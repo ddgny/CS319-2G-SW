@@ -30,3 +30,5 @@ There are seven ways to obtain victory points;<br/>
 -Commercial Structures (yellow cards)<br/>
 -Guilds (purple cards)<br/>
 -Scientific structures (green cards)<br/>
+
+Analysis Report 1st Iteration: https://docs.google.com/document/d/1UyAp1IcCmikkJ9bGKUF4ZWYRXGCIFDB4azSnpfmXu4A/edit?usp=sharing
