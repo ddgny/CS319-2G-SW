@@ -32,9 +32,9 @@ public class OptionsPage extends Scene {
         bb.setTranslateX(-350);
         bb.setTranslateY(-230);
         sp.getChildren().add(bb);
-        
+
     }
-    private static class BackButton extends VBox {
+    public static class BackButton extends VBox {
         public BackButton() throws Exception{
             setMaxSize(100,100);
             InputStream is = Files.newInputStream(Paths.get("images/back.png"));

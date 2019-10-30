@@ -35,9 +35,6 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         root = new StackPane();
-        options = new StackPane();
-        htp = new StackPane();
-        setName = new StackPane();
         window = primaryStage;
         // Background image
         InputStream is = Files.newInputStream(Paths.get("images/mainmenu.jpg"));
@@ -66,7 +63,8 @@ public class Main extends Application {
             btnStart.setOnMouseClicked(event -> {
                 Scene scene = null;
                 try {
-                    scene = new setNamePage(setName);
+                    setName = new StackPane();
+                    scene = new setNamePage(setName, mainMenu, window);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -91,7 +89,8 @@ public class Main extends Application {
             btnHTP.setOnMouseClicked(event -> {
                 Scene scene = null;
                 try {
-                    scene = new HTPPage(htp);
+                    htp = new StackPane();
+                    scene = new HTPPage(htp, mainMenu, window);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
