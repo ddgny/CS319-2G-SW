@@ -106,7 +106,7 @@ public class Main extends Application {
             getChildren().add(menu1);
         }
     }
-    private static class MenuButton extends StackPane{
+    public static class MenuButton extends StackPane{
         private Text text;
         public MenuButton(String name) {
             // creating the text of button
