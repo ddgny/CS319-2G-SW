@@ -55,7 +55,9 @@ public class setNamePage extends Scene {
         sideText.setFont(Font.font("Verdana", FontWeight.BOLD,15));
         sideText.setTranslateY(40);
         RadioButton aSide = new RadioButton("A");
+        aSide.setUserData("A");
         RadioButton bSide = new RadioButton("B");
+        bSide.setUserData("B");
         aSide.setTextFill(Color.WHITESMOKE);
         bSide.setTextFill(Color.WHITESMOKE);
         ToggleGroup tg = new ToggleGroup();
@@ -74,7 +76,7 @@ public class setNamePage extends Scene {
             Scene scene = null;
             StackPane gameScreen = new StackPane();
             try {
-                scene = new GamePage(gameScreen, bp, window, tf.getText(), (RadioButton) tg.getSelectedToggle());
+                scene = new GamePage(gameScreen, bp, window, tf.getText(), tg);
             } catch (Exception e) {
                 e.printStackTrace();
             }
