@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,6 +19,7 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -31,23 +33,26 @@ public class Main extends Application {
     private static Stage window;
     private static StackPane root, options, htp, setName;
     private static Scene mainMenu;
+    public static Rectangle2D primaryScreenBounds;
     @Override
     public void start(Stage primaryStage) throws Exception{
         //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        primaryStage.setMaximized(true);
         root = new StackPane();
         window = primaryStage;
+        primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         // Background image
         InputStream is = Files.newInputStream(Paths.get("images/mainmenu.jpg"));
         Image img = new Image(is);
         is.close();
         ImageView imgView = new ImageView(img);
-        imgView.setFitHeight(650);
-        imgView.setFitWidth(1000);
+        imgView.setFitHeight(primaryScreenBounds.getHeight());
+        imgView.setFitWidth(primaryScreenBounds.getWidth());
 
         gameMenu = new GameMenu();
         root.getChildren().addAll(imgView, gameMenu);
 
-        mainMenu = new Scene(root, 1000, 650);
+        mainMenu = new Scene(root, primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
         primaryStage.setTitle("Seven Wonders");
         primaryStage.setScene(mainMenu);
         window.show();

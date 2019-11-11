@@ -12,13 +12,13 @@ import java.nio.file.Paths;
 
 public class HTPPage extends Scene {
     public HTPPage(StackPane sp, Scene bp, Stage window) throws Exception{
-        super(sp, 1000, 650);
+        super(sp, Main.primaryScreenBounds.getWidth(), Main.primaryScreenBounds.getHeight());
         InputStream is = Files.newInputStream(Paths.get("images/mainmenu.jpg"));
         Image img = new Image(is);
         is.close();
         ImageView imgView = new ImageView(img);
-        imgView.setFitHeight(650);
-        imgView.setFitWidth(1000);
+        imgView.setFitHeight(Main.primaryScreenBounds.getHeight());
+        imgView.setFitWidth(Main.primaryScreenBounds.getWidth());
         sp.getChildren().add(imgView);
 
         OptionsPage.BackButton bb = new OptionsPage.BackButton();
