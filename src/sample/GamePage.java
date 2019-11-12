@@ -77,13 +77,13 @@ public class GamePage extends Scene {
         translateTransition.play();
         translateTransition = new TranslateTransition();
         translateTransition.setDuration(Duration.millis(1000));
-        translateTransition.setNode(wb[2]);
+        translateTransition.setNode(wb[3]);
         translateTransition.setByY(-100);
         translateTransition.setByX(-450);
         translateTransition.play();
         translateTransition = new TranslateTransition();
         translateTransition.setDuration(Duration.millis(1000));
-        translateTransition.setNode(wb[3]);
+        translateTransition.setNode(wb[2]);
         translateTransition.setByY(-260);
         translateTransition.play();
     }
@@ -147,6 +147,32 @@ public class GamePage extends Scene {
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
             }
+            else if( wNumber == 4) {
+                InputStream is = Files.newInputStream(Paths.get("images/babylon.jpg"));
+                Image img = new Image(is);
+                is.close();
+                board.setFill(new ImagePattern(img));
+
+                Text sideText2 = new Text("Babylon - (" + side + ")");
+                sideText2.setFill(Color.WHITESMOKE);
+                sideText2.setFont(Font.font("Kalam", FontWeight.BOLD,15));
+                sideText2.setTranslateX(290);
+                sideText2.setTranslateY(20);
+                getChildren().addAll(sideText2);
+            }
+            else if( wNumber == 5) {
+                InputStream is = Files.newInputStream(Paths.get("images/olympia.jpg"));
+                Image img = new Image(is);
+                is.close();
+                board.setFill(new ImagePattern(img));
+
+                Text sideText2 = new Text("Olympia - (" + side + ")");
+                sideText2.setFill(Color.WHITESMOKE);
+                sideText2.setFont(Font.font("Kalam", FontWeight.BOLD,15));
+                sideText2.setTranslateX(290);
+                sideText2.setTranslateY(20);
+                getChildren().addAll(sideText2);
+            }
             else if( wNumber == 6) {
                 InputStream is = Files.newInputStream(Paths.get("images/halikarnassos.jpg"));
                 Image img = new Image(is);
@@ -157,6 +183,19 @@ public class GamePage extends Scene {
                 sideText2.setFill(Color.WHITESMOKE);
                 sideText2.setFont(Font.font("Kalam", FontWeight.BOLD,15));
                 sideText2.setTranslateX(250);
+                sideText2.setTranslateY(20);
+                getChildren().addAll(sideText2);
+            }
+            else if( wNumber == 7) {
+                InputStream is = Files.newInputStream(Paths.get("images/gizeh.jpg"));
+                Image img = new Image(is);
+                is.close();
+                board.setFill(new ImagePattern(img));
+
+                Text sideText2 = new Text("Gizeh - (" + side + ")");
+                sideText2.setFill(Color.WHITESMOKE);
+                sideText2.setFont(Font.font("Kalam", FontWeight.BOLD,15));
+                sideText2.setTranslateX(300);
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
             }
