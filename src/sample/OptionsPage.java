@@ -1,18 +1,18 @@
 package sample;
 
 import javafx.scene.Scene;
-import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.scene.shape.Rectangle;
 
-import java.awt.*;
+import javax.swing.*;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class OptionsPage extends Scene {
     public OptionsPage( StackPane sp, Scene bp, Stage window)  throws Exception{
@@ -33,6 +33,41 @@ public class OptionsPage extends Scene {
         bb.setTranslateY(-230);
         sp.getChildren().add(bb);
 
+
+        // mute option
+        Pane mute = new Pane();
+        Pane unmute = new Pane();
+        mute.setMaxSize(200,200);
+        unmute.setMaxSize(200,200);
+        is = Files.newInputStream(Paths.get("images/mute.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgViewMute = new ImageView(img);
+        imgViewMute.setFitHeight(200);
+        imgViewMute.setFitWidth(200);
+        mute.getChildren().add(imgViewMute);
+        is = Files.newInputStream(Paths.get("images/unmute.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgViewUnmute = new ImageView(img);
+        imgViewUnmute.setFitHeight(200);
+        imgViewUnmute.setFitWidth(200);
+        unmute.getChildren().add(imgViewUnmute);
+        mute.setOnMouseClicked( event -> {
+            Main.mediaPlayer.setMute(true);
+            mute.setVisible(false);
+            unmute.setVisible(true);
+        });
+        unmute.setOnMouseClicked( event -> {
+            Main.mediaPlayer.setMute(false);
+            mute.setVisible(true);
+            unmute.setVisible(false);
+        });
+        if(Main.mediaPlayer.isMute())
+            mute.setVisible(false);
+        else
+            unmute.setVisible(false);
+        sp.getChildren().addAll(mute, unmute);
     }
     public static class BackButton extends VBox {
         public BackButton() throws Exception{

@@ -46,6 +46,13 @@ public class GamePage extends Scene {
         imgView.setFitHeight(Main.primaryScreenBounds.getHeight());
         imgView.setFitWidth(Main.primaryScreenBounds.getWidth());
         sp.getChildren().add(imgView);
+        OptionsPage.BackButton bb = new OptionsPage.BackButton();
+        bb.setOnMouseClicked( event -> {
+            window.setScene( mainmenu);
+        });
+        bb.setTranslateX(-450);
+        bb.setTranslateY(-330);
+        sp.getChildren().add(bb);
         distributeWonders( sp, side, name);
         sp.getChildren().addAll(wb);
     }
@@ -91,6 +98,7 @@ public class GamePage extends Scene {
         Text coinText, shieldText, battleText, vicPointText;
         int pNum;
         Background bg;
+        Milestone[] milestones;
         VBox coinVB, shieldVB, battleVB, vicPointVB;
         public WonderBoard( StackPane sp, int wNumber, String side, String playerName, int pN) throws Exception{
             setMaxSize(400, 250);
@@ -271,6 +279,11 @@ public class GamePage extends Scene {
             coinText.setFill(Color.WHITESMOKE);
             coinText.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
             getChildren().addAll(coinText);
+        }
+    }
+    public class Milestone extends Pane {
+        public Milestone() throws Exception {
+
         }
     }
 }

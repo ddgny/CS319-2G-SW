@@ -1,4 +1,5 @@
 package sample;
+import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -14,6 +15,8 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Glow;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.StackPane;
@@ -34,6 +37,7 @@ public class Main extends Application {
     private static StackPane root, options, htp, setName;
     private static Scene mainMenu;
     public static Rectangle2D primaryScreenBounds;
+    public static MediaPlayer mediaPlayer;
     @Override
     public void start(Stage primaryStage) throws Exception{
         //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
@@ -149,6 +153,9 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        Media sound = new Media(new File("sounds/gamemusic.mp3").toURI().toString());
+        mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.play();
         launch(args);
     }
 }
