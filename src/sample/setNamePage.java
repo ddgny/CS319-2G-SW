@@ -15,6 +15,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.control.CheckBox;
 
 import java.awt.*;
 import java.io.InputStream;
@@ -22,7 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class setNamePage extends Scene {
-    public setNamePage(StackPane sp, Scene bp, Stage window) throws Exception {
+    public setNamePage(StackPane sp, Scene bp, Stage window, String mode) throws Exception {
         super( sp, Main.primaryScreenBounds.getWidth(), Main.primaryScreenBounds.getHeight());
         InputStream is = Files.newInputStream(Paths.get("images/setname.jpg"));
         Image img = new Image(is);
@@ -40,34 +41,40 @@ public class setNamePage extends Scene {
         bb.setTranslateY(-230);
 
         // isim ve yüz seçerkenki karanlık alan
-        Rectangle nameArea = new Rectangle(300,200);
+        Rectangle nameArea = new Rectangle(300,250);
         nameArea.setOpacity(0.6);
         nameArea.setFill(Color.BLACK);
         nameArea.setEffect( new GaussianBlur(3.5));
+        // name
         TextField tf = new TextField("Player");
         tf.setMaxWidth(150);
+        tf.setTranslateY(-30);
         Text nameText = new Text("Player Name: ");
         nameText.setFill(Color.WHITESMOKE);
         nameText.setFont(Font.font("Verdana", FontWeight.BOLD,15));
-        nameText.setTranslateY(-40);
+        nameText.setTranslateY(-70);
         Text sideText = new Text("Which side you want to play? ");
         sideText.setFill(Color.WHITESMOKE);
         sideText.setFont(Font.font("Verdana", FontWeight.BOLD,15));
-        sideText.setTranslateY(40);
+        sideText.setTranslateY(10);
+        // side
         RadioButton aSide = new RadioButton("A");
         aSide.setUserData("A");
         RadioButton bSide = new RadioButton("B");
         bSide.setUserData("B");
         aSide.setTextFill(Color.WHITESMOKE);
         bSide.setTextFill(Color.WHITESMOKE);
-        ToggleGroup tg = new ToggleGroup();
-        aSide.setToggleGroup(tg);
-        bSide.setToggleGroup(tg);
+        ToggleGroup sidetg = new ToggleGroup();
+        aSide.setToggleGroup(sidetg);
+        bSide.setToggleGroup(sidetg);
         HBox hbox = new HBox(aSide, bSide);
         bSide.setTranslateX(40);
-        hbox.setTranslateY(477);
+        hbox.setTranslateY(447);
         hbox.setTranslateX(710);
-
+        // ally mode
+        CheckBox ally = new CheckBox("Ally Mode");
+        ally.setTranslateY(90);
+        ally.setTextFill(Color.WHITESMOKE);
         // Start Button
         Main.MenuButton sb = new Main.MenuButton("Start");
         sb.setMaxSize(250,30);
@@ -75,14 +82,18 @@ public class setNamePage extends Scene {
         sb.setOnMouseClicked(event -> {
             Scene scene = null;
             StackPane gameScreen = new StackPane();
+            int intMode;
+            if( mode == "Story") intMode = 1;
+            else if( ally.isSelected()) intMode = -1;
+            else intMode = 0;
             try {
-                scene = new GamePage(gameScreen, bp, window, tf.getText(), tg);
+                scene = new GamePage(gameScreen, bp, window, tf.getText(), sidetg, intMode);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             window.setScene( scene);
         });
 
-        sp.getChildren().addAll( bb, nameArea, nameText, tf, sideText, hbox, sb);
+        sp.getChildren().addAll( bb, nameArea, nameText, tf, sideText, hbox, ally, sb);
     }
 }

@@ -62,26 +62,89 @@ public class Main extends Application {
         window.show();
     }
     private static class GameMenu extends Parent {
-        public GameMenu() {
-            VBox menu1 = new VBox(20);
-            menu1.setTranslateX(200);
-            menu1.setTranslateY(20);
+        MenuButton btnStart, btnLoadGame, btnOptions, btnHTP, btnExit;
+        private void modeSelectionMenu() {
+            VBox menu2 = new VBox(20);
+            menu2.setTranslateX(200);
+            menu2.setTranslateY(20);
 
-            // start game button
-            MenuButton btnStart = new MenuButton("Start Game");
-            btnStart.setOnMouseClicked(event -> {
+            // story mode
+            MenuButton btnStory = new MenuButton("Story Mode");
+            btnStory.setOnMouseClicked(event -> {
                 Scene scene = null;
                 try {
                     setName = new StackPane();
-                    scene = new setNamePage(setName, mainMenu, window);
+                    scene = new setNamePage(setName, mainMenu, window, "Story");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 window.setScene( scene);
             });
 
+            // quickmatch
+            MenuButton btnQuickmatch = new MenuButton("Quick Match");
+            btnQuickmatch.setOnMouseClicked(event -> {
+                Scene scene = null;
+                try {
+                    setName = new StackPane();
+                    scene = new setNamePage(setName, mainMenu, window, "Quick");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                window.setScene( scene);
+            });
+
+            // cancel
+            MenuButton btnCancel = new MenuButton("Cancel");
+            btnCancel.setOnMouseClicked( event -> {
+                btnCancel.setVisible(false);
+                btnQuickmatch.setVisible(false);
+                btnStory.setVisible(false);
+                menu2.setVisible(false);
+                btnStart.setVisible(true);
+                btnLoadGame.setVisible(true);
+                btnOptions.setVisible(true);
+                btnHTP.setVisible(true);
+                btnExit.setVisible(true);
+            });
+            menu2.getChildren().addAll(btnStory, btnQuickmatch, btnCancel);
+            getChildren().addAll(menu2);
+        }
+        public GameMenu() {
+            VBox menu1 = new VBox(20);
+            menu1.setTranslateX(200);
+            menu1.setTranslateY(20);
+
+
+            // start game button
+            btnStart = new MenuButton("Start a New Game");
+            btnLoadGame = new MenuButton("Load Game");
+            btnOptions = new MenuButton("Options");
+            btnHTP = new MenuButton("How to Play");
+            btnExit = new MenuButton("Exit Game");
+            btnStart.setOnMouseClicked(event -> {
+                btnStart.setVisible(false);
+                btnLoadGame.setVisible(false);
+                btnOptions.setVisible(false);
+                btnHTP.setVisible(false);
+                btnExit.setVisible(false);
+                modeSelectionMenu();
+//                Scene scene = null;
+//                try {
+//                    setName = new StackPane();
+//                    scene = new setNamePage(setName, mainMenu, window);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                window.setScene( scene);
+            });
+
+            // load game button
+            btnLoadGame.setOnMouseClicked(event -> {
+
+            });
+
             // Options button
-            MenuButton btnOptions = new MenuButton("Options");
             btnOptions.setOnMouseClicked(event -> {
                 Scene scene = null;
                 try {
@@ -94,7 +157,6 @@ public class Main extends Application {
             });
 
             // How to Play button
-            MenuButton btnHTP = new MenuButton("How to Play");
             btnHTP.setOnMouseClicked(event -> {
                 Scene scene = null;
                 try {
@@ -107,11 +169,10 @@ public class Main extends Application {
             });
 
             // Exit Game button
-            MenuButton btnExit = new MenuButton("Exit Game");
             btnExit.setOnMouseClicked(event -> {
                 System.exit(0);
             });
-            menu1.getChildren().addAll(btnStart, btnOptions, btnHTP, btnExit);
+            menu1.getChildren().addAll(btnStart, btnLoadGame, btnOptions, btnHTP, btnExit);
             getChildren().add(menu1);
         }
     }

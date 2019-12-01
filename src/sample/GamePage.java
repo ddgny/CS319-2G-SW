@@ -28,17 +28,36 @@ import java.nio.file.Paths;
 import java.util.Random;
 
 public class GamePage extends Scene {
-    private int[] coin, shield, battle, vicPoint;
     private WonderBoard[] wb;
-
-    public GamePage(StackPane sp, Scene mainmenu, Stage window, String name, ToggleGroup side) throws Exception {
+    private Player[] players;
+    // mode = ally -> -1 , normal -> 0 , story -> 1,2,3,4,5...
+    private int mode;
+    private class Property {
+        int coin, shield, mechanic, literature, geometry, victoryPoint;
+        String requiredBuilding;
+        public Property(){
+            coin = shield = mechanic = literature = geometry = victoryPoint = 0;
+            requiredBuilding = "";
+        }
+    }
+    private class Player {
+        String name;
+        int battlePoint, greenCards, redCards, yellowCards, greyCards, purpleCards, brownCards, blueCards, milestoneDone;
+        String[] buildings;
+        Property stats;
+        public Player(String tmp) {
+            stats = new Property();
+            stats.coin = 3;
+            name = tmp;
+            battlePoint = greenCards = redCards = yellowCards = greyCards = purpleCards = brownCards = blueCards = milestoneDone = 0;
+            buildings = new String[22];
+        }
+    }
+    public GamePage(StackPane sp, Scene mainmenu, Stage window, String name, ToggleGroup side, int sMode) throws Exception {
         super(sp, Main.primaryScreenBounds.getWidth(), Main.primaryScreenBounds.getHeight());
-        coin = new int[4];
-        coin[0] = 3; coin[1] = 3; coin[2] = 3; coin[3] = 3;
-        shield = new int[4];
-        battle = new int[4];
-        vicPoint = new int[4];
+        mode = sMode;
         wb = new WonderBoard[4];
+        players = new Player[4];
         InputStream is = Files.newInputStream(Paths.get("images/gamepage.jpg"));
         Image img = new Image(is);
         is.close();
@@ -53,6 +72,10 @@ public class GamePage extends Scene {
         bb.setTranslateX(-450);
         bb.setTranslateY(-330);
         sp.getChildren().add(bb);
+        players[0] = new Player(name);
+        players[1] = new Player("bot1");
+        players[2] = new Player("bot2");
+        players[3] = new Player("bot3");
         distributeWonders( sp, side, name);
         sp.getChildren().addAll(wb);
     }
@@ -95,11 +118,12 @@ public class GamePage extends Scene {
         translateTransition.play();
     }
     private class WonderBoard extends Pane {
-        Text coinText, shieldText, battleText, vicPointText;
+        Text coinText, shieldText, battleText, vicPointText, literatureText, mechanicText, geometryText, greenText, redText, yellowText, greyText, brownText, blueText;
         int pNum;
         Background bg;
         Milestone[] milestones;
-        VBox coinVB, shieldVB, battleVB, vicPointVB;
+        VBox coinVB, shieldVB, battleVB, vicPointVB, literatureVB, mechanicVB, geometryVB;
+        HBox greenHB, redHB, yellowHB, greyHB, brownHB, blueHB;
         public WonderBoard( StackPane sp, int wNumber, String side, String playerName, int pN) throws Exception{
             setMaxSize(400, 250);
             pNum = pN;
@@ -214,7 +238,7 @@ public class GamePage extends Scene {
             ImageView imgView = new ImageView(img);
             imgView.setFitHeight(35);
             imgView.setFitWidth(35);
-            coinText = new Text(coin[pNum] + "");
+            coinText = new Text(players[pNum].stats.coin + "");
             coinText.setFill(Color.WHITESMOKE);
             coinText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
             coinText.setTranslateX(5);
@@ -230,7 +254,7 @@ public class GamePage extends Scene {
             imgView = new ImageView(img);
             imgView.setFitHeight(35);
             imgView.setFitWidth(35);
-            shieldText = new Text(shield[pNum] + "");
+            shieldText = new Text(players[pNum].stats.shield + "");
             shieldText.setFill(Color.WHITESMOKE);
             shieldText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
             shieldText.setTranslateX(5);
@@ -246,7 +270,7 @@ public class GamePage extends Scene {
             imgView = new ImageView(img);
             imgView.setFitHeight(35);
             imgView.setFitWidth(35);
-            battleText = new Text(battle[pNum] + "");
+            battleText = new Text(players[pNum].battlePoint + "");
             battleText.setFill(Color.WHITESMOKE);
             battleText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
             battleText.setTranslateX(5);
@@ -262,7 +286,7 @@ public class GamePage extends Scene {
             imgView = new ImageView(img);
             imgView.setFitHeight(35);
             imgView.setFitWidth(35);
-            vicPointText = new Text(vicPoint[pNum] + "");
+            vicPointText = new Text(players[pNum].stats.victoryPoint + "");
             vicPointText.setFill(Color.WHITESMOKE);
             vicPointText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
             vicPointText.setTranslateX(5);
@@ -271,11 +295,159 @@ public class GamePage extends Scene {
             vicPointVB.setTranslateY(30);
             vicPointVB.setTranslateX(125);
 
-            getChildren().addAll(shieldVB, coinVB, battleVB, vicPointVB);
+            // literature part
+            is = Files.newInputStream(Paths.get("images/ancient-scroll.png"));
+            img = new Image(is);
+            is.close();
+            imgView = new ImageView(img);
+            imgView.setFitHeight(35);
+            imgView.setFitWidth(35);
+            literatureText = new Text(players[pNum].stats.literature + "");
+            literatureText.setFill(Color.WHITESMOKE);
+            literatureText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+            literatureText.setTranslateX(5);
+            literatureVB = new VBox(imgView, literatureText);
+            literatureVB.setBackground(bg);
+            literatureVB.setTranslateY(30);
+            literatureVB.setTranslateX(165);
+
+            // mechanic part
+            is = Files.newInputStream(Paths.get("images/mechanic.png"));
+            img = new Image(is);
+            is.close();
+            imgView = new ImageView(img);
+            imgView.setFitHeight(35);
+            imgView.setFitWidth(35);
+            mechanicText = new Text(players[pNum].stats.mechanic + "");
+            mechanicText.setFill(Color.WHITESMOKE);
+            mechanicText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+            mechanicText.setTranslateX(5);
+            mechanicVB = new VBox(imgView, mechanicText);
+            mechanicVB.setBackground(bg);
+            mechanicVB.setTranslateY(30);
+            mechanicVB.setTranslateX(205);
+
+            // geometry part
+            is = Files.newInputStream(Paths.get("images/geometry.png"));
+            img = new Image(is);
+            is.close();
+            imgView = new ImageView(img);
+            imgView.setFitHeight(35);
+            imgView.setFitWidth(35);
+            geometryText = new Text(players[pNum].stats.geometry + "");
+            geometryText.setFill(Color.WHITESMOKE);
+            geometryText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+            geometryText.setTranslateX(5);
+            geometryVB = new VBox(imgView, geometryText);
+            geometryVB.setBackground(bg);
+            geometryVB.setTranslateY(30);
+            geometryVB.setTranslateX(245);
+
+            getChildren().addAll(shieldVB, coinVB, battleVB, vicPointVB, literatureVB, mechanicVB, geometryVB);
+
+            // Used Cards parts
+
+            // Green Cards
+            Rectangle card = new Rectangle( 15,20, Color.GREEN);
+            card.setArcWidth(5);
+            card.setArcHeight(5);
+            card.setTranslateX(5);
+            card.setTranslateY(5);
+            greenText = new Text(players[pNum].greenCards + "");
+            greenText.setFill(Color.WHITESMOKE);
+            greenText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+            greenText.setTranslateX(10);
+            greenHB = new HBox(card, greenText);
+            greenHB.setBackground(bg);
+            greenHB.setTranslateY(30);
+            greenHB.setTranslateX(355);
+            greenHB.setPrefSize(40,20);
+
+            // red Cards
+            card = new Rectangle( 15,20, Color.RED);
+            card.setArcWidth(5);
+            card.setArcHeight(5);
+            card.setTranslateX(5);
+            card.setTranslateY(5);
+            redText = new Text(players[pNum].redCards + "");
+            redText.setFill(Color.WHITESMOKE);
+            redText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+            redText.setTranslateX(10);
+            redHB = new HBox(card, redText);
+            redHB.setBackground(bg);
+            redHB.setTranslateY(60);
+            redHB.setTranslateX(355);
+            redHB.setPrefSize(40,20);
+
+            // yellow Cards
+            card = new Rectangle( 15,20, Color.YELLOW);
+            card.setArcWidth(5);
+            card.setArcHeight(5);
+            card.setTranslateX(5);
+            card.setTranslateY(5);
+            yellowText = new Text(players[pNum].yellowCards + "");
+            yellowText.setFill(Color.WHITESMOKE);
+            yellowText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+            yellowText.setTranslateX(10);
+            yellowHB = new HBox(card, yellowText);
+            yellowHB.setBackground(bg);
+            yellowHB.setTranslateY(90);
+            yellowHB.setTranslateX(355);
+            yellowHB.setPrefSize(40,20);
+
+            // grey Cards
+            card = new Rectangle( 15,20, Color.GREY);
+            card.setArcWidth(5);
+            card.setArcHeight(5);
+            card.setTranslateX(5);
+            card.setTranslateY(5);
+            greyText = new Text(players[pNum].greyCards + "");
+            greyText.setFill(Color.WHITESMOKE);
+            greyText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+            greyText.setTranslateX(10);
+            greyHB = new HBox(card, greyText);
+            greyHB.setBackground(bg);
+            greyHB.setTranslateY(120);
+            greyHB.setTranslateX(355);
+            greyHB.setPrefSize(40,20);
+
+            // brown Cards
+            card = new Rectangle( 15,20, Color.BROWN);
+            card.setArcWidth(5);
+            card.setArcHeight(5);
+            card.setTranslateX(5);
+            card.setTranslateY(5);
+            brownText = new Text(players[pNum].brownCards + "");
+            brownText.setFill(Color.WHITESMOKE);
+            brownText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+            brownText.setTranslateX(10);
+            brownHB = new HBox(card, brownText);
+            brownHB.setBackground(bg);
+            brownHB.setTranslateY(150);
+            brownHB.setTranslateX(355);
+            brownHB.setPrefSize(40,20);
+
+            // blue Cards
+            card = new Rectangle( 15,20, Color.BLUE);
+            card.setArcWidth(5);
+            card.setArcHeight(5);
+            card.setTranslateX(5);
+            card.setTranslateY(5);
+            blueText = new Text(players[pNum].blueCards + "");
+            blueText.setFill(Color.WHITESMOKE);
+            blueText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+            blueText.setTranslateX(10);
+            blueHB = new HBox(card, blueText);
+            blueHB.setBackground(bg);
+            blueHB.setTranslateY(180);
+            blueHB.setTranslateX(355);
+            blueHB.setPrefSize(40,20);
+
+            getChildren().addAll(greenHB, redHB, yellowHB, greyHB, brownHB, blueHB);
         }
         public void makeChanges(){
             getChildren().remove(coinText);
-            coinText = new Text(coin[pNum] + "");
+            coinText = new Text(players[pNum].stats.coin + "");
             coinText.setFill(Color.WHITESMOKE);
             coinText.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
             getChildren().addAll(coinText);
