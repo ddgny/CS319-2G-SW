@@ -27,14 +27,25 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
 
+import static java.lang.Math.min;
+
 public class GamePage extends Scene {
     private WonderBoard[] wb;
     private Player[] players;
     // mode = ally -> -1 , normal -> 0 , story -> 1,2,3,4,5...
     private int mode;
+    private class Resource {
+        String[] name;
+        int[] quantity;
+        public Resource( int optional) {
+                name = new String[optional];
+                quantity = new int[optional];
+        }
+    }
     private class Property {
         int coin, shield, mechanic, literature, geometry, victoryPoint;
         String requiredBuilding;
+        Resource resource;
         public Property(){
             coin = shield = mechanic = literature = geometry = victoryPoint = 0;
             requiredBuilding = "";
@@ -44,13 +55,20 @@ public class GamePage extends Scene {
         String name;
         int battlePoint, greenCards, redCards, yellowCards, greyCards, purpleCards, brownCards, blueCards, milestoneDone;
         String[] buildings;
+        Resource[] resources;
+        int resourceCount;
         Property stats;
         public Player(String tmp) {
             stats = new Property();
             stats.coin = 3;
             name = tmp;
-            battlePoint = greenCards = redCards = yellowCards = greyCards = purpleCards = brownCards = blueCards = milestoneDone = 0;
+            battlePoint = greenCards = redCards = yellowCards = greyCards = purpleCards = brownCards = blueCards = milestoneDone = resourceCount = 0;
             buildings = new String[22];
+            resources = new Resource[22];
+        }
+        void addResource( Resource add) {
+            resources[resourceCount] = add;
+            resourceCount++;
         }
     }
     public GamePage(StackPane sp, Scene mainmenu, Stage window, String name, ToggleGroup side, int sMode) throws Exception {
@@ -123,7 +141,7 @@ public class GamePage extends Scene {
         Background bg;
         Milestone[] milestones;
         VBox coinVB, shieldVB, battleVB, vicPointVB, literatureVB, mechanicVB, geometryVB;
-        HBox greenHB, redHB, yellowHB, greyHB, brownHB, blueHB;
+        HBox greenHB, redHB, yellowHB, greyHB, brownHB, blueHB, resourcesHB;
         public WonderBoard( StackPane sp, int wNumber, String side, String playerName, int pN) throws Exception{
             setMaxSize(400, 250);
             pNum = pN;
@@ -152,6 +170,9 @@ public class GamePage extends Scene {
                 sideText2.setTranslateX(300);
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
+                Resource tmp = new Resource( 1);
+                tmp.name[0] = "Ore"; tmp.quantity[0] = 1;
+                players[pNum].addResource( tmp);
             }
             else if( wNumber == 2) {
                 InputStream is = Files.newInputStream(Paths.get("images/alexandria.jpg"));
@@ -165,6 +186,9 @@ public class GamePage extends Scene {
                 sideText2.setTranslateX(280);
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
+                Resource tmp = new Resource( 1);
+                tmp.name[0] = "Glass"; tmp.quantity[0] = 1;
+                players[pNum].addResource( tmp);
             }
             else if( wNumber == 3) {
                 InputStream is = Files.newInputStream(Paths.get("images/gamepage.jpg"));
@@ -178,6 +202,9 @@ public class GamePage extends Scene {
                 sideText2.setTranslateX(290);
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
+                Resource tmp = new Resource( 1);
+                tmp.name[0] = "Paper"; tmp.quantity[0] = 1;
+                players[pNum].addResource( tmp);
             }
             else if( wNumber == 4) {
                 InputStream is = Files.newInputStream(Paths.get("images/babylon.jpg"));
@@ -191,6 +218,9 @@ public class GamePage extends Scene {
                 sideText2.setTranslateX(290);
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
+                Resource tmp = new Resource( 1);
+                tmp.name[0] = "Clay"; tmp.quantity[0] = 1;
+                players[pNum].addResource( tmp);
             }
             else if( wNumber == 5) {
                 InputStream is = Files.newInputStream(Paths.get("images/olympia.jpg"));
@@ -204,6 +234,9 @@ public class GamePage extends Scene {
                 sideText2.setTranslateX(290);
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
+                Resource tmp = new Resource( 1);
+                tmp.name[0] = "Lumber"; tmp.quantity[0] = 1;
+                players[pNum].addResource( tmp);
             }
             else if( wNumber == 6) {
                 InputStream is = Files.newInputStream(Paths.get("images/halikarnassos.jpg"));
@@ -217,6 +250,9 @@ public class GamePage extends Scene {
                 sideText2.setTranslateX(250);
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
+                Resource tmp = new Resource( 1);
+                tmp.name[0] = "Textile"; tmp.quantity[0] = 1;
+                players[pNum].addResource( tmp);
             }
             else if( wNumber == 7) {
                 InputStream is = Files.newInputStream(Paths.get("images/gizeh.jpg"));
@@ -230,6 +266,9 @@ public class GamePage extends Scene {
                 sideText2.setTranslateX(300);
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
+                Resource tmp = new Resource( 1);
+                tmp.name[0] = "Stone"; tmp.quantity[0] = 1;
+                players[pNum].addResource( tmp);
             }
             // coin part
             InputStream is = Files.newInputStream(Paths.get("images/coins.png"));
@@ -444,6 +483,30 @@ public class GamePage extends Scene {
             blueHB.setPrefSize(40,20);
 
             getChildren().addAll(greenHB, redHB, yellowHB, greyHB, brownHB, blueHB);
+
+//            Resource resource = new Resource(4);
+//            resource.name[0] = "Ore"; resource.name[1] = "Lumber"; resource.name[2] = "Glass"; resource.name[3] = "Textile";
+//            resource.quantity[0] = 1; resource.quantity[1] = 1; resource.quantity[2] = 1; resource.quantity[3] = 1;
+//            players[pNum].addResource(resource);
+            // Resource Part
+            resourcesHB = new HBox( 5);
+            for(int i = 0; i < players[pNum].resourceCount; i++) {
+                VBox vb = new VBox();
+                vb.setBackground(bg);
+                for(int j = 0; j < players[pNum].resources[i].quantity.length; j++){
+                    is = Files.newInputStream(Paths.get("images/" + players[pNum].resources[i].name[j] + ".png"));
+                    img = new Image(is);
+                    is.close();
+                    imgView = new ImageView(img);
+                    imgView.setFitHeight(min(25,50 / players[pNum].resources[i].quantity.length));
+                    imgView.setFitWidth(25);
+                    vb.getChildren().addAll(imgView);
+                }
+                resourcesHB.getChildren().addAll(vb);
+            }
+            resourcesHB.setTranslateY(100);
+            resourcesHB.setTranslateX(5);
+            getChildren().addAll(resourcesHB);
         }
         public void makeChanges(){
             getChildren().remove(coinText);

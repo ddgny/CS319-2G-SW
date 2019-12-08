@@ -67,6 +67,7 @@ public class setNamePage extends Scene {
         ToggleGroup sidetg = new ToggleGroup();
         aSide.setToggleGroup(sidetg);
         bSide.setToggleGroup(sidetg);
+        aSide.setSelected(true);
         HBox hbox = new HBox(aSide, bSide);
         bSide.setTranslateX(40);
         hbox.setTranslateY(447);
