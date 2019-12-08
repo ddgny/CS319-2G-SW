@@ -31,6 +31,7 @@ There are seven ways to obtain victory points;<br/>
 -Guilds (purple cards)<br/>
 -Scientific structures (green cards)<br/>
 
-Analysis Report 1st Iteration: https://docs.google.com/document/d/1UyAp1IcCmikkJ9bGKUF4ZWYRXGCIFDB4azSnpfmXu4A/edit?usp=sharing <br/>
-Design Report 1st Iteration: https://docs.google.com/document/d/1_EW7_fnjqfcBxt9ZRUbKZkZYPWL6eo0FNiQPLY5GVkQ/edit?usp=sharing <br/>
-Final Report 1st Iteration: https://docs.google.com/document/d/1u1UV-GyAHQAyPzAoN01t8YLWIoeKMpxh3yQzGwPP378/edit?usp=sharing
+Analysis Report 1st Iteration:<br/> https://docs.google.com/document/d/1UyAp1IcCmikkJ9bGKUF4ZWYRXGCIFDB4azSnpfmXu4A/edit?usp=sharing <br/>
+Design Report 1st Iteration:<br/> https://docs.google.com/document/d/1_EW7_fnjqfcBxt9ZRUbKZkZYPWL6eo0FNiQPLY5GVkQ/edit?usp=sharing <br/>
+Final Report 1st Iteration:<br/> https://docs.google.com/document/d/1u1UV-GyAHQAyPzAoN01t8YLWIoeKMpxh3yQzGwPP378/edit?usp=sharing<br/>
+Analysis Report 2nd Iteration:<br/> https://docs.google.com/document/d/120bX1P9_-FkHBz0sQ1WfYjE6fWz5Oq2tkBQat6g9YHI/edit?usp=sharing
