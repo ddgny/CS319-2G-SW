@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -16,6 +17,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import javafx.scene.shape.Rectangle;
@@ -25,13 +27,17 @@ import java.awt.*;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 
 import static java.lang.Math.min;
 
 public class GamePage extends Scene {
-    private WonderBoard[] wb;
-    private Player[] players;
+    public static WonderBoard[] wb;
+    public static Player[] players;
+    private Card[][] cards;
+    private static Stage window;
     // mode = ally -> -1 , normal -> 0 , story -> 1,2,3,4,5...
     private int mode;
     private class Resource {
@@ -42,7 +48,7 @@ public class GamePage extends Scene {
                 quantity = new int[optional];
         }
     }
-    public class Property {
+    public static class Property {
         int coin, shield, mechanic, literature, geometry, victoryPoint;
         String requiredBuilding;
         Resource resource;
@@ -74,8 +80,10 @@ public class GamePage extends Scene {
     public GamePage(StackPane sp, Scene mainmenu, Stage window, String name, ToggleGroup side, int sMode) throws Exception {
         super(sp, Main.primaryScreenBounds.getWidth(), Main.primaryScreenBounds.getHeight());
         mode = sMode;
+        this.window = window;
         wb = new WonderBoard[4];
         players = new Player[4];
+        cards = new Card[3][28];
         InputStream is = Files.newInputStream(Paths.get("images/gamepage.jpg"));
         Image img = new Image(is);
         is.close();
@@ -94,22 +102,59 @@ public class GamePage extends Scene {
         players[1] = new Player("bot1");
         players[2] = new Player("bot2");
         players[3] = new Player("bot3");
-        Property a = new Property();
-        Property b = new Property();
-        Card card = new Card("Arsenal",a,b);
-        card.setTranslateX(-800);
-        card.setTranslateY(200);
-        sp.getChildren().addAll(card);
-
-        card.setOnMouseEntered(event -> {
-            card.mouseEnteredHere();
-        });
-        card.setOnMouseExited(event -> {
-            card.mouseExitedHere();
-        });
+        definingCards();
+//        Collections.shuffle(Arrays.asList(cards[0]));
+//        Collections.shuffle(Arrays.asList(cards[1]));
+//        Collections.shuffle(Arrays.asList(cards[2]));
+        sp.getChildren().addAll(cards[0][0],cards[0][1],cards[0][2],cards[0][3],cards[0][4],cards[0][5],cards[0][6]);
 
         distributeWonders( sp, side, name);
         sp.getChildren().addAll(wb);
+    }
+    public static void giveError( String errorMessage) {
+        Popup popup = new Popup();
+        Text text = new Text(errorMessage);
+        text.setFill(Color.RED);
+        text.setFont(Font.font("Kalam", FontWeight.BOLD,40));
+        text.setTranslateY(200);
+        popup.getContent().add(text);
+        PauseTransition delay = new PauseTransition(Duration.seconds(1));
+        delay.setOnFinished(e -> popup.hide());
+
+        popup.show(window);
+        delay.play();
+    }
+    public static void endTurn() {
+
+    }
+    public static boolean checkResources(int playerNum, boolean isWonderbuild, Property cost) {
+        if(isWonderbuild)
+            cost = wb[playerNum].milestones[players[playerNum].milestoneDone].cost;
+        return false;
+    }
+    public static void gainBenefit( int playerNum, boolean isWonderbuild, Property benefit) {
+        if(isWonderbuild) {
+            benefit = wb[playerNum].milestones[players[playerNum].milestoneDone].benefit;
+            players[playerNum].milestoneDone++;
+        }
+    }
+    private void definingCards() throws Exception {
+        Property a = new Property();
+        Property b = new Property();
+        cards[0][0] = new Card("Arsenal","red",a,b);
+        cards[0][1] = new Card("Arsenal","red",a,b);
+        cards[0][2] = new Card("Arsenal","red",a,b);
+        cards[0][3] = new Card("Arsenal","red",a,b);
+        cards[0][4] = new Card("Arsenal","red",a,b);
+        cards[0][5] = new Card("Arsenal","red",a,b);
+        cards[0][6] = new Card("Arsenal","red",a,b);
+        cards[0][0].setTranslateX(-250); cards[0][0].setTranslateY(90);
+        cards[0][1].setTranslateX(-50);  cards[0][1].setTranslateY(90);
+        cards[0][2].setTranslateX(-450); cards[0][2].setTranslateY(90);
+        cards[0][3].setTranslateX(-650); cards[0][3].setTranslateY(90);
+        cards[0][4].setTranslateX(-150); cards[0][4].setTranslateY(290);
+        cards[0][5].setTranslateX(-350); cards[0][5].setTranslateY(290);
+        cards[0][6].setTranslateX(-550); cards[0][6].setTranslateY(290);
     }
     private void distributeWonders( StackPane sp, ToggleGroup side, String name) throws Exception {
         Random rand = new Random();
@@ -129,18 +174,19 @@ public class GamePage extends Scene {
         TranslateTransition translateTransition = new TranslateTransition();
         translateTransition.setDuration(Duration.millis(1000));
         translateTransition.setNode(wb[0]);
-        translateTransition.setByY(120);
+        translateTransition.setByY(150);
+        translateTransition.setByX(350);
         translateTransition.play();
         translateTransition = new TranslateTransition();
         translateTransition.setDuration(Duration.millis(1000));
         translateTransition.setNode(wb[1]);
-        translateTransition.setByY(-100);
+        translateTransition.setByY(-150);
         translateTransition.setByX(450);
         translateTransition.play();
         translateTransition = new TranslateTransition();
         translateTransition.setDuration(Duration.millis(1000));
         translateTransition.setNode(wb[3]);
-        translateTransition.setByY(-100);
+        translateTransition.setByY(-150);
         translateTransition.setByX(-450);
         translateTransition.play();
         translateTransition = new TranslateTransition();
@@ -158,6 +204,7 @@ public class GamePage extends Scene {
         HBox greenHB, redHB, yellowHB, greyHB, brownHB, blueHB, resourcesHB;
         public WonderBoard( StackPane sp, int wNumber, String side, String playerName, int pN) throws Exception{
             setMaxSize(400, 250);
+            milestones = new Milestone[3];
             pNum = pN;
             bg = new Background( new BackgroundFill(Color.rgb(0,0,0,0.6), CornerRadii.EMPTY, Insets.EMPTY));
             Rectangle board = new Rectangle(400,250);
@@ -531,8 +578,10 @@ public class GamePage extends Scene {
         }
     }
     public class Milestone extends Pane {
-        public Milestone() throws Exception {
-
+        Property cost, benefit;
+        public Milestone( Property cost, Property benefit ) throws Exception {
+            this.cost = cost;
+            this.benefit = benefit;
         }
     }
 }

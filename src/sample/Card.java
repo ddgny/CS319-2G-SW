@@ -18,15 +18,17 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class Card extends Pane {
-    Text coinText;
+    String name, color;
     Button sellButton,buryButton,buildButton;
-    Background bg;
-    HBox greenHB, redHB, yellowHB, greyHB, brownHB, blueHB, resourcesHB ,geometryVB,coinHB;
     Rectangle board;
-    public Card(String name, GamePage.Property a, GamePage.Property b ) throws  Exception{
-        setMaxSize(250, 400);
+    GamePage.Property cost, benefit;
+    public Card(String name, String color, GamePage.Property a, GamePage.Property b ) throws  Exception{
+        this.name = name;
+        this.color = color;
+        cost = a;
+        benefit = b;
         //bg = new Background( new BackgroundFill(Color.rgb(109,132,118,0.1), CornerRadii.EMPTY, Insets.EMPTY));
-        board = new Rectangle(250,400,Color.rgb(109,132,118,1));
+        board = new Rectangle(140,190,Color.rgb(109,132,118,1));
         board.setArcHeight(15);
         board.setArcWidth(15);
         getChildren().add(board);
@@ -34,44 +36,53 @@ public class Card extends Pane {
         Image img = new Image(is);
         is.close();
         board.setFill(new ImagePattern(img));
-
-
-
-
+        this.setOnMouseEntered(event -> {
+            mouseEnteredHere();
+        });
+        this.setOnMouseExited(event -> {
+            mouseExitedHere();
+        });
+        setMaxSize(140, 190);
     }
     public void  mouseEnteredHere(){
         board.setOpacity(0.65);
         sellButton = new Button("SELL");
-        sellButton.setTranslateX(110);
-        sellButton.setTranslateY(150);
+        sellButton.setTranslateX(55);
+        sellButton.setTranslateY(30);
         getChildren().add(sellButton);
         sellButton.setOnMouseClicked(event -> {
-
-            System.out.println("SELL");
-
+            GamePage.Property tmp;
+            tmp = new GamePage.Property();
+            tmp.coin = 3;
+            GamePage.gainBenefit( 0, false, tmp);
         });
 
-
-
-
         buryButton = new Button("UPGRADE WONDER");
-        buryButton.setTranslateX(65);
-        buryButton.setTranslateY(220);
+        buryButton.setTranslateX(10);
+        buryButton.setTranslateY(70);
         getChildren().add(buryButton);
         buryButton.setOnMouseClicked(event -> {
-
-            System.out.println("UPGRADE WONDER");
-
+            if( GamePage.checkResources( 0 , true, cost)) {
+                GamePage.gainBenefit(0, true, benefit);
+                GamePage.endTurn();
+            }
+            else {
+                GamePage.giveError("Not enough resources");
+            }
         });
 
         buildButton = new Button("BUILD");
-        buildButton.setTranslateX(105);
-        buildButton.setTranslateY(290);
+        buildButton.setTranslateX(50);
+        buildButton.setTranslateY(110);
         getChildren().add(buildButton);
         buildButton.setOnMouseClicked(event -> {
-
-            System.out.println("BUILD");
-
+            if( GamePage.checkResources( 0 , false, cost)) {
+                GamePage.gainBenefit(0, false, benefit);
+                GamePage.endTurn();
+            }
+            else {
+                GamePage.giveError("Not enough resources");
+            }
         });
 
         /*
