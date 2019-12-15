@@ -42,7 +42,7 @@ public class GamePage extends Scene {
                 quantity = new int[optional];
         }
     }
-    private class Property {
+    public class Property {
         int coin, shield, mechanic, literature, geometry, victoryPoint;
         String requiredBuilding;
         Resource resource;
@@ -94,6 +94,20 @@ public class GamePage extends Scene {
         players[1] = new Player("bot1");
         players[2] = new Player("bot2");
         players[3] = new Player("bot3");
+        Property a = new Property();
+        Property b = new Property();
+        Card card = new Card("Arsenal",a,b);
+        card.setTranslateX(-800);
+        card.setTranslateY(200);
+        sp.getChildren().addAll(card);
+
+        card.setOnMouseEntered(event -> {
+            card.mouseEnteredHere();
+        });
+        card.setOnMouseExited(event -> {
+            card.mouseExitedHere();
+        });
+
         distributeWonders( sp, side, name);
         sp.getChildren().addAll(wb);
     }
