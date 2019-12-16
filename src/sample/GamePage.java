@@ -212,7 +212,8 @@ public class GamePage extends Scene {
         // lighthouse =7,  chamber of commerce = 8,    arena = 9,  workers guild = 10, craftsmens guild = 11,  traders guild = 12, philosophers guild = 13,
         // spies guild = 14,   magistrates guild = 15
         
-                //scriptorium1
+        //1st age cards
+        //scriptorium1
         a.resource = new Resource(1);
         a.resource.name[0] = "Paper"; a.resource.quantity[0] = 1;
         b.resource = new Resource(1);
