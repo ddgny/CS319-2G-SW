@@ -144,11 +144,18 @@ public class GamePage extends Scene {
         players[2] = new Player("bot2");
         players[3] = new Player("bot3");
         definingCards();
-//        Collections.shuffle(Arrays.asList(cards[0]));
+        Collections.shuffle(Arrays.asList(cards[0]));
 //        Collections.shuffle(Arrays.asList(cards[1]));
 //        Collections.shuffle(Arrays.asList(cards[2]));
         sp.getChildren().addAll(cards[0][0],cards[0][1],cards[0][2],cards[0][3],cards[0][4],cards[0][5],cards[0][6]);
 
+        cards[0][0].setTranslateX(-250); cards[0][0].setTranslateY(90);
+        cards[0][1].setTranslateX(-50);  cards[0][1].setTranslateY(90);
+        cards[0][2].setTranslateX(-450); cards[0][2].setTranslateY(90);
+        cards[0][3].setTranslateX(-650); cards[0][3].setTranslateY(90);
+        cards[0][4].setTranslateX(-150); cards[0][4].setTranslateY(290);
+        cards[0][5].setTranslateX(-350); cards[0][5].setTranslateY(290);
+        cards[0][6].setTranslateX(-550); cards[0][6].setTranslateY(290);
         distributeWonders( sp, side, name);
         sp.getChildren().addAll(wb);
     }
@@ -448,7 +455,7 @@ public class GamePage extends Scene {
         a.resource.name[1] = "Ore"; a.resource.quantity[1] = 1;
         a.resource.name[2] = "Textile"; a.resource.quantity[2] = 1;
         b.shield = 3;
-        cards[0][0] = new Card("arsenal","red",a,b);
+        cards[2][0] = new Card("arsenal","red",a,b);
 
         // caravansery örneği
         a = new Property();
@@ -461,20 +468,7 @@ public class GamePage extends Scene {
         b.resource.name[1] = "Stone"; b.resource.quantity[1] = 1;
         b.resource.name[2] = "Ore"; b.resource.quantity[2] = 1;
         b.resource.name[3] = "Clay"; b.resource.quantity[3] = 1;
-        cards[0][1] = new Card("caravansery","yellow",a,b);
-
-        cards[0][2] = new Card("Arsenal","red",a,b);
-        cards[0][3] = new Card("Arsenal","red",a,b);
-        cards[0][4] = new Card("Arsenal","red",a,b);
-        cards[0][5] = new Card("Arsenal","red",a,b);
-        cards[0][6] = new Card("Arsenal","red",a,b);
-        cards[0][0].setTranslateX(-250); cards[0][0].setTranslateY(90);
-        cards[0][1].setTranslateX(-50);  cards[0][1].setTranslateY(90);
-        cards[0][2].setTranslateX(-450); cards[0][2].setTranslateY(90);
-        cards[0][3].setTranslateX(-650); cards[0][3].setTranslateY(90);
-        cards[0][4].setTranslateX(-150); cards[0][4].setTranslateY(290);
-        cards[0][5].setTranslateX(-350); cards[0][5].setTranslateY(290);
-        cards[0][6].setTranslateX(-550); cards[0][6].setTranslateY(290);
+        cards[1][1] = new Card("caravansery","yellow",a,b);
     }
     private void distributeWonders( StackPane sp, ToggleGroup side, String name) throws Exception {
         Random rand = new Random();
@@ -1207,7 +1201,7 @@ public class GamePage extends Scene {
             board.setArcHeight(15);
             board.setArcWidth(15);
             getChildren().add(board);
-            InputStream is = Files.newInputStream(Paths.get("images/arsenal.png"));
+            InputStream is = Files.newInputStream(Paths.get("images/card images/" + name + ".png"));
             Image img = new Image(is);
             is.close();
             board.setFill(new ImagePattern(img));
