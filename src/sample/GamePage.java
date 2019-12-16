@@ -105,13 +105,7 @@ public class GamePage extends Scene {
         imgView.setFitHeight(Main.primaryScreenBounds.getHeight());
         imgView.setFitWidth(Main.primaryScreenBounds.getWidth());
         sp.getChildren().add(imgView);
-        //OptionsPage.BackButton bb = new OptionsPage.BackButton();
-        //bb.setOnMouseClicked( event -> {
-        //    window.setScene( mainmenu);
-        //});
-        //bb.setTranslateX(-450);
-        //bb.setTranslateY(-330);
-        //sp.getChildren().add(bb);
+
 
         OptionsPage.PauseButton pb = new OptionsPage.PauseButton();
         pb.setOnMouseClicked( event -> {
