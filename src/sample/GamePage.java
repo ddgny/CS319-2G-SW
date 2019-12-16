@@ -60,8 +60,9 @@ public class GamePage extends Scene {
         int coin, shield, mechanic, literature, geometry, victoryPoint;
         String requiredBuilding;
         Resource resource;
+        int specialCard;
         public Property(){
-            coin = shield = mechanic = literature = geometry = victoryPoint = 0;
+            coin = shield = mechanic = literature = geometry = victoryPoint = specialCard = 0;
             requiredBuilding = "";
         }
     }
@@ -71,6 +72,7 @@ public class GamePage extends Scene {
         String[] buildings;
         Resource[] resources;
         int resourceCount;
+        boolean specialCards[];
         Property stats;
         public Player(String tmp) {
             stats = new Property();
@@ -79,6 +81,8 @@ public class GamePage extends Scene {
             battlePoint = greenCards = redCards = yellowCards = greyCards = purpleCards = brownCards = blueCards = milestoneDone = resourceCount = 0;
             buildings = new String[22];
             resources = new Resource[22];
+            specialCards = new boolean[20];
+            for(int i = 0; i < 20; i++) specialCards[i] = false;
         }
         void addResource( Resource add) {
             resources[resourceCount] = add;
@@ -237,7 +241,10 @@ public class GamePage extends Scene {
     private void definingCards() throws Exception {
         Property a = new Property();
         Property b = new Property();
-
+        // bazı kartların benefiti özellik veriyor. bu özellikleri b.specialCard = # diyerek yapın
+        // # -> east Trading post = 1,  west trading post = 2,  marketplace = 3,    vineyard = 4,   bazar = 5,  haven = 6,
+        // lighthouse =7,  chamber of commerce = 8,    arena = 9,  workers guild = 10, craftsmens guild = 11,  traders guild = 12, philosophers guild = 13,
+        // spies guild = 14,   magistrates guild = 15
         // arsenal örneği
         a.resource = new Resource(3);
         a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 2;
@@ -699,7 +706,6 @@ public class GamePage extends Scene {
             this.benefit = benefit;
         }
     }
-
     public class Card extends Pane {
         String name, color;
         javafx.scene.control.Button sellButton,buryButton,buildButton;
