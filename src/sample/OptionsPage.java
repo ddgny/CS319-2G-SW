@@ -81,4 +81,16 @@ public class OptionsPage extends Scene {
             getChildren().add(imgView);
         }
     }
+    public static class PauseButton extends VBox {
+        public PauseButton() throws Exception{
+            setMaxSize( 100, 100);
+            InputStream is = Files.newInputStream(Paths.get( "images/pause.png"));
+            Image img = new Image(is);
+            is.close();
+            ImageView imgView = new ImageView(img);
+            imgView.setFitHeight(100);
+            imgView.setFitWidth(100);
+            getChildren().add(imgView);
+        }
+    }
 }

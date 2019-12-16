@@ -20,6 +20,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.scene.shape.*;
 
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -82,6 +83,8 @@ public class GamePage extends Scene {
             resourceCount++;
         }
     }
+
+
     public GamePage(StackPane sp, Scene mainmenu, Stage window, String name, ToggleGroup side, int sMode) throws Exception {
         super(sp, Main.primaryScreenBounds.getWidth(), Main.primaryScreenBounds.getHeight());
         mode = sMode;
@@ -103,6 +106,39 @@ public class GamePage extends Scene {
         bb.setTranslateX(-450);
         bb.setTranslateY(-330);
         sp.getChildren().add(bb);
+
+        OptionsPage.PauseButton pb = new OptionsPage.PauseButton();
+        pb.setOnMouseClicked( event -> {
+            Rectangle r = new Rectangle(0,0,1700,1700);
+            r.setFill(Color.rgb(0,0,0,0.6));
+            sp.getChildren().add(r);
+            VBox menu2 = new VBox(40);
+            menu2.setTranslateX(0);
+            menu2.setTranslateY(300);
+
+            Main.MenuButton btnResume = new Main.MenuButton("Resume Game");
+            Main.MenuButton btnExit2 = new Main.MenuButton("Exit Game");
+            btnResume.setOnMouseClicked( event2 -> {
+                        btnResume.setVisible(false);
+                        btnExit2.setVisible(false);
+                        menu2.getChildren().removeAll(btnResume, btnExit2);
+                        sp.getChildren().remove(menu2);
+                        sp.getChildren().remove(r);
+            });
+            menu2.getChildren().addAll(btnResume, btnExit2);
+            sp.getChildren().add(menu2);
+
+
+            //window.initStyle(StageStyle.TRANSPARENT);
+            //mainmenu.setFill(Color.TRANSPARENT);
+            //Color.rgb(0,0,0 ,0.5)
+            //window.setOpacity(0.2);
+            //mainmenu.setFill(Color.rgb(0,0,0 ,0.5));
+        });
+        pb.setTranslateX(530);
+        pb.setTranslateY(270);
+        sp.getChildren().add(pb);
+
         players[0] = new Player(name);
         players[1] = new Player("bot1");
         players[2] = new Player("bot2");
