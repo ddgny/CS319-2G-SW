@@ -65,18 +65,18 @@ public class GamePage extends Scene {
         int battlePoint, greenCards, redCards, yellowCards, greyCards, purpleCards, brownCards, blueCards, milestoneDone;
         String[] buildings;
         Resource[] resources;
-        int resourceCount;
-        boolean specialCards[];
+        int resourceCount, buildingsCount;
+        boolean[] specialCards;
         Property stats;
         public Player(String tmp) {
             stats = new Property();
             stats.coin = 3;
             name = tmp;
-            battlePoint = greenCards = redCards = yellowCards = greyCards = purpleCards = brownCards = blueCards = milestoneDone = resourceCount = 0;
+            battlePoint = greenCards = redCards = yellowCards = greyCards = purpleCards = brownCards = blueCards = milestoneDone = buildingsCount = resourceCount = 0;
             buildings = new String[22];
             resources = new Resource[22];
-            specialCards = new boolean[20];
-            for(int i = 0; i < 20; i++) specialCards[i] = false;
+            specialCards = new boolean[22];
+            for(int i = 0; i < 22; i++) specialCards[i] = false;
         }
         void addResource( Resource add) {
             resources[resourceCount] = add;
@@ -152,7 +152,7 @@ public class GamePage extends Scene {
         distributeWonders( sp, side, name);
         sp.getChildren().addAll(wb);
     }
-    public static void giveError( String errorMessage) {
+    public void giveError( String errorMessage) {
         Popup popup = new Popup();
         Text text = new Text(errorMessage);
         text.setFill(Color.RED);
@@ -165,27 +165,46 @@ public class GamePage extends Scene {
         popup.show(window);
         delay.play();
     }
-    public static void endTurn() {
+    public void endTurn() {
 
     }
-    public static boolean checkResources(int playerNum, boolean isWonderbuild, Property cost) {
+    public boolean checkResources(int playerNum, boolean isWonderbuild, Property cost) {
         if(isWonderbuild)
             cost = wb[playerNum].milestones[players[playerNum].milestoneDone].cost;
         return false;
     }
-    public static void gainBenefit( int playerNum, boolean isWonderbuild, Property benefit) {
+    public void gainBenefit( int playerNum, boolean isWonderbuild, Property benefit, String buildingName, String buildingColor) {
         if(isWonderbuild) {
             benefit = wb[playerNum].milestones[players[playerNum].milestoneDone].benefit;
             players[playerNum].milestoneDone++;
         }
+        else if(!buildingName.equals("")) {
+            players[playerNum].buildings[players[playerNum].buildingsCount] = buildingName;
+            if(buildingColor.equals("red")) players[playerNum].redCards++;
+            else if(buildingColor.equals("grey")) players[playerNum].greyCards++;
+            else if(buildingColor.equals("green")) players[playerNum].greenCards++;
+            else if(buildingColor.equals("blue")) players[playerNum].blueCards++;
+            else if(buildingColor.equals("yellow")) players[playerNum].yellowCards++;
+            else if(buildingColor.equals("brown")) players[playerNum].brownCards++;
+        }
+        players[playerNum].addResource(benefit.resource);
+        players[playerNum].stats.coin += benefit.coin;
+        players[playerNum].stats.shield += benefit.shield;
+        players[playerNum].stats.mechanic += benefit.mechanic;
+        players[playerNum].stats.literature += benefit.literature;
+        players[playerNum].stats.geometry += benefit.geometry;
+        players[playerNum].stats.victoryPoint += benefit.victoryPoint;
+        players[playerNum].specialCards[benefit.specialCard] = true;
     }
     private void definingCards() throws Exception {
         Property a = new Property();
         Property b = new Property();
+
         // bazı kartların benefiti özellik veriyor. bu özellikleri b.specialCard = # diyerek yapın
         // # -> east Trading post = 1,  west trading post = 2,  marketplace = 3,    vineyard = 4,   bazar = 5,  haven = 6,
         // lighthouse =7,  chamber of commerce = 8,    arena = 9,  workers guild = 10, craftsmens guild = 11,  traders guild = 12, philosophers guild = 13,
-        // spies guild = 14,   magistrates guild = 15
+        // spies guild = 14,   magistrates guild = 15,  babylona2 = 16, babylonb2 = 17, olympiaa2 = 18, olympiab1 = 19, olympiab3 = 20, halicarnassus = 21
+
         // arsenal örneği
         a.resource = new Resource(3);
         a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 2;
@@ -206,6 +225,7 @@ public class GamePage extends Scene {
         b.resource.name[2] = "Ore"; b.resource.quantity[2] = 1;
         b.resource.name[3] = "Clay"; b.resource.quantity[3] = 1;
         cards[0][1] = new Card("caravansery","yellow",a,b);
+
         cards[0][2] = new Card("Arsenal","red",a,b);
         cards[0][3] = new Card("Arsenal","red",a,b);
         cards[0][4] = new Card("Arsenal","red",a,b);
@@ -266,6 +286,7 @@ public class GamePage extends Scene {
         VBox coinVB, shieldVB, battleVB, vicPointVB, literatureVB, mechanicVB, geometryVB;
         HBox greenHB, redHB, yellowHB, greyHB, brownHB, blueHB, resourcesHB;
         public WonderBoard( StackPane sp, int wNumber, String side, String playerName, int pN) throws Exception{
+            Property a,b;
             setMaxSize(400, 250);
             milestones = new Milestone[3];
             pNum = pN;
@@ -297,6 +318,39 @@ public class GamePage extends Scene {
                 Resource tmp = new Resource( 1);
                 tmp.name[0] = "Ore"; tmp.quantity[0] = 1;
                 players[pNum].addResource( tmp);
+                if(side.equals("A")) {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Lumber";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 3;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Clay";    a.resource.quantity[0] = 3;
+                    b.shield = 2;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Ore";  a.resource.quantity[0] = 4;
+                    b.victoryPoint = 7;
+                    milestones[2] = new Milestone(a,b);
+                }
+                else {
+                    milestones = new Milestone[2];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 3;
+                    b.victoryPoint = 3; b.coin = 3; b.shield = 1;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Ore";    a.resource.quantity[0] = 4;
+                    b.shield = 1;   b.victoryPoint = 4; b.coin = 4;
+                    milestones[1] = new Milestone(a,b);
+                }
             }
             else if( wNumber == 2) {
                 InputStream is = Files.newInputStream(Paths.get("images/alexandria.jpg"));
@@ -313,6 +367,55 @@ public class GamePage extends Scene {
                 Resource tmp = new Resource( 1);
                 tmp.name[0] = "Glass"; tmp.quantity[0] = 1;
                 players[pNum].addResource( tmp);
+                if(side.equals("A")) {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 3;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Ore";    a.resource.quantity[0] = 2;
+                    b.resource = new Resource(4);
+                    b.resource.name[0] = "Lumber";  b.resource.quantity[0] = 1;
+                    b.resource.name[1] = "Ore";  b.resource.quantity[1] = 1;
+                    b.resource.name[2] = "Stone";  b.resource.quantity[2] = 1;
+                    b.resource.name[3] = "Clay";  b.resource.quantity[3] = 1;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Glass";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 7;
+                    milestones[2] = new Milestone(a,b);
+                }
+                else {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Clay";  a.resource.quantity[0] = 2;
+                    b.resource = new Resource(4);
+                    b.resource.name[0] = "Lumber";  b.resource.quantity[0] = 1;
+                    b.resource.name[1] = "Ore";  b.resource.quantity[1] = 1;
+                    b.resource.name[2] = "Stone";  b.resource.quantity[2] = 1;
+                    b.resource.name[3] = "Clay";  b.resource.quantity[3] = 1;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Lumber";    a.resource.quantity[0] = 2;
+                    b.resource = new Resource(3);
+                    b.resource.name[0] = "Glass";  b.resource.quantity[0] = 1;
+                    b.resource.name[1] = "Textile";  b.resource.quantity[1] = 1;
+                    b.resource.name[2] = "Paper";  b.resource.quantity[2] = 1;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 3;
+                    b.victoryPoint = 7;
+                    milestones[2] = new Milestone(a,b);
+                }
             }
             else if( wNumber == 3) {
                 InputStream is = Files.newInputStream(Paths.get("images/gamepage.jpg"));
@@ -329,6 +432,47 @@ public class GamePage extends Scene {
                 Resource tmp = new Resource( 1);
                 tmp.name[0] = "Paper"; tmp.quantity[0] = 1;
                 players[pNum].addResource( tmp);
+                if(side.equals("A")) {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 3;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Lumber";    a.resource.quantity[0] = 2;
+                    b.resource = new Resource(4);
+                    b.coin = 9;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Paper";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 7;
+                    milestones[2] = new Milestone(a,b);
+                }
+                else {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 2; b.coin = 4;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Lumber";    a.resource.quantity[0] = 2;
+                    b.victoryPoint = 3; b.coin= 4;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(3);
+                    a.resource.name[0] = "Paper";  a.resource.quantity[0] = 1;
+                    a.resource.name[1] = "Glass";  a.resource.quantity[1] = 1;
+                    a.resource.name[2] = "Textile";  a.resource.quantity[2] = 1;
+                    b.victoryPoint = 5; b.coin = 4;
+                    milestones[2] = new Milestone(a,b);
+                }
             }
             else if( wNumber == 4) {
                 InputStream is = Files.newInputStream(Paths.get("images/babylon.jpg"));
@@ -345,6 +489,47 @@ public class GamePage extends Scene {
                 Resource tmp = new Resource( 1);
                 tmp.name[0] = "Clay"; tmp.quantity[0] = 1;
                 players[pNum].addResource( tmp);
+                if(side.equals("A")) {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Clay";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 3;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Lumber";    a.resource.quantity[0] = 3;
+                    b.specialCard = 16;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Clay";  a.resource.quantity[0] = 4;
+                    b.victoryPoint = 7;
+                    milestones[2] = new Milestone(a,b);
+                }
+                else {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(2);
+                    a.resource.name[0] = "Textile";  a.resource.quantity[0] = 1;
+                    a.resource.name[1] = "Clay";  a.resource.quantity[1] = 1;
+                    b.victoryPoint = 3;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(2);
+                    a.resource.name[0] = "Lumber";    a.resource.quantity[0] = 2;
+                    a.resource.name[1] = "Glass";    a.resource.quantity[1] = 1;
+                    b.specialCard = 17;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(2);
+                    a.resource.name[0] = "Clay";  a.resource.quantity[0] = 3;
+                    a.resource.name[1] = "Paper";  a.resource.quantity[1] = 1;
+                    b.specialCard = 16;
+                    milestones[2] = new Milestone(a,b);
+                }
             }
             else if( wNumber == 5) {
                 InputStream is = Files.newInputStream(Paths.get("images/olympia.jpg"));
@@ -361,6 +546,45 @@ public class GamePage extends Scene {
                 Resource tmp = new Resource( 1);
                 tmp.name[0] = "Lumber"; tmp.quantity[0] = 1;
                 players[pNum].addResource( tmp);
+                if(side.equals("A")) {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Lumber";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 3;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Stone";    a.resource.quantity[0] = 2;
+                    b.specialCard = 18;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Ore";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 7;
+                    milestones[2] = new Milestone(a,b);
+                }
+                else {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Lumber";  a.resource.quantity[0] = 2;
+                    b.specialCard = 19;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Stone";    a.resource.quantity[0] = 2;
+                    b.victoryPoint = 5;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(2);
+                    a.resource.name[0] = "Ore";  a.resource.quantity[0] = 2;
+                    a.resource.name[1] = "Textile";  a.resource.quantity[1] = 1;
+                    b.specialCard = 20;
+                    milestones[2] = new Milestone(a,b);
+                }
             }
             else if( wNumber == 6) {
                 InputStream is = Files.newInputStream(Paths.get("images/halikarnassos.jpg"));
@@ -377,6 +601,46 @@ public class GamePage extends Scene {
                 Resource tmp = new Resource( 1);
                 tmp.name[0] = "Textile"; tmp.quantity[0] = 1;
                 players[pNum].addResource( tmp);
+                if(side.equals("A")) {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Clay";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 3;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Ore";    a.resource.quantity[0] = 3;
+                    b.specialCard = 21;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Textile";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 7;
+                    milestones[2] = new Milestone(a,b);
+                }
+                else {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Ore";  a.resource.quantity[0] = 2;
+                    b.specialCard = 21; b.victoryPoint = 2;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Clay";    a.resource.quantity[0] = 3;
+                    b.specialCard = 21; b.victoryPoint = 1;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(3);
+                    a.resource.name[0] = "Glass";  a.resource.quantity[0] = 1;
+                    a.resource.name[1] = "Textile";  a.resource.quantity[1] = 1;
+                    a.resource.name[2] = "Paper";  a.resource.quantity[2] = 1;
+                    b.specialCard = 21;
+                    milestones[2] = new Milestone(a,b);
+                }
             }
             else if( wNumber == 7) {
                 InputStream is = Files.newInputStream(Paths.get("images/gizeh.jpg"));
@@ -393,6 +657,50 @@ public class GamePage extends Scene {
                 Resource tmp = new Resource( 1);
                 tmp.name[0] = "Stone"; tmp.quantity[0] = 1;
                 players[pNum].addResource( tmp);
+                if(side.equals("A")) {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 3;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Lumber";    a.resource.quantity[0] = 3;
+                    b.victoryPoint = 5;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 4;
+                    b.victoryPoint = 7;
+                    milestones[2] = new Milestone(a,b);
+                }
+                else {
+                    milestones = new Milestone[4];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Lumber";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 3;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Stone";    a.resource.quantity[0] = 3;
+                    b.victoryPoint = 5;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Clay";  a.resource.quantity[0] = 3;
+                    b.victoryPoint = 5;
+                    milestones[2] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(2);
+                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 4;
+                    a.resource.name[1] = "Paper";  a.resource.quantity[1] = 1;
+                    b.victoryPoint = 7;
+                    milestones[2] = new Milestone(a,b);
+                }
             }
             // coin part
             InputStream is = Files.newInputStream(Paths.get("images/coins.png"));
@@ -681,10 +989,10 @@ public class GamePage extends Scene {
             sellButton.setTranslateY(30);
             getChildren().add(sellButton);
             sellButton.setOnMouseClicked(event -> {
-                GamePage.Property tmp;
+                Property tmp;
                 tmp = new GamePage.Property();
                 tmp.coin = 3;
-                GamePage.gainBenefit( 0, false, tmp);
+                gainBenefit( 0, false, tmp, "", "");
             });
 
             buryButton = new javafx.scene.control.Button("UPGRADE WONDER");
@@ -692,12 +1000,12 @@ public class GamePage extends Scene {
             buryButton.setTranslateY(70);
             getChildren().add(buryButton);
             buryButton.setOnMouseClicked(event -> {
-                if( GamePage.checkResources( 0 , true, cost)) {
-                    GamePage.gainBenefit(0, true, benefit);
-                    GamePage.endTurn();
+                if( checkResources( 0 , true, cost)) {
+                    gainBenefit(0, true, benefit, "", "");
+                    endTurn();
                 }
                 else {
-                    GamePage.giveError("Not enough resources");
+                    giveError("Not enough resources");
                 }
             });
 
@@ -706,12 +1014,12 @@ public class GamePage extends Scene {
             buildButton.setTranslateY(110);
             getChildren().add(buildButton);
             buildButton.setOnMouseClicked(event -> {
-                if( GamePage.checkResources( 0 , false, cost)) {
-                    GamePage.gainBenefit(0, false, benefit);
-                    GamePage.endTurn();
+                if( checkResources( 0 , false, cost)) {
+                    gainBenefit(0, false, benefit, name, color);
+                    endTurn();
                 }
                 else {
-                    GamePage.giveError("Not enough resources");
+                    giveError("Not enough resources");
                 }
             });
 
