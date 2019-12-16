@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SubScene;
+import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
@@ -141,8 +142,27 @@ public class GamePage extends Scene {
     private void definingCards() throws Exception {
         Property a = new Property();
         Property b = new Property();
-        cards[0][0] = new Card("Arsenal","red",a,b);
-        cards[0][1] = new Card("Arsenal","red",a,b);
+
+        // arsenal örneği
+        a.resource = new Resource(3);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Ore"; a.resource.quantity[1] = 1;
+        a.resource.name[2] = "Textile"; a.resource.quantity[2] = 1;
+        b.shield = 3;
+        cards[0][0] = new Card("arsenal","red",a,b);
+
+        // caravansery örneği
+        a = new Property();
+        a.requiredBuilding = "marketplace";
+        a.resource = new Resource(1);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 2;
+        b = new Property();
+        b.resource = new Resource(4);
+        b.resource.name[0] = "Lumber"; b.resource.quantity[0] = 1;
+        b.resource.name[1] = "Stone"; b.resource.quantity[1] = 1;
+        b.resource.name[2] = "Ore"; b.resource.quantity[2] = 1;
+        b.resource.name[3] = "Clay"; b.resource.quantity[3] = 1;
+        cards[0][1] = new Card("caravansery","yellow",a,b);
         cards[0][2] = new Card("Arsenal","red",a,b);
         cards[0][3] = new Card("Arsenal","red",a,b);
         cards[0][4] = new Card("Arsenal","red",a,b);
@@ -582,6 +602,93 @@ public class GamePage extends Scene {
         public Milestone( Property cost, Property benefit ) throws Exception {
             this.cost = cost;
             this.benefit = benefit;
+        }
+    }
+
+    public class Card extends Pane {
+        String name, color;
+        javafx.scene.control.Button sellButton,buryButton,buildButton;
+        Rectangle board;
+        GamePage.Property cost, benefit;
+        public Card(String name, String color, GamePage.Property a, GamePage.Property b ) throws  Exception{
+            this.name = name;
+            this.color = color;
+            cost = a;
+            benefit = b;
+            //bg = new Background( new BackgroundFill(Color.rgb(109,132,118,0.1), CornerRadii.EMPTY, Insets.EMPTY));
+            board = new Rectangle(140,190,Color.rgb(109,132,118,1));
+            board.setArcHeight(15);
+            board.setArcWidth(15);
+            getChildren().add(board);
+            InputStream is = Files.newInputStream(Paths.get("images/arsenal.png"));
+            Image img = new Image(is);
+            is.close();
+            board.setFill(new ImagePattern(img));
+            this.setOnMouseEntered(event -> {
+                mouseEnteredHere();
+            });
+            this.setOnMouseExited(event -> {
+                mouseExitedHere();
+            });
+            setMaxSize(140, 190);
+        }
+        public void  mouseEnteredHere(){
+            board.setOpacity(0.65);
+            sellButton = new javafx.scene.control.Button("SELL");
+            sellButton.setTranslateX(55);
+            sellButton.setTranslateY(30);
+            getChildren().add(sellButton);
+            sellButton.setOnMouseClicked(event -> {
+                GamePage.Property tmp;
+                tmp = new GamePage.Property();
+                tmp.coin = 3;
+                GamePage.gainBenefit( 0, false, tmp);
+            });
+
+            buryButton = new javafx.scene.control.Button("UPGRADE WONDER");
+            buryButton.setTranslateX(10);
+            buryButton.setTranslateY(70);
+            getChildren().add(buryButton);
+            buryButton.setOnMouseClicked(event -> {
+                if( GamePage.checkResources( 0 , true, cost)) {
+                    GamePage.gainBenefit(0, true, benefit);
+                    GamePage.endTurn();
+                }
+                else {
+                    GamePage.giveError("Not enough resources");
+                }
+            });
+
+            buildButton = new Button("BUILD");
+            buildButton.setTranslateX(50);
+            buildButton.setTranslateY(110);
+            getChildren().add(buildButton);
+            buildButton.setOnMouseClicked(event -> {
+                if( GamePage.checkResources( 0 , false, cost)) {
+                    GamePage.gainBenefit(0, false, benefit);
+                    GamePage.endTurn();
+                }
+                else {
+                    GamePage.giveError("Not enough resources");
+                }
+            });
+
+        /*
+        sell = new Text("Sell");
+        sell.setFill(Color.WHITESMOKE);
+        sell.setFont(Font.font("Kalam", FontWeight.BOLD,15));
+        sell.setTranslateX(110);
+        sell.setTranslateY(150);
+        getChildren().add(sell);
+
+         */
+
+        }
+        public void  mouseExitedHere(){
+            board.setOpacity(1);
+            getChildren().remove(sellButton);
+            getChildren().remove(buryButton);
+            getChildren().remove(buildButton);
         }
     }
 }
