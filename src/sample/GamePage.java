@@ -398,7 +398,7 @@ public class GamePage extends Scene {
         b = new Property();
         b.resource = new Resource(1);
         b.coin = 5;
-        cards[0][24] = new Card("orevein","brown",a,b);
+        cards[0][24] = new Card("orevein","yellow",a,b);
 
         //east trading post
         a = new Property();
