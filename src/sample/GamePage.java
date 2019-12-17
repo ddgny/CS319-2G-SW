@@ -741,8 +741,7 @@ public class GamePage extends Scene {
         //scriptorium1
         a.resource = new Resource(1);
         a.resource.name[0] = "Paper"; a.resource.quantity[0] = 1;
-        b.resource = new Resource(1);
-        b.resource.name[0] = "Literature"; b.resource.quantity[0] = 1;
+        b.literature = 1;
         cards[0][0] = new Card("scriptorium","green",a,b);
 
         //scriptorium2
@@ -750,8 +749,7 @@ public class GamePage extends Scene {
         a.resource = new Resource(1);
         a.resource.name[0] = "Paper"; a.resource.quantity[0] = 1;
         b = new Property();
-        b.resource = new Resource(1);
-        b.resource.name[0] = "Literature"; b.resource.quantity[0] = 1;
+        b.literature = 1;
         cards[0][1] = new Card("scriptorium","green",a,b);
 
         //workshop
@@ -759,8 +757,7 @@ public class GamePage extends Scene {
         a.resource = new Resource(1);
         a.resource.name[0] = "Glass"; a.resource.quantity[0] = 1;
         b = new Property();
-        b.resource = new Resource(1);
-        b.resource.name[0] = "Mechanic"; b.resource.quantity[0] = 1;
+        b.mechanic = 1;
         cards[0][2] = new Card("workshop","green",a,b);
 
         //apothecary
@@ -768,8 +765,7 @@ public class GamePage extends Scene {
         a.resource = new Resource(1);
         a.resource.name[0] = "Textile"; a.resource.quantity[0] = 1;
         b = new Property();
-        b.resource = new Resource(1);
-        b.resource.name[0] = "Geometry"; b.resource.quantity[0] = 1;
+        b.geometry = 1;
         cards[0][3] = new Card("apothecary","green",a,b);
 
         //stockade
@@ -810,7 +806,6 @@ public class GamePage extends Scene {
 
         //pawnshop
         a = new Property();
-        a.resource = new Resource(0);
         b = new Property();
         b.resource = new Resource(1);
         b.victoryPoint = 3;
@@ -818,7 +813,6 @@ public class GamePage extends Scene {
 
         //altar
         a = new Property();
-        a.resource = new Resource(0);
         b = new Property();
         b.resource = new Resource(1);
         b.victoryPoint = 2;
@@ -826,7 +820,6 @@ public class GamePage extends Scene {
 
         //theater
         a = new Property();
-        a.resource = new Resource(0);
         b = new Property();
         b.resource = new Resource(1);
         b.victoryPoint = 2;
@@ -838,12 +831,11 @@ public class GamePage extends Scene {
         a.resource.name[0] = "Stone"; a.resource.quantity[0] = 1;
         b = new Property();
         b.resource = new Resource(1);
-        b.victoryPoint = 2;
+        b.victoryPoint = 3;
         cards[0][11] = new Card("baths","blue",a,b);
 
         //lumberyard1
         a = new Property();
-        a.resource = new Resource(0);
         b = new Property();
         b.resource = new Resource(1);
         b.resource.name[0] = "Lumber"; b.resource.quantity[0] = 1;
@@ -851,7 +843,6 @@ public class GamePage extends Scene {
 
         //lumberyard2
         a = new Property();
-        a.resource = new Resource(0);
         b = new Property();
         b.resource = new Resource(1);
         b.resource.name[0] = "Lumber"; b.resource.quantity[0] = 1;
@@ -859,7 +850,6 @@ public class GamePage extends Scene {
 
         //stone pit
         a = new Property();
-        a.resource = new Resource(0);
         b = new Property();
         b.resource = new Resource(1);
         b.resource.name[0] = "Stone"; b.resource.quantity[0] = 1;
@@ -867,7 +857,6 @@ public class GamePage extends Scene {
 
         //clay pool
         a = new Property();
-        a.resource = new Resource(0);
         b = new Property();
         b.resource = new Resource(1);
         b.resource.name[0] = "Clay"; b.resource.quantity[0] = 1;
@@ -875,7 +864,6 @@ public class GamePage extends Scene {
 
         //ore vein1
         a = new Property();
-        a.resource = new Resource(0);
         b = new Property();
         b.resource = new Resource(1);
         b.resource.name[0] = "Ore"; b.resource.quantity[0] = 1;
@@ -883,7 +871,6 @@ public class GamePage extends Scene {
 
         //loom
         a = new Property();
-        a.resource = new Resource(0);
         b = new Property();
         b.resource = new Resource(1);
         b.resource.name[0] = "Textile"; b.resource.quantity[0] = 1;
@@ -891,7 +878,6 @@ public class GamePage extends Scene {
 
         //glassworks
         a = new Property();
-        a.resource = new Resource(0);
         b = new Property();
         b.resource = new Resource(1);
         b.resource.name[0] = "Glass"; b.resource.quantity[0] = 1;
@@ -899,7 +885,6 @@ public class GamePage extends Scene {
 
         //press
         a = new Property();
-        a.resource = new Resource(0);
         b = new Property();
         b.resource = new Resource(1);
         b.resource.name[0] = "Paper"; b.resource.quantity[0] = 1;
@@ -937,7 +922,6 @@ public class GamePage extends Scene {
 
         //ore vein2
         a = new Property();
-        a.resource = new Resource(0);
         b = new Property();
         b.resource = new Resource(1);
         b.resource.name[0] = "Ore"; b.resource.quantity[0] = 1;
@@ -945,7 +929,6 @@ public class GamePage extends Scene {
 
         //tavern
         a = new Property();
-        a.resource = new Resource(0);
         b = new Property();
         b.resource = new Resource(1);
         b.coin = 5;
@@ -953,7 +936,6 @@ public class GamePage extends Scene {
 
         //east trading post
         a = new Property();
-        a.resource = new Resource(0);
         b = new Property();
         b.resource = new Resource(1);
         b.specialCard = 1;
@@ -961,7 +943,6 @@ public class GamePage extends Scene {
 
         //west trading post
         a = new Property();
-        a.resource = new Resource(0);
         b = new Property();
         b.resource = new Resource(1);
         b.specialCard = 2;
@@ -969,24 +950,11 @@ public class GamePage extends Scene {
 
         //marketplace
         a = new Property();
-        a.resource = new Resource(0);
         b = new Property();
         b.resource = new Resource(1);
         b.specialCard = 3;
         cards[0][27] = new Card("marketplace","yellow",a,b);
 
-        // caravansery örneği
-        a = new Property();
-        a.requiredBuilding = "marketplace";
-        a.resource = new Resource(1);
-        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 2;
-        b = new Property();
-        b.resource = new Resource(4);
-        b.resource.name[0] = "Lumber"; b.resource.quantity[0] = 1;
-        b.resource.name[1] = "Stone"; b.resource.quantity[1] = 1;
-        b.resource.name[2] = "Ore"; b.resource.quantity[2] = 1;
-        b.resource.name[3] = "Clay"; b.resource.quantity[3] = 1;
-        cards[1][1] = new Card("caravansery","yellow",a,b);
 
         //2nd age cards
 
