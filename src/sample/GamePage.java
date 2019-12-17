@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SubScene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
@@ -107,6 +108,454 @@ public class GamePage extends Scene {
         bb.setTranslateY(-330);
         sp.getChildren().add(bb);
 
+        // TESTING FOR TRADE
+        is = Files.newInputStream(Paths.get("images/coins.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgCoin = new ImageView(img);
+        imgCoin.setFitHeight(35);
+        imgCoin.setFitWidth(35);
+        imgCoin.setTranslateX(20);
+
+        is = Files.newInputStream(Paths.get("images/Lumber.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgLumber = new ImageView(img);
+        imgLumber.setFitHeight(35);
+        imgLumber.setFitWidth(35);
+        imgLumber.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/ore.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgOre = new ImageView(img);
+        imgOre.setFitHeight(35);
+        imgOre.setFitWidth(35);
+        imgOre.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/Clay.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgClay = new ImageView(img);
+        imgClay.setFitHeight(35);
+        imgClay.setFitWidth(35);
+        imgClay.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/Paper.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgPaper = new ImageView(img);
+        imgPaper.setFitHeight(35);
+        imgPaper.setFitWidth(35);
+        imgPaper.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/Glass.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgGlass = new ImageView(img);
+        imgGlass.setFitHeight(35);
+        imgGlass.setFitWidth(35);
+        imgGlass.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/Textile.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgTextile = new ImageView(img);
+        imgTextile.setFitHeight(35);
+        imgTextile.setFitWidth(35);
+        imgTextile.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/Stone.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgStone  = new ImageView(img);
+        imgStone.setFitHeight(35);
+        imgStone.setFitWidth(35);
+        imgStone.setTranslateX(10);
+
+        Text ForText;
+        ForText = new Text("For 2 ");
+        ForText.setFill(Color.WHITESMOKE);
+        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+        ForText.setTranslateX(15);
+
+
+
+        Button tradeLumberLeft = new Button("Trade");
+        tradeLumberLeft.setTranslateX(5);
+        tradeLumberLeft.setOnMouseClicked(event -> {
+            System.out.println("tradeLumberLeft");
+        });
+
+        Button tradeClayLeft = new Button("Trade");
+        tradeClayLeft.setTranslateX(5);
+        tradeClayLeft.setOnMouseClicked(event -> {
+            System.out.println("tradeClayLeft");
+        });
+        Button tradeOreLeft = new Button("Trade");
+        tradeOreLeft.setTranslateX(5);
+        tradeOreLeft.setOnMouseClicked(event -> {
+            System.out.println("tradeOreLeft");
+        });
+        Button tradeStoneLeft = new Button("Trade");
+        tradeStoneLeft.setTranslateX(5);
+        tradeStoneLeft.setOnMouseClicked(event -> {
+            System.out.println("tradeStoneLeft");
+        });
+
+        Button tradeGlassLeft = new Button("Trade");
+        tradeGlassLeft.setTranslateX(5);
+        tradeGlassLeft.setOnMouseClicked(event -> {
+            System.out.println("tradeGlassLeft");
+        });
+        Button tradePaperLeft = new Button("Trade");
+        tradePaperLeft.setTranslateX(5);
+        tradePaperLeft.setOnMouseClicked(event -> {
+            System.out.println("tradePaperLeft");
+        });
+        Button tradeTextileLeft = new Button("Trade");
+        tradeTextileLeft.setTranslateX(5);
+        tradeTextileLeft.setOnMouseClicked(event -> {
+            System.out.println("tradeTextileLeft");
+        });
+        HBox tradeLumberHBLeft,tradeClayHBLeft,tradeStoneHBLeft,tradeOreHBLeft,tradeGlassHBLeft,tradePaperHBLeft,tradeTextileHBLeft;
+
+        is = Files.newInputStream(Paths.get("images/coins.png"));
+        img = new Image(is);
+        is.close();
+        imgCoin = new ImageView(img);
+        imgCoin.setFitHeight(35);
+        imgCoin.setFitWidth(35);
+        imgCoin.setTranslateX(20);
+        ForText = new Text("For 2 ");
+        ForText.setFill(Color.WHITESMOKE);
+        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+        ForText.setTranslateX(15);
+        tradeLumberHBLeft = new HBox(tradeLumberLeft,imgLumber,ForText,imgCoin);
+        tradeLumberHBLeft.setTranslateY(270);
+        tradeLumberHBLeft.setTranslateX(60);
+        tradeLumberHBLeft.setPrefSize(60,60);
+
+
+        is = Files.newInputStream(Paths.get("images/coins.png"));
+        img = new Image(is);
+        is.close();
+        imgCoin = new ImageView(img);
+        imgCoin.setFitHeight(35);
+        imgCoin.setFitWidth(35);
+        imgCoin.setTranslateX(20);
+        ForText = new Text("For 2 ");
+        ForText.setFill(Color.WHITESMOKE);
+        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+        ForText.setTranslateX(15);
+        tradeClayHBLeft = new HBox(tradeClayLeft,imgClay,ForText,imgCoin);
+        tradeClayHBLeft.setTranslateY(300);
+        tradeClayHBLeft.setTranslateX(60);
+        tradeClayHBLeft.setPrefSize(60,60);
+
+        is = Files.newInputStream(Paths.get("images/coins.png"));
+        img = new Image(is);
+        is.close();
+        imgCoin = new ImageView(img);
+        imgCoin.setFitHeight(35);
+        imgCoin.setFitWidth(35);
+        imgCoin.setTranslateX(20);
+        ForText = new Text("For 2 ");
+        ForText.setFill(Color.WHITESMOKE);
+        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+        ForText.setTranslateX(15);
+        tradeOreHBLeft = new HBox(tradeOreLeft,imgOre,ForText,imgCoin);
+        tradeOreHBLeft.setTranslateY(330);
+        tradeOreHBLeft.setTranslateX(60);
+        tradeOreHBLeft.setPrefSize(60,60);
+
+        is = Files.newInputStream(Paths.get("images/coins.png"));
+        img = new Image(is);
+        is.close();
+        imgCoin = new ImageView(img);
+        imgCoin.setFitHeight(35);
+        imgCoin.setFitWidth(35);
+        imgCoin.setTranslateX(20);
+        ForText = new Text("For 2 ");
+        ForText.setFill(Color.WHITESMOKE);
+        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+        ForText.setTranslateX(15);
+        tradeStoneHBLeft = new HBox(tradeStoneLeft,imgStone,ForText,imgCoin);
+        tradeStoneHBLeft.setTranslateY(360);
+        tradeStoneHBLeft.setTranslateX(60);
+        tradeStoneHBLeft.setPrefSize(60,60);
+
+        is = Files.newInputStream(Paths.get("images/coins.png"));
+        img = new Image(is);
+        is.close();
+        imgCoin = new ImageView(img);
+        imgCoin.setFitHeight(35);
+        imgCoin.setFitWidth(35);
+        imgCoin.setTranslateX(20);
+        ForText = new Text("For 2 ");
+        ForText.setFill(Color.WHITESMOKE);
+        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+        ForText.setTranslateX(15);
+        tradeGlassHBLeft = new HBox(tradeGlassLeft,imgGlass,ForText,imgCoin);
+        tradeGlassHBLeft.setTranslateY(390);
+        tradeGlassHBLeft.setTranslateX(60);
+        tradeGlassHBLeft.setPrefSize(60,60);
+
+        is = Files.newInputStream(Paths.get("images/coins.png"));
+        img = new Image(is);
+        is.close();
+        imgCoin = new ImageView(img);
+        imgCoin.setFitHeight(35);
+        imgCoin.setFitWidth(35);
+        imgCoin.setTranslateX(20);
+        ForText = new Text("For 2 ");
+        ForText.setFill(Color.WHITESMOKE);
+        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+        ForText.setTranslateX(15);
+        tradePaperHBLeft = new HBox(tradePaperLeft,imgPaper,ForText,imgCoin);
+        tradePaperHBLeft.setTranslateY(420);
+        tradePaperHBLeft.setTranslateX(60);
+        tradePaperHBLeft.setPrefSize(60,60);
+
+        is = Files.newInputStream(Paths.get("images/coins.png"));
+        img = new Image(is);
+        is.close();
+        imgCoin = new ImageView(img);
+        imgCoin.setFitHeight(35);
+        imgCoin.setFitWidth(35);
+        imgCoin.setTranslateX(20);
+        ForText = new Text("For 2 ");
+        ForText.setFill(Color.WHITESMOKE);
+        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+        ForText.setTranslateX(15);
+        tradeTextileHBLeft = new HBox(tradeTextileLeft,imgTextile,ForText,imgCoin);
+        tradeTextileHBLeft.setTranslateY(450);
+        tradeTextileHBLeft.setTranslateX(60);
+        tradeTextileHBLeft.setPrefSize(60,60);
+
+        sp.getChildren().addAll(tradeLumberHBLeft,tradeClayHBLeft,tradeOreHBLeft,tradeStoneHBLeft,tradeGlassHBLeft,tradePaperHBLeft,tradeTextileHBLeft);
+        // TESTING FOR TRADE
+
+        is = Files.newInputStream(Paths.get("images/coins.png"));
+        img = new Image(is);
+        is.close();
+        imgCoin = new ImageView(img);
+        imgCoin.setFitHeight(35);
+        imgCoin.setFitWidth(35);
+        imgCoin.setTranslateX(20);
+
+        is = Files.newInputStream(Paths.get("images/Lumber.png"));
+        img = new Image(is);
+        is.close();
+         imgLumber = new ImageView(img);
+        imgLumber.setFitHeight(35);
+        imgLumber.setFitWidth(35);
+        imgLumber.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/ore.png"));
+        img = new Image(is);
+        is.close();
+        imgOre = new ImageView(img);
+        imgOre.setFitHeight(35);
+        imgOre.setFitWidth(35);
+        imgOre.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/Clay.png"));
+        img = new Image(is);
+        is.close();
+        imgClay = new ImageView(img);
+        imgClay.setFitHeight(35);
+        imgClay.setFitWidth(35);
+        imgClay.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/Paper.png"));
+        img = new Image(is);
+        is.close();
+        imgPaper = new ImageView(img);
+        imgPaper.setFitHeight(35);
+        imgPaper.setFitWidth(35);
+        imgPaper.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/Glass.png"));
+        img = new Image(is);
+        is.close();
+        imgGlass = new ImageView(img);
+        imgGlass.setFitHeight(35);
+        imgGlass.setFitWidth(35);
+        imgGlass.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/Textile.png"));
+        img = new Image(is);
+        is.close();
+        imgTextile = new ImageView(img);
+        imgTextile.setFitHeight(35);
+        imgTextile.setFitWidth(35);
+        imgTextile.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/Stone.png"));
+        img = new Image(is);
+        is.close();
+        imgStone  = new ImageView(img);
+        imgStone.setFitHeight(35);
+        imgStone.setFitWidth(35);
+        imgStone.setTranslateX(10);
+
+        Button tradeLumberRight = new Button("Trade");
+        tradeLumberRight.setTranslateX(5);
+        tradeLumberRight.setOnMouseClicked(event -> {
+            System.out.println("tradeLumberRight");
+        });
+
+        Button tradeClayRight = new Button("Trade");
+        tradeClayRight.setTranslateX(5);
+        tradeClayRight.setOnMouseClicked(event -> {
+            System.out.println("tradeClayRight");
+        });
+        Button tradeOreRight = new Button("Trade");
+        tradeOreRight.setTranslateX(5);
+        tradeOreRight.setOnMouseClicked(event -> {
+            System.out.println("tradeOreRight");
+        });
+        Button tradeStoneRight = new Button("Trade");
+        tradeStoneRight.setTranslateX(5);
+        tradeStoneRight.setOnMouseClicked(event -> {
+            System.out.println("tradeStoneRight");
+        });
+
+        Button tradeGlassRight = new Button("Trade");
+        tradeGlassRight.setTranslateX(5);
+        tradeGlassRight.setOnMouseClicked(event -> {
+            System.out.println("tradeGlassRight");
+        });
+        Button tradePaperRight = new Button("Trade");
+        tradePaperRight.setTranslateX(5);
+        tradePaperRight.setOnMouseClicked(event -> {
+            System.out.println("tradePaperRight");
+        });
+        Button tradeTextileRight = new Button("Trade");
+        tradeTextileRight.setTranslateX(5);
+        tradeTextileRight.setOnMouseClicked(event -> {
+            System.out.println("tradeTextileRight");
+        });
+        HBox tradeLumberHBRight,tradeClayHBRight,tradeStoneHBRight,tradeOreHBRight,tradeGlassHBRight,tradePaperHBRight,tradeTextileHBRight;
+
+        is = Files.newInputStream(Paths.get("images/coins.png"));
+        img = new Image(is);
+        is.close();
+        imgCoin = new ImageView(img);
+        imgCoin.setFitHeight(35);
+        imgCoin.setFitWidth(35);
+        imgCoin.setTranslateX(20);
+        ForText = new Text("For 2 ");
+        ForText.setFill(Color.WHITESMOKE);
+        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+        ForText.setTranslateX(15);
+        tradeLumberHBRight = new HBox(tradeLumberRight,imgLumber,ForText,imgCoin);
+        tradeLumberHBRight.setTranslateY(270);
+        tradeLumberHBRight.setTranslateX(1650);
+        tradeLumberHBRight.setPrefSize(60,60);
+
+
+        is = Files.newInputStream(Paths.get("images/coins.png"));
+        img = new Image(is);
+        is.close();
+        imgCoin = new ImageView(img);
+        imgCoin.setFitHeight(35);
+        imgCoin.setFitWidth(35);
+        imgCoin.setTranslateX(20);
+        ForText = new Text("For 2 ");
+        ForText.setFill(Color.WHITESMOKE);
+        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+        ForText.setTranslateX(15);
+        tradeClayHBRight = new HBox(tradeClayRight,imgClay,ForText,imgCoin);
+        tradeClayHBRight.setTranslateY(300);
+        tradeClayHBRight.setTranslateX(1650);
+        tradeClayHBRight.setPrefSize(60,60);
+
+        is = Files.newInputStream(Paths.get("images/coins.png"));
+        img = new Image(is);
+        is.close();
+        imgCoin = new ImageView(img);
+        imgCoin.setFitHeight(35);
+        imgCoin.setFitWidth(35);
+        imgCoin.setTranslateX(20);
+        ForText = new Text("For 2 ");
+        ForText.setFill(Color.WHITESMOKE);
+        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+        ForText.setTranslateX(15);
+        tradeOreHBRight = new HBox(tradeOreRight,imgOre,ForText,imgCoin);
+        tradeOreHBRight.setTranslateY(360);
+        tradeOreHBRight.setTranslateX(1650);
+        tradeOreHBRight.setPrefSize(60,60);
+
+        is = Files.newInputStream(Paths.get("images/coins.png"));
+        img = new Image(is);
+        is.close();
+        imgCoin = new ImageView(img);
+        imgCoin.setFitHeight(35);
+        imgCoin.setFitWidth(35);
+        imgCoin.setTranslateX(20);
+        ForText = new Text("For 2 ");
+        ForText.setFill(Color.WHITESMOKE);
+        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+        ForText.setTranslateX(15);
+        tradeStoneHBRight = new HBox(tradeStoneRight,imgStone,ForText,imgCoin);
+        tradeStoneHBRight.setTranslateY(330);
+        tradeStoneHBRight.setTranslateX(1650);
+        tradeStoneHBRight.setPrefSize(40,40);
+
+        is = Files.newInputStream(Paths.get("images/coins.png"));
+        img = new Image(is);
+        is.close();
+        imgCoin = new ImageView(img);
+        imgCoin.setFitHeight(35);
+        imgCoin.setFitWidth(35);
+        imgCoin.setTranslateX(20);
+        ForText = new Text("For 2 ");
+        ForText.setFill(Color.BLACK);
+        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+        ForText.setTranslateX(15);
+        tradeGlassHBRight = new HBox(tradeGlassRight,imgGlass,ForText,imgCoin);
+        tradeGlassHBRight.setTranslateY(390);
+        tradeGlassHBRight.setTranslateX(1650);
+        tradeGlassHBRight.setPrefSize(60,60);
+
+        is = Files.newInputStream(Paths.get("images/coins.png"));
+        img = new Image(is);
+        is.close();
+        imgCoin = new ImageView(img);
+        imgCoin.setFitHeight(35);
+        imgCoin.setFitWidth(35);
+        imgCoin.setTranslateX(20);
+        ForText = new Text("For 2 ");
+        ForText.setFill(Color.BLACK);
+        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+        ForText.setTranslateX(15);
+        tradePaperHBRight = new HBox(tradePaperRight,imgPaper,ForText,imgCoin);
+        tradePaperHBRight.setTranslateY(420);
+        tradePaperHBRight.setTranslateX(1650);
+        tradePaperHBRight.setPrefSize(60,60);
+
+        is = Files.newInputStream(Paths.get("images/coins.png"));
+        img = new Image(is);
+        is.close();
+        imgCoin = new ImageView(img);
+        imgCoin.setFitHeight(35);
+        imgCoin.setFitWidth(35);
+        imgCoin.setTranslateX(20);
+        ForText = new Text("For 2 ");
+        ForText.setFill(Color.BLACK);
+        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+        ForText.setTranslateX(15);
+        tradeTextileHBRight = new HBox(tradeTextileRight,imgTextile,ForText,imgCoin);
+        tradeTextileHBRight.setTranslateY(450);
+        tradeTextileHBRight.setTranslateX(1650);
+        tradeTextileHBRight.setPrefSize(60,60);
+
+        sp.getChildren().addAll(tradeLumberHBRight,tradeClayHBRight,tradeStoneHBRight,tradeOreHBRight,tradeGlassHBRight,tradePaperHBRight,tradeTextileHBRight);
+
+
+
         OptionsPage.PauseButton pb = new OptionsPage.PauseButton();
         pb.setOnMouseClicked( event -> {
             Rectangle r = new Rectangle(0,0,1700,1700);
@@ -158,6 +607,9 @@ public class GamePage extends Scene {
         cards[0][6].setTranslateX(-550); cards[0][6].setTranslateY(290);
         distributeWonders( sp, side, name);
         sp.getChildren().addAll(wb);
+
+
+
     }
     public void giveError( String errorMessage) {
         Popup popup = new Popup();
@@ -565,13 +1017,13 @@ public class GamePage extends Scene {
 //vineyard
         a = new Property();
         b = new Property();
-        //b.specialcard =4;
+        b.specialCard =4;
         cards[1][13] = new Card("vineyard","yellow",a,b);
 
 //bazar
         a = new Property();
         b = new Property();
-        //b.specialcard =5;
+        b.specialCard =5;
         cards[1][14] = new Card("bazar","yellow",a,b);
 
 //walls
@@ -684,7 +1136,7 @@ public class GamePage extends Scene {
         cards[1][27] = new Card("press","grey",a,b);
 
 
-
+/*
         //3rd age cards
         //red cards
         // arsenal1
@@ -1009,6 +1461,8 @@ public class GamePage extends Scene {
         b.resource = new Resource(1);
         b.specialCard=15;
         cards[2][27] = new Card("magistratesguild","purple",a,b);
+
+ */
 
     }
     private void distributeWonders( StackPane sp, ToggleGroup side, String name) throws Exception {
