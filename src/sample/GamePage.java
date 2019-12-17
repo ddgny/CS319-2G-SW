@@ -49,6 +49,7 @@ public class GamePage extends Scene {
     private Stage window;
     private StackPane sp;
     private String side;
+    int currentAge, currentTurn;
     // mode = ally -> -1 , normal -> 0 , story -> 1,2,3,4,5...
     private int mode;
     private class Resource {
@@ -98,6 +99,7 @@ public class GamePage extends Scene {
     public GamePage(StackPane sp, Scene mainmenu, Stage window, String name, ToggleGroup side, int sMode) throws Exception {
         super(sp, Main.primaryScreenBounds.getWidth(), Main.primaryScreenBounds.getHeight());
         mode = sMode;
+        currentAge = currentTurn = 1;
         this.window = window;
         this.sp = sp;
         this.side = side.getSelectedToggle().getUserData().toString();
@@ -2292,6 +2294,8 @@ public class GamePage extends Scene {
             getChildren().add(buildButton);
             buildButton.setOnMouseClicked(event -> {
                 if( checkResources( 0 , false, cost)) {
+                    if(cost.coin != 0)
+                        benefit.coin--;
                     gainBenefit(0, false, benefit, name, color);
                     try {
                         endTurn();
