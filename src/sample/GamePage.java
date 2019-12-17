@@ -3,6 +3,7 @@ package sample;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -49,7 +50,7 @@ public class GamePage extends Scene {
     private Stage window;
     private StackPane sp;
     private String side;
-    int currentAge, currentTurn;
+    private int currentAge, currentTurn;
     // mode = ally -> -1 , normal -> 0 , story -> 1,2,3,4,5...
     private int mode;
     private class Resource {
@@ -657,14 +658,18 @@ public class GamePage extends Scene {
         Collections.shuffle(Arrays.asList(cards[1]));
         Collections.shuffle(Arrays.asList(cards[2]));
         sp.getChildren().addAll(cards[0][0],cards[0][1],cards[0][2],cards[0][3],cards[0][4],cards[0][5],cards[0][6]);
+        for( int i = 0; i < 3; i++) {
+            for( int j = 0; j < 4; j++) {
+                cards[i][j*7].setTranslateX(-250); cards[i][j*7].setTranslateY(90);
+                cards[i][j*7+1].setTranslateX(-50);  cards[i][j*7+1].setTranslateY(90);
+                cards[i][j*7+2].setTranslateX(-450); cards[i][j*7+2].setTranslateY(90);
+                cards[i][j*7+3].setTranslateX(-650); cards[i][j*7+3].setTranslateY(90);
+                cards[i][j*7+4].setTranslateX(-150); cards[i][j*7+4].setTranslateY(290);
+                cards[i][j*7+5].setTranslateX(-350); cards[i][j*7+5].setTranslateY(290);
+                cards[i][j*7+6].setTranslateX(-550); cards[i][j*7+6].setTranslateY(290);
+            }
+        }
 
-        cards[0][0].setTranslateX(-250); cards[0][0].setTranslateY(90);
-        cards[0][1].setTranslateX(-50);  cards[0][1].setTranslateY(90);
-        cards[0][2].setTranslateX(-450); cards[0][2].setTranslateY(90);
-        cards[0][3].setTranslateX(-650); cards[0][3].setTranslateY(90);
-        cards[0][4].setTranslateX(-150); cards[0][4].setTranslateY(290);
-        cards[0][5].setTranslateX(-350); cards[0][5].setTranslateY(290);
-        cards[0][6].setTranslateX(-550); cards[0][6].setTranslateY(290);
         distributeWonders( sp, side, name);
 
         sp.getChildren().addAll(wb);
@@ -686,6 +691,8 @@ public class GamePage extends Scene {
         delay.play();
     }
     public void endTurn() throws Exception {
+        // wonderboard part
+        sp.getChildren().removeAll(wb);
         wb[0] = new WonderBoard( sp,wb[0].wonderNum, side, players[0].name, 0);
         wb[1] = new WonderBoard( sp,wb[1].wonderNum, side, players[1].name, 1);
         wb[2] = new WonderBoard( sp,wb[2].wonderNum, side, players[2].name, 2);
@@ -698,6 +705,22 @@ public class GamePage extends Scene {
         wb[3].setTranslateX(-450);
         wb[2].setTranslateY(-260);
         sp.getChildren().addAll(wb);
+
+        // cards part
+        int lastAge = currentAge;
+        int lastTurn = currentTurn;
+        currentTurn++;
+
+        if( currentTurn == 7) {
+            currentTurn = 1;
+            currentAge++;
+            if( currentAge == 4) endGame();
+        }
+        for(int i = ((lastTurn - 1) % 4) * 7; i <= ((lastTurn - 1) % 4) * 7 + 6; i++) sp.getChildren().remove(cards[lastAge - 1][i]);
+        for(int i = ((currentTurn - 1) % 4) * 7; i <= ((currentTurn - 1) % 4) * 7 + 6; i++) sp.getChildren().add(cards[currentAge - 1][i]);
+    }
+    public void endGame() {
+
     }
     public boolean checkResources(int playerNum, boolean isWonderbuild, Property cost) {
         if(isWonderbuild)
@@ -2229,6 +2252,11 @@ public class GamePage extends Scene {
                 tmp.coin = 3;
                 gainBenefit( 0, false, tmp, "", "");
                 try {
+                    deleteCard();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
                     endTurn();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -2245,6 +2273,11 @@ public class GamePage extends Scene {
                 }
                 else if( checkResources( 0 , true, cost)) {
                     gainBenefit(0, true, benefit, "", "");
+                    try {
+                        deleteCard();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     try {
                         endTurn();
                     } catch (Exception e) {
@@ -2265,6 +2298,11 @@ public class GamePage extends Scene {
                     if(cost.coin != 0)
                         benefit.coin--;
                     gainBenefit(0, false, benefit, name, color);
+                    try {
+                        deleteCard();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     try {
                         endTurn();
                     } catch (Exception e) {
@@ -2287,11 +2325,26 @@ public class GamePage extends Scene {
          */
 
         }
+
         public void  mouseExitedHere(){
             board.setOpacity(1);
             getChildren().remove(sellButton);
             getChildren().remove(buryButton);
             getChildren().remove(buildButton);
+        }
+        public void deleteCard() throws IOException {
+            board.setOpacity(1);
+            getChildren().remove(sellButton);
+            getChildren().remove(buryButton);
+            getChildren().remove(buildButton);
+            InputStream is = Files.newInputStream(Paths.get("images/card images/age" + currentAge + ".png"));
+            Image img = new Image(is);
+            is.close();
+            board.setFill(new ImagePattern(img));
+            this.setOnMouseEntered(event -> {
+            });
+            this.setOnMouseExited(event -> {
+            });
         }
     }
 }
