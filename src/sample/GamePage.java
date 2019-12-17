@@ -463,6 +463,228 @@ public class GamePage extends Scene {
         b.resource.name[3] = "Clay"; b.resource.quantity[3] = 1;
         cards[1][1] = new Card("caravansery","yellow",a,b);
 
+        //2nd age cards
+
+//sawmill
+        a = new Property();
+        a.coin = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Lumber"; b.resource.quantity[0] = 2;
+        cards[1][0] = new Card("sawmill","brown",a,b);
+//sawmill2
+        cards[1][1] = new Card("sawmill","brown",a,b);
+
+//quarry
+        a = new Property();
+        a.coin = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Stone"; b.resource.quantity[0] = 2;
+        cards[1][2] = new Card("quarry","brown",a,b);
+//quarry2
+        cards[1][3] = new Card("quarry","brown",a,b);
+
+//brickyard
+        a = new Property();
+        a.coin = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Clay"; b.resource.quantity[0] = 2;
+        cards[1][4] = new Card("brickyard","brown",a,b);
+//brickyard2
+        cards[1][5] = new Card("brickyard","brown",a,b);
+
+
+//foundry
+        a = new Property();
+        a.coin = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Ore"; b.resource.quantity[0] = 2;
+        cards[1][6] = new Card("foundry","brown",a,b);
+//foundry2
+        cards[1][7] = new Card("foundry","brown",a,b);
+
+
+//aqueduct
+        a = new Property();
+        a.requiredBuilding = "Baths";
+        a.resource = new Resource(1);
+        a.resource.name[0] = "Stone"; a.resource.quantity[0] = 3;
+        b = new Property();
+        b.victoryPoint = 5;
+        cards[1][8] = new Card("aqueduct","blue",a,b);
+
+//temple
+        a = new Property();
+        a.resource = new Resource(3);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 1;
+        a.resource.name[1] = "Clay"; a.resource.quantity[1] = 1;
+        a.resource.name[2] = "Glass"; a.resource.quantity[2] = 1;
+        a.requiredBuilding = "altar";
+        b = new Property();
+        b.victoryPoint = 3;
+        cards[1][9] = new Card("temple","blue",a,b);
+
+//statue
+        a = new Property();
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 1;
+        a.resource.name[1] = "Ore"; a.resource.quantity[1] = 2;
+        a.requiredBuilding = "altar";
+        b = new Property();
+        b.victoryPoint = 4;
+        cards[1][10] = new Card("statue","blue",a,b);
+
+//forum
+        a = new Property();
+        a.resource = new Resource(1);
+        a.resource.name[0] = "Clay"; a.resource.quantity[0] = 2;
+        b = new Property();
+        b.resource = new Resource(3);
+        b.resource.name[0] = "Glass"; b.resource.quantity[0] = 1;
+        b.resource.name[1] = "Textile"; b.resource.quantity[1] = 1;
+        b.resource.name[2] = "Paper"; b.resource.quantity[2] = 1;
+        cards[1][11] = new Card("forum","yellow",a,b);
+
+
+// caravansery
+        a = new Property();
+        a.requiredBuilding = "marketplace";
+        a.resource = new Resource(1);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 2;
+        b = new Property();
+        b.resource = new Resource(4);
+        b.resource.name[0] = "Lumber"; b.resource.quantity[0] = 1;
+        b.resource.name[1] = "Stone"; b.resource.quantity[1] = 1;
+        b.resource.name[2] = "Ore"; b.resource.quantity[2] = 1;
+        b.resource.name[3] = "Clay"; b.resource.quantity[3] = 1;
+        cards[1][12] = new Card("caravansery","yellow",a,b);
+
+//vineyard
+        a = new Property();
+        b = new Property();
+        //b.specialcard =4;
+        cards[1][13] = new Card("vineyard","yellow",a,b);
+
+//bazar
+        a = new Property();
+        b = new Property();
+        //b.specialcard =5;
+        cards[1][14] = new Card("bazar","yellow",a,b);
+
+//walls
+        a = new Property();
+        a.resource = new Resource(1);
+        a.resource.name[0] = "Stone"; a.resource.quantity[0] = 3;
+        b = new Property();
+        b.shield = 2;
+        cards[1][15] = new Card("walls","red",a,b);
+
+//trainingground
+        a = new Property();
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Ore"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Lumber"; a.resource.quantity[1] = 1;
+        b = new Property();
+        b.shield = 2;
+        cards[1][16] = new Card("trainingground","red",a,b);
+
+//stables
+        a = new Property();
+        a.resource = new Resource(3);
+        a.resource.name[0] = "Ore"; a.resource.quantity[0] = 1;
+        a.resource.name[1] = "Clay"; a.resource.quantity[1] = 1;
+        a.resource.name[2] = "Lumber"; a.resource.quantity[2] = 1;
+        b = new Property();
+        b.shield =2;
+        cards[1][17] = new Card("stables","red",a,b);
+
+//dispensary
+        a = new Property();
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Ore"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Glass"; a.resource.quantity[1] = 1;
+        b = new Property();
+        b.geometry=1;
+        cards[1][18] = new Card("dispensary","green",a,b);
+//dispensary2
+        cards[1][19] = new Card("dispensary","green",a,b);
+
+
+//archeryrange
+        a = new Property();
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Ore"; a.resource.quantity[1] = 1;
+        b = new Property();
+        b.shield =2;
+        cards[1][20] = new Card("archeryrange","red",a,b);
+
+//laboratory
+        a = new Property();
+        a.requiredBuilding = "workshop";
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Clay"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Paper"; a.resource.quantity[1] = 1;
+        b = new Property();
+        b.mechanic =1;
+        cards[1][21] = new Card("laboratory","green",a,b);
+
+//courthouse
+        a = new Property();
+        a.requiredBuilding = "scriptorium";
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Clay"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Textile"; a.resource.quantity[1] = 1;
+        b = new Property();
+        b.victoryPoint =4;
+        cards[1][22] = new Card("courthouse","blue",a,b);
+
+//library
+        a = new Property();
+        a.requiredBuilding = "scriptorium";
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Stone"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Textile"; a.resource.quantity[1] = 1;
+        b = new Property();
+        b.literature =1;
+        cards[1][23] = new Card("library","green",a,b);
+
+//school
+        a = new Property();
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 1;
+        a.resource.name[1] = "Paper"; a.resource.quantity[1] = 1;
+        b = new Property();
+        b.literature =1;
+        cards[1][24] = new Card("dispensary","green",a,b);
+
+
+//loom
+        a = new Property();
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Textile"; b.resource.quantity[0] = 1;
+        cards[1][25] = new Card("loom","grey",a,b);
+
+//glawssworks
+        a = new Property();
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Glass"; b.resource.quantity[0] = 1;
+        cards[1][26] = new Card("glassworks","grey",a,b);
+
+//press
+        a = new Property();
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Paper"; b.resource.quantity[0] = 1;
+        cards[1][27] = new Card("press","grey",a,b);
+
+
+
         //3rd age cards
         //red cards
         // arsenal1
