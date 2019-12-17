@@ -1,5 +1,11 @@
 package sample;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
@@ -100,13 +106,7 @@ public class GamePage extends Scene {
         imgView.setFitHeight(Main.primaryScreenBounds.getHeight());
         imgView.setFitWidth(Main.primaryScreenBounds.getWidth());
         sp.getChildren().add(imgView);
-        OptionsPage.BackButton bb = new OptionsPage.BackButton();
-        bb.setOnMouseClicked( event -> {
-            window.setScene( mainmenu);
-        });
-        bb.setTranslateX(-450);
-        bb.setTranslateY(-330);
-        sp.getChildren().add(bb);
+
 
         // TESTING FOR TRADE
         is = Files.newInputStream(Paths.get("images/coins.png"));
@@ -567,25 +567,78 @@ public class GamePage extends Scene {
 
             Main.MenuButton btnResume = new Main.MenuButton("Resume Game");
             Main.MenuButton btnExit2 = new Main.MenuButton("Exit Game");
+            Main.MenuButton btnMain = new Main.MenuButton("Main Menu");
             btnResume.setOnMouseClicked( event2 -> {
                         btnResume.setVisible(false);
                         btnExit2.setVisible(false);
-                        menu2.getChildren().removeAll(btnResume, btnExit2);
+                        btnMain.setVisible(false);
+                        menu2.getChildren().removeAll(btnResume, btnExit2, btnMain);
                         sp.getChildren().remove(menu2);
                         sp.getChildren().remove(r);
             });
-            menu2.getChildren().addAll(btnResume, btnExit2);
+            btnExit2.setOnMouseClicked( event2 -> {
+                        System.exit(0);
+            });
+            btnMain.setOnMouseClicked( event2 -> {
+                        btnResume.setVisible(false);
+                        btnExit2.setVisible(false);
+                        btnMain.setVisible(false);
+                        menu2.getChildren().removeAll(btnResume, btnExit2, btnMain);
+                        sp.getChildren().remove(menu2);
+                        sp.getChildren().remove(r);
+                        window.setScene( mainmenu);
+            });
+            menu2.getChildren().addAll(btnResume, btnExit2, btnMain);
             sp.getChildren().add(menu2);
 
-
-            //window.initStyle(StageStyle.TRANSPARENT);
-            //mainmenu.setFill(Color.TRANSPARENT);
-            //Color.rgb(0,0,0 ,0.5)
-            //window.setOpacity(0.2);
-            //mainmenu.setFill(Color.rgb(0,0,0 ,0.5));
         });
-        pb.setTranslateX(530);
-        pb.setTranslateY(270);
+        Pane mute2 = new Pane();
+        Pane unmute2 = new Pane();
+        mute2.setMaxSize(100,100);
+        unmute2.setMaxSize(100,100);
+        try {
+            InputStream is2 = Files.newInputStream(Paths.get("images/mute.png"));
+            Image img2 = new Image(is2);
+            is2.close();
+            ImageView imgViewMute = new ImageView(img2);
+            imgViewMute.setFitHeight(100);
+            imgViewMute.setFitWidth(100);
+            mute2.getChildren().add(imgViewMute);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            InputStream is3 = Files.newInputStream(Paths.get("images/unmute.png"));
+            Image img3 = new Image(is3);
+            is3.close();
+            ImageView imgViewUnmute = new ImageView(img3);
+            imgViewUnmute.setFitHeight(100);
+            imgViewUnmute.setFitWidth(100);
+            unmute2.getChildren().add(imgViewUnmute);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mute2.setOnMouseClicked( event2 -> {
+            Main.mediaPlayer.setMute(true);
+            mute2.setVisible(false);
+            unmute2.setVisible(true);
+        });
+        unmute2.setOnMouseClicked( event2 -> {
+            Main.mediaPlayer.setMute(false);
+            mute2.setVisible(true);
+            unmute2.setVisible(false);
+        });
+        if(Main.mediaPlayer.isMute())
+            mute2.setVisible(false);
+        else
+            unmute2.setVisible(false);
+        sp.getChildren().addAll(mute2, unmute2);
+        mute2.setTranslateX(650);
+        mute2.setTranslateY(-380);
+        unmute2.setTranslateX(650);
+        unmute2.setTranslateY(-380);
+        pb.setTranslateX(750);
+        pb.setTranslateY(-380);
         sp.getChildren().add(pb);
 
         players[0] = new Player(name);
