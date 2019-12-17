@@ -71,18 +71,18 @@ public class GamePage extends Scene {
         int battlePoint, greenCards, redCards, yellowCards, greyCards, purpleCards, brownCards, blueCards, milestoneDone;
         String[] buildings;
         Resource[] resources;
-        int resourceCount;
-        boolean specialCards[];
+        int resourceCount, buildingsCount;
+        boolean[] specialCards;
         Property stats;
         public Player(String tmp) {
             stats = new Property();
             stats.coin = 3;
             name = tmp;
-            battlePoint = greenCards = redCards = yellowCards = greyCards = purpleCards = brownCards = blueCards = milestoneDone = resourceCount = 0;
+            battlePoint = greenCards = redCards = yellowCards = greyCards = purpleCards = brownCards = blueCards = milestoneDone = buildingsCount = resourceCount = 0;
             buildings = new String[22];
             resources = new Resource[22];
-            specialCards = new boolean[20];
-            for(int i = 0; i < 20; i++) specialCards[i] = false;
+            specialCards = new boolean[22];
+            for(int i = 0; i < 22; i++) specialCards[i] = false;
         }
         void addResource( Resource add) {
             resources[resourceCount] = add;
@@ -197,15 +197,22 @@ public class GamePage extends Scene {
         players[2] = new Player("bot2");
         players[3] = new Player("bot3");
         definingCards();
-//        Collections.shuffle(Arrays.asList(cards[0]));
+        Collections.shuffle(Arrays.asList(cards[0]));
 //        Collections.shuffle(Arrays.asList(cards[1]));
 //        Collections.shuffle(Arrays.asList(cards[2]));
         sp.getChildren().addAll(cards[0][0],cards[0][1],cards[0][2],cards[0][3],cards[0][4],cards[0][5],cards[0][6]);
 
+        cards[0][0].setTranslateX(-250); cards[0][0].setTranslateY(90);
+        cards[0][1].setTranslateX(-50);  cards[0][1].setTranslateY(90);
+        cards[0][2].setTranslateX(-450); cards[0][2].setTranslateY(90);
+        cards[0][3].setTranslateX(-650); cards[0][3].setTranslateY(90);
+        cards[0][4].setTranslateX(-150); cards[0][4].setTranslateY(290);
+        cards[0][5].setTranslateX(-350); cards[0][5].setTranslateY(290);
+        cards[0][6].setTranslateX(-550); cards[0][6].setTranslateY(290);
         distributeWonders( sp, side, name);
         sp.getChildren().addAll(wb);
     }
-    public static void giveError( String errorMessage) {
+    public void giveError( String errorMessage) {
         Popup popup = new Popup();
         Text text = new Text(errorMessage);
         text.setFill(Color.RED);
@@ -218,34 +225,283 @@ public class GamePage extends Scene {
         popup.show(window);
         delay.play();
     }
-    public static void endTurn() {
+    public void endTurn() {
 
     }
-    public static boolean checkResources(int playerNum, boolean isWonderbuild, Property cost) {
+    public boolean checkResources(int playerNum, boolean isWonderbuild, Property cost) {
         if(isWonderbuild)
             cost = wb[playerNum].milestones[players[playerNum].milestoneDone].cost;
         return false;
     }
-    public static void gainBenefit( int playerNum, boolean isWonderbuild, Property benefit) {
+    public void gainBenefit( int playerNum, boolean isWonderbuild, Property benefit, String buildingName, String buildingColor) {
         if(isWonderbuild) {
             benefit = wb[playerNum].milestones[players[playerNum].milestoneDone].benefit;
             players[playerNum].milestoneDone++;
         }
+        else if(!buildingName.equals("")) {
+            players[playerNum].buildings[players[playerNum].buildingsCount] = buildingName;
+            if(buildingColor.equals("red")) players[playerNum].redCards++;
+            else if(buildingColor.equals("grey")) players[playerNum].greyCards++;
+            else if(buildingColor.equals("green")) players[playerNum].greenCards++;
+            else if(buildingColor.equals("blue")) players[playerNum].blueCards++;
+            else if(buildingColor.equals("yellow")) players[playerNum].yellowCards++;
+            else if(buildingColor.equals("brown")) players[playerNum].brownCards++;
+        }
+        players[playerNum].addResource(benefit.resource);
+        players[playerNum].stats.coin += benefit.coin;
+        players[playerNum].stats.shield += benefit.shield;
+        players[playerNum].stats.mechanic += benefit.mechanic;
+        players[playerNum].stats.literature += benefit.literature;
+        players[playerNum].stats.geometry += benefit.geometry;
+        players[playerNum].stats.victoryPoint += benefit.victoryPoint;
+        players[playerNum].specialCards[benefit.specialCard] = true;
     }
     private void definingCards() throws Exception {
         Property a = new Property();
         Property b = new Property();
+
         // bazı kartların benefiti özellik veriyor. bu özellikleri b.specialCard = # diyerek yapın
         // # -> east Trading post = 1,  west trading post = 2,  marketplace = 3,    vineyard = 4,   bazar = 5,  haven = 6,
         // lighthouse =7,  chamber of commerce = 8,    arena = 9,  workers guild = 10, craftsmens guild = 11,  traders guild = 12, philosophers guild = 13,
         // spies guild = 14,   magistrates guild = 15
-        // arsenal örneği
-        a.resource = new Resource(3);
-        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 2;
-        a.resource.name[1] = "Ore"; a.resource.quantity[1] = 1;
-        a.resource.name[2] = "Textile"; a.resource.quantity[2] = 1;
-        b.shield = 3;
-        cards[0][0] = new Card("arsenal","red",a,b);
+        
+        //1st age cards
+        //scriptorium1
+        a.resource = new Resource(1);
+        a.resource.name[0] = "Paper"; a.resource.quantity[0] = 1;
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Literature"; b.resource.quantity[0] = 1;
+        cards[0][0] = new Card("scriptorium","green",a,b);
+
+        //scriptorium2
+        a = new Property();
+        a.resource = new Resource(1);
+        a.resource.name[0] = "Paper"; a.resource.quantity[0] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Literature"; b.resource.quantity[0] = 1;
+        cards[0][1] = new Card("scriptorium","green",a,b);
+
+        //workshop
+        a = new Property();
+        a.resource = new Resource(1);
+        a.resource.name[0] = "Glass"; a.resource.quantity[0] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Mechanic"; b.resource.quantity[0] = 1;
+        cards[0][2] = new Card("workshop","green",a,b);
+
+        //apothecary
+        a = new Property();
+        a.resource = new Resource(1);
+        a.resource.name[0] = "Textile"; a.resource.quantity[0] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Geometry"; b.resource.quantity[0] = 1;
+        cards[0][3] = new Card("apothecary","green",a,b);
+
+        //stockade
+        a = new Property();
+        a.resource = new Resource(1);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.shield = 1;
+        cards[0][4] = new Card("apothecary","red",a,b);
+
+        //barracks
+        a = new Property();
+        a.resource = new Resource(1);
+        a.resource.name[0] = "Ore"; a.resource.quantity[0] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.shield = 1;
+        cards[0][5] = new Card("barracks","red",a,b);
+
+        //guard tower1
+        a = new Property();
+        a.resource = new Resource(1);
+        a.resource.name[0] = "Clay"; a.resource.quantity[0] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.shield = 1;
+        cards[0][6] = new Card("guardtower","red",a,b);
+
+        //guard tower2
+        a = new Property();
+        a.resource = new Resource(1);
+        a.resource.name[0] = "Clay"; a.resource.quantity[0] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.shield = 1;
+        cards[0][7] = new Card("guardtower","red",a,b);
+
+        //pawnshop
+        a = new Property();
+        a.resource = new Resource(0);
+        b = new Property();
+        b.resource = new Resource(1);
+        b.victoryPoint = 3;
+        cards[0][8] = new Card("pawnshop","blue",a,b);
+
+        //altar
+        a = new Property();
+        a.resource = new Resource(0);
+        b = new Property();
+        b.resource = new Resource(1);
+        b.victoryPoint = 2;
+        cards[0][9] = new Card("altar","blue",a,b);
+
+        //theater
+        a = new Property();
+        a.resource = new Resource(0);
+        b = new Property();
+        b.resource = new Resource(1);
+        b.victoryPoint = 2;
+        cards[0][10] = new Card("theater","blue",a,b);
+
+        //baths
+        a = new Property();
+        a.resource = new Resource(1);
+        a.resource.name[0] = "Stone"; a.resource.quantity[0] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.victoryPoint = 2;
+        cards[0][11] = new Card("baths","blue",a,b);
+
+        //lumberyard1
+        a = new Property();
+        a.resource = new Resource(0);
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Lumber"; b.resource.quantity[0] = 1;
+        cards[0][12] = new Card("lumberyard","brown",a,b);
+
+        //lumberyard2
+        a = new Property();
+        a.resource = new Resource(0);
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Lumber"; b.resource.quantity[0] = 1;
+        cards[0][13] = new Card("lumberyard","brown",a,b);
+
+        //stone pit
+        a = new Property();
+        a.resource = new Resource(0);
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Stone"; b.resource.quantity[0] = 1;
+        cards[0][14] = new Card("stonepit","brown",a,b);
+
+        //clay pool
+        a = new Property();
+        a.resource = new Resource(0);
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Clay"; b.resource.quantity[0] = 1;
+        cards[0][15] = new Card("claypool","brown",a,b);
+
+        //ore vein1
+        a = new Property();
+        a.resource = new Resource(0);
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Ore"; b.resource.quantity[0] = 1;
+        cards[0][16] = new Card("orevein","brown",a,b);
+
+        //loom
+        a = new Property();
+        a.resource = new Resource(0);
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Textile"; b.resource.quantity[0] = 1;
+        cards[0][17] = new Card("loom","grey",a,b);
+
+        //glassworks
+        a = new Property();
+        a.resource = new Resource(0);
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Glass"; b.resource.quantity[0] = 1;
+        cards[0][18] = new Card("glassworks","grey",a,b);
+
+        //press
+        a = new Property();
+        a.resource = new Resource(0);
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Paper"; b.resource.quantity[0] = 1;
+        cards[0][19] = new Card("press","grey",a,b);
+
+        //excavation
+        a = new Property();
+        a.resource = new Resource(1);
+        a.coin = 1;
+        b = new Property();
+        b.resource = new Resource(2);
+        b.resource.name[0] = "Stone"; b.resource.quantity[0] = 1;
+        b.resource.name[1] = "Clay"; b.resource.quantity[1] = 1;
+        cards[0][20] = new Card("excavation","brown",a,b);
+
+        //clay pit
+        a = new Property();
+        a.resource = new Resource(1);
+        a.coin = 1;
+        b = new Property();
+        b.resource = new Resource(2);
+        b.resource.name[0] = "Clay"; b.resource.quantity[0] = 1;
+        b.resource.name[1] = "Ore"; b.resource.quantity[1] = 1;
+        cards[0][21] = new Card("claypit","brown",a,b);
+
+        //timber yard
+        a = new Property();
+        a.resource = new Resource(1);
+        a.coin = 1;
+        b = new Property();
+        b.resource = new Resource(2);
+        b.resource.name[0] = "Stone"; b.resource.quantity[0] = 1;
+        b.resource.name[1] = "Lumber"; b.resource.quantity[1] = 1;
+        cards[0][22] = new Card("timberyard","brown",a,b);
+
+        //ore vein2
+        a = new Property();
+        a.resource = new Resource(0);
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Ore"; b.resource.quantity[0] = 1;
+        cards[0][23] = new Card("orevein","brown",a,b);
+
+        //tavern
+        a = new Property();
+        a.resource = new Resource(0);
+        b = new Property();
+        b.resource = new Resource(1);
+        b.coin = 5;
+        cards[0][24] = new Card("orevein","yellow",a,b);
+
+        //east trading post
+        a = new Property();
+        a.resource = new Resource(0);
+        b = new Property();
+        b.resource = new Resource(1);
+        b.specialCard = 1;
+        cards[0][25] = new Card("easttradingpost","yellow",a,b);
+
+        //west trading post
+        a = new Property();
+        a.resource = new Resource(0);
+        b = new Property();
+        b.resource = new Resource(1);
+        b.specialCard = 2;
+        cards[0][26] = new Card("westtradingpost","yellow",a,b);
+
+        //marketplace
+        a = new Property();
+        a.resource = new Resource(0);
+        b = new Property();
+        b.resource = new Resource(1);
+        b.specialCard = 3;
+        cards[0][27] = new Card("marketplace","yellow",a,b);
 
         // caravansery örneği
         a = new Property();
@@ -258,19 +514,555 @@ public class GamePage extends Scene {
         b.resource.name[1] = "Stone"; b.resource.quantity[1] = 1;
         b.resource.name[2] = "Ore"; b.resource.quantity[2] = 1;
         b.resource.name[3] = "Clay"; b.resource.quantity[3] = 1;
-        cards[0][1] = new Card("caravansery","yellow",a,b);
-        cards[0][2] = new Card("Arsenal","red",a,b);
-        cards[0][3] = new Card("Arsenal","red",a,b);
-        cards[0][4] = new Card("Arsenal","red",a,b);
-        cards[0][5] = new Card("Arsenal","red",a,b);
-        cards[0][6] = new Card("Arsenal","red",a,b);
-        cards[0][0].setTranslateX(-250); cards[0][0].setTranslateY(90);
-        cards[0][1].setTranslateX(-50);  cards[0][1].setTranslateY(90);
-        cards[0][2].setTranslateX(-450); cards[0][2].setTranslateY(90);
-        cards[0][3].setTranslateX(-650); cards[0][3].setTranslateY(90);
-        cards[0][4].setTranslateX(-150); cards[0][4].setTranslateY(290);
-        cards[0][5].setTranslateX(-350); cards[0][5].setTranslateY(290);
-        cards[0][6].setTranslateX(-550); cards[0][6].setTranslateY(290);
+        cards[1][1] = new Card("caravansery","yellow",a,b);
+
+        //2nd age cards
+
+//sawmill
+        a = new Property();
+        a.coin = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Lumber"; b.resource.quantity[0] = 2;
+        cards[1][0] = new Card("sawmill","brown",a,b);
+//sawmill2
+        cards[1][1] = new Card("sawmill","brown",a,b);
+
+//quarry
+        a = new Property();
+        a.coin = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Stone"; b.resource.quantity[0] = 2;
+        cards[1][2] = new Card("quarry","brown",a,b);
+//quarry2
+        cards[1][3] = new Card("quarry","brown",a,b);
+
+//brickyard
+        a = new Property();
+        a.coin = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Clay"; b.resource.quantity[0] = 2;
+        cards[1][4] = new Card("brickyard","brown",a,b);
+//brickyard2
+        cards[1][5] = new Card("brickyard","brown",a,b);
+
+
+//foundry
+        a = new Property();
+        a.coin = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Ore"; b.resource.quantity[0] = 2;
+        cards[1][6] = new Card("foundry","brown",a,b);
+//foundry2
+        cards[1][7] = new Card("foundry","brown",a,b);
+
+
+//aqueduct
+        a = new Property();
+        a.requiredBuilding = "Baths";
+        a.resource = new Resource(1);
+        a.resource.name[0] = "Stone"; a.resource.quantity[0] = 3;
+        b = new Property();
+        b.victoryPoint = 5;
+        cards[1][8] = new Card("aqueduct","blue",a,b);
+
+//temple
+        a = new Property();
+        a.resource = new Resource(3);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 1;
+        a.resource.name[1] = "Clay"; a.resource.quantity[1] = 1;
+        a.resource.name[2] = "Glass"; a.resource.quantity[2] = 1;
+        a.requiredBuilding = "altar";
+        b = new Property();
+        b.victoryPoint = 3;
+        cards[1][9] = new Card("temple","blue",a,b);
+
+//statue
+        a = new Property();
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 1;
+        a.resource.name[1] = "Ore"; a.resource.quantity[1] = 2;
+        a.requiredBuilding = "altar";
+        b = new Property();
+        b.victoryPoint = 4;
+        cards[1][10] = new Card("statue","blue",a,b);
+
+//forum
+        a = new Property();
+        a.resource = new Resource(1);
+        a.resource.name[0] = "Clay"; a.resource.quantity[0] = 2;
+        b = new Property();
+        b.resource = new Resource(3);
+        b.resource.name[0] = "Glass"; b.resource.quantity[0] = 1;
+        b.resource.name[1] = "Textile"; b.resource.quantity[1] = 1;
+        b.resource.name[2] = "Paper"; b.resource.quantity[2] = 1;
+        cards[1][11] = new Card("forum","yellow",a,b);
+
+
+// caravansery
+        a = new Property();
+        a.requiredBuilding = "marketplace";
+        a.resource = new Resource(1);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 2;
+        b = new Property();
+        b.resource = new Resource(4);
+        b.resource.name[0] = "Lumber"; b.resource.quantity[0] = 1;
+        b.resource.name[1] = "Stone"; b.resource.quantity[1] = 1;
+        b.resource.name[2] = "Ore"; b.resource.quantity[2] = 1;
+        b.resource.name[3] = "Clay"; b.resource.quantity[3] = 1;
+        cards[1][12] = new Card("caravansery","yellow",a,b);
+
+//vineyard
+        a = new Property();
+        b = new Property();
+        //b.specialcard =4;
+        cards[1][13] = new Card("vineyard","yellow",a,b);
+
+//bazar
+        a = new Property();
+        b = new Property();
+        //b.specialcard =5;
+        cards[1][14] = new Card("bazar","yellow",a,b);
+
+//walls
+        a = new Property();
+        a.resource = new Resource(1);
+        a.resource.name[0] = "Stone"; a.resource.quantity[0] = 3;
+        b = new Property();
+        b.shield = 2;
+        cards[1][15] = new Card("walls","red",a,b);
+
+//trainingground
+        a = new Property();
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Ore"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Lumber"; a.resource.quantity[1] = 1;
+        b = new Property();
+        b.shield = 2;
+        cards[1][16] = new Card("trainingground","red",a,b);
+
+//stables
+        a = new Property();
+        a.resource = new Resource(3);
+        a.resource.name[0] = "Ore"; a.resource.quantity[0] = 1;
+        a.resource.name[1] = "Clay"; a.resource.quantity[1] = 1;
+        a.resource.name[2] = "Lumber"; a.resource.quantity[2] = 1;
+        b = new Property();
+        b.shield =2;
+        cards[1][17] = new Card("stables","red",a,b);
+
+//dispensary
+        a = new Property();
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Ore"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Glass"; a.resource.quantity[1] = 1;
+        b = new Property();
+        b.geometry=1;
+        cards[1][18] = new Card("dispensary","green",a,b);
+//dispensary2
+        cards[1][19] = new Card("dispensary","green",a,b);
+
+
+//archeryrange
+        a = new Property();
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Ore"; a.resource.quantity[1] = 1;
+        b = new Property();
+        b.shield =2;
+        cards[1][20] = new Card("archeryrange","red",a,b);
+
+//laboratory
+        a = new Property();
+        a.requiredBuilding = "workshop";
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Clay"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Paper"; a.resource.quantity[1] = 1;
+        b = new Property();
+        b.mechanic =1;
+        cards[1][21] = new Card("laboratory","green",a,b);
+
+//courthouse
+        a = new Property();
+        a.requiredBuilding = "scriptorium";
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Clay"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Textile"; a.resource.quantity[1] = 1;
+        b = new Property();
+        b.victoryPoint =4;
+        cards[1][22] = new Card("courthouse","blue",a,b);
+
+//library
+        a = new Property();
+        a.requiredBuilding = "scriptorium";
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Stone"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Textile"; a.resource.quantity[1] = 1;
+        b = new Property();
+        b.literature =1;
+        cards[1][23] = new Card("library","green",a,b);
+
+//school
+        a = new Property();
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 1;
+        a.resource.name[1] = "Paper"; a.resource.quantity[1] = 1;
+        b = new Property();
+        b.literature =1;
+        cards[1][24] = new Card("dispensary","green",a,b);
+
+
+//loom
+        a = new Property();
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Textile"; b.resource.quantity[0] = 1;
+        cards[1][25] = new Card("loom","grey",a,b);
+
+//glawssworks
+        a = new Property();
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Glass"; b.resource.quantity[0] = 1;
+        cards[1][26] = new Card("glassworks","grey",a,b);
+
+//press
+        a = new Property();
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Paper"; b.resource.quantity[0] = 1;
+        cards[1][27] = new Card("press","grey",a,b);
+
+
+
+        //3rd age cards
+        //red cards
+        // arsenal1
+        a = new Property();
+        a.resource = new Resource(3);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Ore"; a.resource.quantity[1] = 1;
+        a.resource.name[2] = "Textile"; a.resource.quantity[2] = 1;
+        b = new Property();
+        b.shield = 3;
+        cards[2][0] = new Card("arsenal","red",a,b);
+
+        // arsenal2
+        a = new Property();
+        a.resource = new Resource(3);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Ore"; a.resource.quantity[1] = 1;
+        a.resource.name[2] = "Textile"; a.resource.quantity[2] = 1;
+        b = new Property();
+        b.shield = 3;
+        cards[2][1] = new Card("arsenal","red",a,b);
+
+
+        //Circus
+        a = new Property();
+        a.requiredBuilding = "trainingground";
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Stone"; a.resource.quantity[0] = 3;
+        a.resource.name[1] = "Ore"; a.resource.quantity[1] = 1;
+        b = new Property();
+        b.shield = 3;
+        cards[2][2] = new Card("circus","red",a,b);
+
+        //fortifications
+        a = new Property();
+        a.requiredBuilding = "walls";
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Stone"; a.resource.quantity[0] = 1;
+        a.resource.name[1] = "Ore"; a.resource.quantity[1] = 3;
+        b = new Property();
+        b.shield = 3;
+        cards[2][3] = new Card("fortifications","red",a,b);
+
+        //siegeworkshop
+        a = new Property();
+        a.requiredBuilding = "laboratory";
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 1;
+        a.resource.name[1] = "Clay"; a.resource.quantity[1] = 3;
+        b = new Property();
+        b.shield = 3;
+        cards[2][4] = new Card("siegeworkshop","red",a,b);
+
+        //blue cards
+        //Pantheon
+        a = new Property();
+        a.requiredBuilding = "temple";
+        a.resource = new Resource(5);
+        a.resource.name[0] = "Clay"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Ore"; a.resource.quantity[1] = 1;
+        a.resource.name[2] = "Paper"; a.resource.quantity[2] = 1;
+        a.resource.name[3] = "Textile"; a.resource.quantity[3] = 1;
+        a.resource.name[4] = "Glass"; a.resource.quantity[4] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.victoryPoint=7;
+        cards[2][5] = new Card("pantheon","blue",a,b);
+
+        //Gardens1
+        a = new Property();
+        a.requiredBuilding = "statue";
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 1;
+        a.resource.name[1] = "Clay"; a.resource.quantity[1] = 2;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.victoryPoint = 5;
+        cards[2][6] = new Card("gardens","blue",a,b);
+
+        //Gardens2
+        a = new Property();
+        a.requiredBuilding = "statue";
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 1;
+        a.resource.name[1] = "Clay"; a.resource.quantity[1] = 2;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.victoryPoint = 5;
+        cards[2][7] = new Card("gardens","blue",a,b);
+
+        //Townhall
+        a = new Property();
+        a.resource = new Resource(3);
+        a.resource.name[0] = "Glass"; a.resource.quantity[0] = 1;
+        a.resource.name[1] = "Ore"; a.resource.quantity[1] = 1;
+        a.resource.name[2] = "Stone"; a.resource.quantity[2] = 2;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.victoryPoint = 6;
+        cards[2][8] = new Card("townhall","blue",a,b);
+
+        //Palace
+        a = new Property();
+        a.resource = new Resource(7);
+        a.resource.name[0] = "Clay"; a.resource.quantity[0] = 1;
+        a.resource.name[1] = "Ore"; a.resource.quantity[1] = 1;
+        a.resource.name[2] = "Paper"; a.resource.quantity[2] = 1;
+        a.resource.name[3] = "Textile"; a.resource.quantity[3] = 1;
+        a.resource.name[4] = "Glass"; a.resource.quantity[4] = 1;
+        a.resource.name[5] = "Lumber"; a.resource.quantity[5] = 1;
+        a.resource.name[6] = "Stone"; a.resource.quantity[6] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.victoryPoint=8;
+        cards[2][9] = new Card("palace","blue",a,b);
+
+        //Senate
+        a = new Property();
+        a.requiredBuilding = "library";
+        a.resource = new Resource(3);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Ore"; a.resource.quantity[1] = 1;
+        a.resource.name[2] = "Stone"; a.resource.quantity[2] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.victoryPoint=8;
+        cards[2][10] = new Card("senate","blue",a,b);
+
+        //Green Cards
+        //Lodge
+        a = new Property();
+        a.requiredBuilding = "dispensary";
+        a.resource = new Resource(3);
+        a.resource.name[0] = "Clay"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Paper"; a.resource.quantity[1] = 1;
+        a.resource.name[2] = "Textile"; a.resource.quantity[2] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Geometry"; b.resource.quantity[0] = 1;
+        cards[2][11] = new Card("lodge","green",a,b);
+
+        //Observatory
+        a = new Property();
+        a.requiredBuilding = "laboratory";
+        a.resource = new Resource(3);
+        a.resource.name[0] = "Ore"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Glass"; a.resource.quantity[1] = 1;
+        a.resource.name[2] = "Textile"; a.resource.quantity[2] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Mechanic"; b.resource.quantity[0] = 1;
+        cards[2][12] = new Card("observatory","green",a,b);
+
+
+        //University1
+        a = new Property();
+        a.requiredBuilding = "library";
+        a.resource = new Resource(3);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Paper"; a.resource.quantity[1] = 1;
+        a.resource.name[2] = "Glass"; a.resource.quantity[2] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Literature"; b.resource.quantity[0] = 1;
+        cards[2][13] = new Card("university","green",a,b);
+
+        //University2
+        a = new Property();
+        a.requiredBuilding = "library";
+        a.resource = new Resource(3);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Paper"; a.resource.quantity[1] = 1;
+        a.resource.name[2] = "Glass"; a.resource.quantity[2] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Literature"; b.resource.quantity[0] = 1;
+        cards[2][14] = new Card("university","green",a,b);
+
+        //Study
+        a = new Property();
+        a.requiredBuilding = "school";
+        a.resource = new Resource(3);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 1;
+        a.resource.name[1] = "Paper"; a.resource.quantity[1] = 1;
+        a.resource.name[2] = "Textile"; a.resource.quantity[2] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Mechanic"; b.resource.quantity[0] = 1;
+        cards[2][15] = new Card("study","green",a,b);
+
+        //academy
+        a = new Property();
+        a.requiredBuilding = "school";
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Stone"; a.resource.quantity[0] = 3;
+        a.resource.name[1] = "Glass"; a.resource.quantity[1] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Geometry"; b.resource.quantity[0] = 1;
+        cards[2][16] = new Card("academy","green",a,b);
+
+
+        //Yellow Cards
+        //Haven1
+        a = new Property();
+        a.requiredBuilding = "forum";
+        a.resource = new Resource(3);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 1;
+        a.resource.name[1] = "Ore"; a.resource.quantity[1] = 1;
+        a.resource.name[2] = "Textile"; a.resource.quantity[2] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.specialCard=6;
+        cards[2][17] = new Card("haven","yellow",a,b);
+
+        //Haven2
+        a = new Property();
+        a.requiredBuilding = "forum";
+        a.resource = new Resource(3);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 1;
+        a.resource.name[1] = "Ore"; a.resource.quantity[1] = 1;
+        a.resource.name[2] = "Textile"; a.resource.quantity[2] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.specialCard=6;
+        cards[2][18] = new Card("haven","yellow",a,b);
+
+        //Lighthouse
+        a = new Property();
+        a.requiredBuilding = "caravansery";
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Glass"; a.resource.quantity[0] = 1;
+        a.resource.name[1] = "Stone"; a.resource.quantity[1] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.specialCard=7;
+        cards[2][19] = new Card("lighthouse","yellow",a,b);
+
+        //Chamber of commerce
+        a = new Property();
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Clay"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Paper"; a.resource.quantity[1] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.specialCard=8;
+        cards[2][20] = new Card("chamberofcommerce","yellow",a,b);
+
+        //arena
+        a = new Property();
+        a.requiredBuilding = "dispensary";
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Ore"; a.resource.quantity[0] = 1;
+        a.resource.name[1] = "Stone"; a.resource.quantity[1] = 2;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.specialCard=9;
+        cards[2][21] = new Card("arena","yellow",a,b);
+
+        //Purple Cards
+        //Workers Guild
+        a = new Property();
+        a.resource = new Resource(4);
+        a.resource.name[0] = "Ore"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Stone"; a.resource.quantity[1] = 1;
+        a.resource.name[2] = "Clay"; a.resource.quantity[2] = 1;
+        a.resource.name[3] = "Lumber"; a.resource.quantity[3] = 2;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.specialCard=10;
+        cards[2][22] = new Card("workersguild","purple",a,b);
+
+        //Craftmens guild
+        a = new Property();
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Ore"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Stone"; a.resource.quantity[1] = 2;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.specialCard=11;
+        cards[2][23] = new Card("craftmensguild","purple",a,b);
+
+        //Traders Guild
+        a = new Property();
+        a.resource = new Resource(3);
+        a.resource.name[0] = "Paper"; a.resource.quantity[0] = 1;
+        a.resource.name[1] = "Textile"; a.resource.quantity[1] = 1;
+        a.resource.name[2] = "Glass"; a.resource.quantity[2] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.specialCard=12;
+        cards[2][24] = new Card("tradersguild","purple",a,b);
+
+        //Philosophers Guild
+        a = new Property();
+        a.resource = new Resource(3);
+        a.resource.name[0] = "Clay"; a.resource.quantity[0] = 3;
+        a.resource.name[1] = "Textile"; a.resource.quantity[1] = 1;
+        a.resource.name[2] = "Paper"; a.resource.quantity[2] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.specialCard=13;
+        cards[2][25] = new Card("philosophersguild","purple",a,b);
+
+        //Spies Guild
+        a = new Property();
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Clay"; a.resource.quantity[0] = 3;
+        a.resource.name[1] = "Glass"; a.resource.quantity[1] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.specialCard=14;
+        cards[2][26] = new Card("spiesguild","purple",a,b);
+
+        //Magistrates Guild
+        a = new Property();
+        a.resource = new Resource(3);
+        a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 3;
+        a.resource.name[1] = "Stone"; a.resource.quantity[1] = 1;
+        a.resource.name[2] = "Textile"; a.resource.quantity[2] = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.specialCard=15;
+        cards[2][27] = new Card("magistratesguild","purple",a,b);
+
     }
     private void distributeWonders( StackPane sp, ToggleGroup side, String name) throws Exception {
         Random rand = new Random();
@@ -319,6 +1111,7 @@ public class GamePage extends Scene {
         VBox coinVB, shieldVB, battleVB, vicPointVB, literatureVB, mechanicVB, geometryVB;
         HBox greenHB, redHB, yellowHB, greyHB, brownHB, blueHB, resourcesHB;
         public WonderBoard( StackPane sp, int wNumber, String side, String playerName, int pN) throws Exception{
+            Property a,b;
             setMaxSize(400, 250);
             milestones = new Milestone[3];
             pNum = pN;
@@ -350,6 +1143,39 @@ public class GamePage extends Scene {
                 Resource tmp = new Resource( 1);
                 tmp.name[0] = "Ore"; tmp.quantity[0] = 1;
                 players[pNum].addResource( tmp);
+                if(side.equals("A")) {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Lumber";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 3;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Clay";    a.resource.quantity[0] = 3;
+                    b.shield = 2;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Ore";  a.resource.quantity[0] = 4;
+                    b.victoryPoint = 7;
+                    milestones[2] = new Milestone(a,b);
+                }
+                else {
+                    milestones = new Milestone[2];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 3;
+                    b.victoryPoint = 3; b.coin = 3; b.shield = 1;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Ore";    a.resource.quantity[0] = 4;
+                    b.shield = 1;   b.victoryPoint = 4; b.coin = 4;
+                    milestones[1] = new Milestone(a,b);
+                }
             }
             else if( wNumber == 2) {
                 InputStream is = Files.newInputStream(Paths.get("images/alexandria.jpg"));
@@ -366,6 +1192,55 @@ public class GamePage extends Scene {
                 Resource tmp = new Resource( 1);
                 tmp.name[0] = "Glass"; tmp.quantity[0] = 1;
                 players[pNum].addResource( tmp);
+                if(side.equals("A")) {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 3;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Ore";    a.resource.quantity[0] = 2;
+                    b.resource = new Resource(4);
+                    b.resource.name[0] = "Lumber";  b.resource.quantity[0] = 1;
+                    b.resource.name[1] = "Ore";  b.resource.quantity[1] = 1;
+                    b.resource.name[2] = "Stone";  b.resource.quantity[2] = 1;
+                    b.resource.name[3] = "Clay";  b.resource.quantity[3] = 1;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Glass";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 7;
+                    milestones[2] = new Milestone(a,b);
+                }
+                else {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Clay";  a.resource.quantity[0] = 2;
+                    b.resource = new Resource(4);
+                    b.resource.name[0] = "Lumber";  b.resource.quantity[0] = 1;
+                    b.resource.name[1] = "Ore";  b.resource.quantity[1] = 1;
+                    b.resource.name[2] = "Stone";  b.resource.quantity[2] = 1;
+                    b.resource.name[3] = "Clay";  b.resource.quantity[3] = 1;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Lumber";    a.resource.quantity[0] = 2;
+                    b.resource = new Resource(3);
+                    b.resource.name[0] = "Glass";  b.resource.quantity[0] = 1;
+                    b.resource.name[1] = "Textile";  b.resource.quantity[1] = 1;
+                    b.resource.name[2] = "Paper";  b.resource.quantity[2] = 1;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 3;
+                    b.victoryPoint = 7;
+                    milestones[2] = new Milestone(a,b);
+                }
             }
             else if( wNumber == 3) {
                 InputStream is = Files.newInputStream(Paths.get("images/gamepage.jpg"));
@@ -382,6 +1257,47 @@ public class GamePage extends Scene {
                 Resource tmp = new Resource( 1);
                 tmp.name[0] = "Paper"; tmp.quantity[0] = 1;
                 players[pNum].addResource( tmp);
+                if(side.equals("A")) {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 3;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Lumber";    a.resource.quantity[0] = 2;
+                    b.resource = new Resource(4);
+                    b.coin = 9;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Paper";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 7;
+                    milestones[2] = new Milestone(a,b);
+                }
+                else {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 2; b.coin = 4;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Lumber";    a.resource.quantity[0] = 2;
+                    b.victoryPoint = 3; b.coin= 4;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(3);
+                    a.resource.name[0] = "Paper";  a.resource.quantity[0] = 1;
+                    a.resource.name[1] = "Glass";  a.resource.quantity[1] = 1;
+                    a.resource.name[2] = "Textile";  a.resource.quantity[2] = 1;
+                    b.victoryPoint = 5; b.coin = 4;
+                    milestones[2] = new Milestone(a,b);
+                }
             }
             else if( wNumber == 4) {
                 InputStream is = Files.newInputStream(Paths.get("images/babylon.jpg"));
@@ -398,6 +1314,47 @@ public class GamePage extends Scene {
                 Resource tmp = new Resource( 1);
                 tmp.name[0] = "Clay"; tmp.quantity[0] = 1;
                 players[pNum].addResource( tmp);
+                if(side.equals("A")) {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Clay";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 3;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Lumber";    a.resource.quantity[0] = 3;
+                    b.specialCard = 16;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Clay";  a.resource.quantity[0] = 4;
+                    b.victoryPoint = 7;
+                    milestones[2] = new Milestone(a,b);
+                }
+                else {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(2);
+                    a.resource.name[0] = "Textile";  a.resource.quantity[0] = 1;
+                    a.resource.name[1] = "Clay";  a.resource.quantity[1] = 1;
+                    b.victoryPoint = 3;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(2);
+                    a.resource.name[0] = "Lumber";    a.resource.quantity[0] = 2;
+                    a.resource.name[1] = "Glass";    a.resource.quantity[1] = 1;
+                    b.specialCard = 17;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(2);
+                    a.resource.name[0] = "Clay";  a.resource.quantity[0] = 3;
+                    a.resource.name[1] = "Paper";  a.resource.quantity[1] = 1;
+                    b.specialCard = 16;
+                    milestones[2] = new Milestone(a,b);
+                }
             }
             else if( wNumber == 5) {
                 InputStream is = Files.newInputStream(Paths.get("images/olympia.jpg"));
@@ -414,6 +1371,45 @@ public class GamePage extends Scene {
                 Resource tmp = new Resource( 1);
                 tmp.name[0] = "Lumber"; tmp.quantity[0] = 1;
                 players[pNum].addResource( tmp);
+                if(side.equals("A")) {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Lumber";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 3;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Stone";    a.resource.quantity[0] = 2;
+                    b.specialCard = 18;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Ore";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 7;
+                    milestones[2] = new Milestone(a,b);
+                }
+                else {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Lumber";  a.resource.quantity[0] = 2;
+                    b.specialCard = 19;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Stone";    a.resource.quantity[0] = 2;
+                    b.victoryPoint = 5;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(2);
+                    a.resource.name[0] = "Ore";  a.resource.quantity[0] = 2;
+                    a.resource.name[1] = "Textile";  a.resource.quantity[1] = 1;
+                    b.specialCard = 20;
+                    milestones[2] = new Milestone(a,b);
+                }
             }
             else if( wNumber == 6) {
                 InputStream is = Files.newInputStream(Paths.get("images/halikarnassos.jpg"));
@@ -430,6 +1426,46 @@ public class GamePage extends Scene {
                 Resource tmp = new Resource( 1);
                 tmp.name[0] = "Textile"; tmp.quantity[0] = 1;
                 players[pNum].addResource( tmp);
+                if(side.equals("A")) {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Clay";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 3;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Ore";    a.resource.quantity[0] = 3;
+                    b.specialCard = 21;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Textile";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 7;
+                    milestones[2] = new Milestone(a,b);
+                }
+                else {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Ore";  a.resource.quantity[0] = 2;
+                    b.specialCard = 21; b.victoryPoint = 2;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Clay";    a.resource.quantity[0] = 3;
+                    b.specialCard = 21; b.victoryPoint = 1;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(3);
+                    a.resource.name[0] = "Glass";  a.resource.quantity[0] = 1;
+                    a.resource.name[1] = "Textile";  a.resource.quantity[1] = 1;
+                    a.resource.name[2] = "Paper";  a.resource.quantity[2] = 1;
+                    b.specialCard = 21;
+                    milestones[2] = new Milestone(a,b);
+                }
             }
             else if( wNumber == 7) {
                 InputStream is = Files.newInputStream(Paths.get("images/gizeh.jpg"));
@@ -446,6 +1482,50 @@ public class GamePage extends Scene {
                 Resource tmp = new Resource( 1);
                 tmp.name[0] = "Stone"; tmp.quantity[0] = 1;
                 players[pNum].addResource( tmp);
+                if(side.equals("A")) {
+                    milestones = new Milestone[3];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 3;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Lumber";    a.resource.quantity[0] = 3;
+                    b.victoryPoint = 5;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 4;
+                    b.victoryPoint = 7;
+                    milestones[2] = new Milestone(a,b);
+                }
+                else {
+                    milestones = new Milestone[4];
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Lumber";  a.resource.quantity[0] = 2;
+                    b.victoryPoint = 3;
+                    milestones[0] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Stone";    a.resource.quantity[0] = 3;
+                    b.victoryPoint = 5;
+                    milestones[1] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Clay";  a.resource.quantity[0] = 3;
+                    b.victoryPoint = 5;
+                    milestones[2] = new Milestone(a,b);
+                    a = new Property(); b = new Property();
+                    a.resource = new Resource(2);
+                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 4;
+                    a.resource.name[1] = "Paper";  a.resource.quantity[1] = 1;
+                    b.victoryPoint = 7;
+                    milestones[2] = new Milestone(a,b);
+                }
             }
             // coin part
             InputStream is = Files.newInputStream(Paths.get("images/coins.png"));
@@ -715,7 +1795,7 @@ public class GamePage extends Scene {
             board.setArcHeight(15);
             board.setArcWidth(15);
             getChildren().add(board);
-            InputStream is = Files.newInputStream(Paths.get("images/arsenal.png"));
+            InputStream is = Files.newInputStream(Paths.get("images/card images/" + name + ".png"));
             Image img = new Image(is);
             is.close();
             board.setFill(new ImagePattern(img));
@@ -734,10 +1814,10 @@ public class GamePage extends Scene {
             sellButton.setTranslateY(30);
             getChildren().add(sellButton);
             sellButton.setOnMouseClicked(event -> {
-                GamePage.Property tmp;
+                Property tmp;
                 tmp = new GamePage.Property();
                 tmp.coin = 3;
-                GamePage.gainBenefit( 0, false, tmp);
+                gainBenefit( 0, false, tmp, "", "");
             });
 
             buryButton = new javafx.scene.control.Button("UPGRADE WONDER");
@@ -745,12 +1825,12 @@ public class GamePage extends Scene {
             buryButton.setTranslateY(70);
             getChildren().add(buryButton);
             buryButton.setOnMouseClicked(event -> {
-                if( GamePage.checkResources( 0 , true, cost)) {
-                    GamePage.gainBenefit(0, true, benefit);
-                    GamePage.endTurn();
+                if( checkResources( 0 , true, cost)) {
+                    gainBenefit(0, true, benefit, "", "");
+                    endTurn();
                 }
                 else {
-                    GamePage.giveError("Not enough resources");
+                    giveError("Not enough resources");
                 }
             });
 
@@ -759,12 +1839,12 @@ public class GamePage extends Scene {
             buildButton.setTranslateY(110);
             getChildren().add(buildButton);
             buildButton.setOnMouseClicked(event -> {
-                if( GamePage.checkResources( 0 , false, cost)) {
-                    GamePage.gainBenefit(0, false, benefit);
-                    GamePage.endTurn();
+                if( checkResources( 0 , false, cost)) {
+                    gainBenefit(0, false, benefit, name, color);
+                    endTurn();
                 }
                 else {
-                    GamePage.giveError("Not enough resources");
+                    giveError("Not enough resources");
                 }
             });
 
