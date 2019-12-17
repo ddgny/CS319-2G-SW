@@ -775,7 +775,7 @@ public class GamePage extends Scene {
         b = new Property();
         b.resource = new Resource(1);
         b.shield = 1;
-        cards[0][4] = new Card("apothecary","red",a,b);
+        cards[0][4] = new Card("stockade","red",a,b);
 
         //barracks
         a = new Property();
@@ -932,7 +932,7 @@ public class GamePage extends Scene {
         b = new Property();
         b.resource = new Resource(1);
         b.coin = 5;
-        cards[0][24] = new Card("orevein","yellow",a,b);
+        cards[0][24] = new Card("tavern","yellow",a,b);
 
         //east trading post
         a = new Property();
