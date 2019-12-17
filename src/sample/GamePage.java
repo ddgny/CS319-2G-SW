@@ -46,7 +46,9 @@ public class GamePage extends Scene {
     public static WonderBoard[] wb;
     public static Player[] players;
     private Card[][] cards;
-    private static Stage window;
+    private Stage window;
+    private StackPane sp;
+    private String side;
     // mode = ally -> -1 , normal -> 0 , story -> 1,2,3,4,5...
     private int mode;
     private class Resource {
@@ -57,7 +59,7 @@ public class GamePage extends Scene {
                 quantity = new int[optional];
         }
     }
-    public static class Property {
+    public  class Property {
         int coin, shield, mechanic, literature, geometry, victoryPoint;
         String requiredBuilding;
         Resource resource;
@@ -65,6 +67,7 @@ public class GamePage extends Scene {
         public Property(){
             coin = shield = mechanic = literature = geometry = victoryPoint = specialCard = 0;
             requiredBuilding = "";
+            resource = new Resource(0);
         }
     }
     private class Player {
@@ -96,6 +99,8 @@ public class GamePage extends Scene {
         super(sp, Main.primaryScreenBounds.getWidth(), Main.primaryScreenBounds.getHeight());
         mode = sMode;
         this.window = window;
+        this.sp = sp;
+        this.side = side.getSelectedToggle().getUserData().toString();
         wb = new WonderBoard[4];
         players = new Player[4];
         cards = new Card[3][28];
@@ -647,8 +652,8 @@ public class GamePage extends Scene {
         players[3] = new Player("bot3");
         definingCards();
         Collections.shuffle(Arrays.asList(cards[0]));
-//        Collections.shuffle(Arrays.asList(cards[1]));
-//        Collections.shuffle(Arrays.asList(cards[2]));
+        Collections.shuffle(Arrays.asList(cards[1]));
+        Collections.shuffle(Arrays.asList(cards[2]));
         sp.getChildren().addAll(cards[0][0],cards[0][1],cards[0][2],cards[0][3],cards[0][4],cards[0][5],cards[0][6]);
 
         cards[0][0].setTranslateX(-250); cards[0][0].setTranslateY(90);
@@ -659,6 +664,7 @@ public class GamePage extends Scene {
         cards[0][5].setTranslateX(-350); cards[0][5].setTranslateY(290);
         cards[0][6].setTranslateX(-550); cards[0][6].setTranslateY(290);
         distributeWonders( sp, side, name);
+
         sp.getChildren().addAll(wb);
 
 
@@ -677,13 +683,24 @@ public class GamePage extends Scene {
         popup.show(window);
         delay.play();
     }
-    public void endTurn() {
-
+    public void endTurn() throws Exception {
+        wb[0] = new WonderBoard( sp,wb[0].wonderNum, side, players[0].name, 0);
+        wb[1] = new WonderBoard( sp,wb[1].wonderNum, side, players[1].name, 1);
+        wb[2] = new WonderBoard( sp,wb[2].wonderNum, side, players[2].name, 2);
+        wb[3] = new WonderBoard( sp,wb[3].wonderNum, side, players[3].name, 3);
+        wb[0].setTranslateY(150);
+        wb[0].setTranslateX(350);
+        wb[1].setTranslateY(-150);
+        wb[1].setTranslateX(450);
+        wb[3].setTranslateY(-150);
+        wb[3].setTranslateX(-450);
+        wb[2].setTranslateY(-260);
+        sp.getChildren().addAll(wb);
     }
     public boolean checkResources(int playerNum, boolean isWonderbuild, Property cost) {
         if(isWonderbuild)
             cost = wb[playerNum].milestones[players[playerNum].milestoneDone].cost;
-        return false;
+        return true;
     }
     public void gainBenefit( int playerNum, boolean isWonderbuild, Property benefit, String buildingName, String buildingColor) {
         if(isWonderbuild) {
@@ -699,7 +716,8 @@ public class GamePage extends Scene {
             else if(buildingColor.equals("yellow")) players[playerNum].yellowCards++;
             else if(buildingColor.equals("brown")) players[playerNum].brownCards++;
         }
-        players[playerNum].addResource(benefit.resource);
+        if(benefit.resource.quantity.length != 0)
+            players[playerNum].addResource(benefit.resource);
         players[playerNum].stats.coin += benefit.coin;
         players[playerNum].stats.shield += benefit.shield;
         players[playerNum].stats.mechanic += benefit.mechanic;
@@ -1189,7 +1207,7 @@ public class GamePage extends Scene {
         cards[1][27] = new Card("press","grey",a,b);
 
 
-/*
+
         //3rd age cards
         //red cards
         // arsenal1
@@ -1254,7 +1272,6 @@ public class GamePage extends Scene {
         a.resource.name[3] = "Textile"; a.resource.quantity[3] = 1;
         a.resource.name[4] = "Glass"; a.resource.quantity[4] = 1;
         b = new Property();
-        b.resource = new Resource(1);
         b.victoryPoint=7;
         cards[2][5] = new Card("pantheon","blue",a,b);
 
@@ -1265,7 +1282,6 @@ public class GamePage extends Scene {
         a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 1;
         a.resource.name[1] = "Clay"; a.resource.quantity[1] = 2;
         b = new Property();
-        b.resource = new Resource(1);
         b.victoryPoint = 5;
         cards[2][6] = new Card("gardens","blue",a,b);
 
@@ -1276,7 +1292,6 @@ public class GamePage extends Scene {
         a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 1;
         a.resource.name[1] = "Clay"; a.resource.quantity[1] = 2;
         b = new Property();
-        b.resource = new Resource(1);
         b.victoryPoint = 5;
         cards[2][7] = new Card("gardens","blue",a,b);
 
@@ -1287,7 +1302,6 @@ public class GamePage extends Scene {
         a.resource.name[1] = "Ore"; a.resource.quantity[1] = 1;
         a.resource.name[2] = "Stone"; a.resource.quantity[2] = 2;
         b = new Property();
-        b.resource = new Resource(1);
         b.victoryPoint = 6;
         cards[2][8] = new Card("townhall","blue",a,b);
 
@@ -1302,7 +1316,6 @@ public class GamePage extends Scene {
         a.resource.name[5] = "Lumber"; a.resource.quantity[5] = 1;
         a.resource.name[6] = "Stone"; a.resource.quantity[6] = 1;
         b = new Property();
-        b.resource = new Resource(1);
         b.victoryPoint=8;
         cards[2][9] = new Card("palace","blue",a,b);
 
@@ -1314,7 +1327,6 @@ public class GamePage extends Scene {
         a.resource.name[1] = "Ore"; a.resource.quantity[1] = 1;
         a.resource.name[2] = "Stone"; a.resource.quantity[2] = 1;
         b = new Property();
-        b.resource = new Resource(1);
         b.victoryPoint=8;
         cards[2][10] = new Card("senate","blue",a,b);
 
@@ -1327,8 +1339,7 @@ public class GamePage extends Scene {
         a.resource.name[1] = "Paper"; a.resource.quantity[1] = 1;
         a.resource.name[2] = "Textile"; a.resource.quantity[2] = 1;
         b = new Property();
-        b.resource = new Resource(1);
-        b.resource.name[0] = "Geometry"; b.resource.quantity[0] = 1;
+        b.geometry = 1;
         cards[2][11] = new Card("lodge","green",a,b);
 
         //Observatory
@@ -1339,8 +1350,7 @@ public class GamePage extends Scene {
         a.resource.name[1] = "Glass"; a.resource.quantity[1] = 1;
         a.resource.name[2] = "Textile"; a.resource.quantity[2] = 1;
         b = new Property();
-        b.resource = new Resource(1);
-        b.resource.name[0] = "Mechanic"; b.resource.quantity[0] = 1;
+        b.mechanic = 1;
         cards[2][12] = new Card("observatory","green",a,b);
 
 
@@ -1352,8 +1362,7 @@ public class GamePage extends Scene {
         a.resource.name[1] = "Paper"; a.resource.quantity[1] = 1;
         a.resource.name[2] = "Glass"; a.resource.quantity[2] = 1;
         b = new Property();
-        b.resource = new Resource(1);
-        b.resource.name[0] = "Literature"; b.resource.quantity[0] = 1;
+        b.literature = 1;
         cards[2][13] = new Card("university","green",a,b);
 
         //University2
@@ -1364,8 +1373,7 @@ public class GamePage extends Scene {
         a.resource.name[1] = "Paper"; a.resource.quantity[1] = 1;
         a.resource.name[2] = "Glass"; a.resource.quantity[2] = 1;
         b = new Property();
-        b.resource = new Resource(1);
-        b.resource.name[0] = "Literature"; b.resource.quantity[0] = 1;
+        b.literature = 1;
         cards[2][14] = new Card("university","green",a,b);
 
         //Study
@@ -1376,8 +1384,7 @@ public class GamePage extends Scene {
         a.resource.name[1] = "Paper"; a.resource.quantity[1] = 1;
         a.resource.name[2] = "Textile"; a.resource.quantity[2] = 1;
         b = new Property();
-        b.resource = new Resource(1);
-        b.resource.name[0] = "Mechanic"; b.resource.quantity[0] = 1;
+        b.mechanic = 1;
         cards[2][15] = new Card("study","green",a,b);
 
         //academy
@@ -1387,8 +1394,7 @@ public class GamePage extends Scene {
         a.resource.name[0] = "Stone"; a.resource.quantity[0] = 3;
         a.resource.name[1] = "Glass"; a.resource.quantity[1] = 1;
         b = new Property();
-        b.resource = new Resource(1);
-        b.resource.name[0] = "Geometry"; b.resource.quantity[0] = 1;
+        b.geometry = 1;
         cards[2][16] = new Card("academy","green",a,b);
 
 
@@ -1401,7 +1407,6 @@ public class GamePage extends Scene {
         a.resource.name[1] = "Ore"; a.resource.quantity[1] = 1;
         a.resource.name[2] = "Textile"; a.resource.quantity[2] = 1;
         b = new Property();
-        b.resource = new Resource(1);
         b.specialCard=6;
         cards[2][17] = new Card("haven","yellow",a,b);
 
@@ -1413,7 +1418,6 @@ public class GamePage extends Scene {
         a.resource.name[1] = "Ore"; a.resource.quantity[1] = 1;
         a.resource.name[2] = "Textile"; a.resource.quantity[2] = 1;
         b = new Property();
-        b.resource = new Resource(1);
         b.specialCard=6;
         cards[2][18] = new Card("haven","yellow",a,b);
 
@@ -1424,7 +1428,6 @@ public class GamePage extends Scene {
         a.resource.name[0] = "Glass"; a.resource.quantity[0] = 1;
         a.resource.name[1] = "Stone"; a.resource.quantity[1] = 1;
         b = new Property();
-        b.resource = new Resource(1);
         b.specialCard=7;
         cards[2][19] = new Card("lighthouse","yellow",a,b);
 
@@ -1434,7 +1437,6 @@ public class GamePage extends Scene {
         a.resource.name[0] = "Clay"; a.resource.quantity[0] = 2;
         a.resource.name[1] = "Paper"; a.resource.quantity[1] = 1;
         b = new Property();
-        b.resource = new Resource(1);
         b.specialCard=8;
         cards[2][20] = new Card("chamberofcommerce","yellow",a,b);
 
@@ -1445,7 +1447,6 @@ public class GamePage extends Scene {
         a.resource.name[0] = "Ore"; a.resource.quantity[0] = 1;
         a.resource.name[1] = "Stone"; a.resource.quantity[1] = 2;
         b = new Property();
-        b.resource = new Resource(1);
         b.specialCard=9;
         cards[2][21] = new Card("arena","yellow",a,b);
 
@@ -1458,7 +1459,6 @@ public class GamePage extends Scene {
         a.resource.name[2] = "Clay"; a.resource.quantity[2] = 1;
         a.resource.name[3] = "Lumber"; a.resource.quantity[3] = 2;
         b = new Property();
-        b.resource = new Resource(1);
         b.specialCard=10;
         cards[2][22] = new Card("workersguild","purple",a,b);
 
@@ -1468,9 +1468,8 @@ public class GamePage extends Scene {
         a.resource.name[0] = "Ore"; a.resource.quantity[0] = 2;
         a.resource.name[1] = "Stone"; a.resource.quantity[1] = 2;
         b = new Property();
-        b.resource = new Resource(1);
         b.specialCard=11;
-        cards[2][23] = new Card("craftmensguild","purple",a,b);
+        cards[2][23] = new Card("craftsmensguild","purple",a,b);
 
         //Traders Guild
         a = new Property();
@@ -1479,7 +1478,6 @@ public class GamePage extends Scene {
         a.resource.name[1] = "Textile"; a.resource.quantity[1] = 1;
         a.resource.name[2] = "Glass"; a.resource.quantity[2] = 1;
         b = new Property();
-        b.resource = new Resource(1);
         b.specialCard=12;
         cards[2][24] = new Card("tradersguild","purple",a,b);
 
@@ -1490,7 +1488,6 @@ public class GamePage extends Scene {
         a.resource.name[1] = "Textile"; a.resource.quantity[1] = 1;
         a.resource.name[2] = "Paper"; a.resource.quantity[2] = 1;
         b = new Property();
-        b.resource = new Resource(1);
         b.specialCard=13;
         cards[2][25] = new Card("philosophersguild","purple",a,b);
 
@@ -1500,7 +1497,6 @@ public class GamePage extends Scene {
         a.resource.name[0] = "Clay"; a.resource.quantity[0] = 3;
         a.resource.name[1] = "Glass"; a.resource.quantity[1] = 1;
         b = new Property();
-        b.resource = new Resource(1);
         b.specialCard=14;
         cards[2][26] = new Card("spiesguild","purple",a,b);
 
@@ -1511,11 +1507,8 @@ public class GamePage extends Scene {
         a.resource.name[1] = "Stone"; a.resource.quantity[1] = 1;
         a.resource.name[2] = "Textile"; a.resource.quantity[2] = 1;
         b = new Property();
-        b.resource = new Resource(1);
         b.specialCard=15;
         cards[2][27] = new Card("magistratesguild","purple",a,b);
-
- */
 
     }
     private void distributeWonders( StackPane sp, ToggleGroup side, String name) throws Exception {
@@ -1528,6 +1521,17 @@ public class GamePage extends Scene {
         while(randoms[2] == randoms[1] || randoms[0] == randoms[2]) {randoms[2] = rand.nextInt(7); randoms[2]++;}
         randoms[3] = rand.nextInt(7); randoms[3]++;
         while(randoms[3] == randoms[0] || randoms[3] == randoms[1] || randoms[3] == randoms[2]) {randoms[3] = rand.nextInt(7); randoms[3]++;}
+        for( int i = 0; i < 4; i++) {
+            Resource tmp = new Resource( 1);
+            if(randoms[i] == 1) {tmp.name[0] = "Ore"; tmp.quantity[0] = 1; }
+            if(randoms[i] == 2) {tmp.name[0] = "Glass"; tmp.quantity[0] = 1; }
+            if(randoms[i] == 3) {tmp.name[0] = "Paper"; tmp.quantity[0] = 1; }
+            if(randoms[i] == 4) {tmp.name[0] = "Clay"; tmp.quantity[0] = 1; }
+            if(randoms[i] == 5) {tmp.name[0] = "Lumber"; tmp.quantity[0] = 1; }
+            if(randoms[i] == 6) {tmp.name[0] = "Textile"; tmp.quantity[0] = 1; }
+            if(randoms[i] == 7) {tmp.name[0] = "Stone"; tmp.quantity[0] = 1; }
+            players[i].addResource( tmp);
+        }
         wb[0] = new WonderBoard( sp,randoms[0], side.getSelectedToggle().getUserData().toString(), name, 0);
         wb[1] = new WonderBoard( sp,randoms[1], side.getSelectedToggle().getUserData().toString(), "bot1", 1);
         wb[2] = new WonderBoard( sp,randoms[2], side.getSelectedToggle().getUserData().toString(), "bot2", 2);
@@ -1559,13 +1563,14 @@ public class GamePage extends Scene {
     }
     private class WonderBoard extends Pane {
         Text coinText, shieldText, battleText, vicPointText, literatureText, mechanicText, geometryText, greenText, redText, yellowText, greyText, brownText, blueText;
-        int pNum;
+        int pNum, wonderNum;
         Background bg;
         Milestone[] milestones;
         VBox coinVB, shieldVB, battleVB, vicPointVB, literatureVB, mechanicVB, geometryVB;
         HBox greenHB, redHB, yellowHB, greyHB, brownHB, blueHB, resourcesHB;
         public WonderBoard( StackPane sp, int wNumber, String side, String playerName, int pN) throws Exception{
             Property a,b;
+            wonderNum = wNumber;
             setMaxSize(400, 250);
             milestones = new Milestone[3];
             pNum = pN;
@@ -1594,9 +1599,6 @@ public class GamePage extends Scene {
                 sideText2.setTranslateX(300);
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
-                Resource tmp = new Resource( 1);
-                tmp.name[0] = "Ore"; tmp.quantity[0] = 1;
-                players[pNum].addResource( tmp);
                 if(side.equals("A")) {
                     milestones = new Milestone[3];
                     a = new Property();
@@ -1643,9 +1645,6 @@ public class GamePage extends Scene {
                 sideText2.setTranslateX(280);
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
-                Resource tmp = new Resource( 1);
-                tmp.name[0] = "Glass"; tmp.quantity[0] = 1;
-                players[pNum].addResource( tmp);
                 if(side.equals("A")) {
                     milestones = new Milestone[3];
                     a = new Property();
@@ -1708,9 +1707,6 @@ public class GamePage extends Scene {
                 sideText2.setTranslateX(290);
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
-                Resource tmp = new Resource( 1);
-                tmp.name[0] = "Paper"; tmp.quantity[0] = 1;
-                players[pNum].addResource( tmp);
                 if(side.equals("A")) {
                     milestones = new Milestone[3];
                     a = new Property();
@@ -1765,9 +1761,6 @@ public class GamePage extends Scene {
                 sideText2.setTranslateX(290);
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
-                Resource tmp = new Resource( 1);
-                tmp.name[0] = "Clay"; tmp.quantity[0] = 1;
-                players[pNum].addResource( tmp);
                 if(side.equals("A")) {
                     milestones = new Milestone[3];
                     a = new Property();
@@ -1822,9 +1815,6 @@ public class GamePage extends Scene {
                 sideText2.setTranslateX(290);
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
-                Resource tmp = new Resource( 1);
-                tmp.name[0] = "Lumber"; tmp.quantity[0] = 1;
-                players[pNum].addResource( tmp);
                 if(side.equals("A")) {
                     milestones = new Milestone[3];
                     a = new Property();
@@ -1877,9 +1867,6 @@ public class GamePage extends Scene {
                 sideText2.setTranslateX(250);
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
-                Resource tmp = new Resource( 1);
-                tmp.name[0] = "Textile"; tmp.quantity[0] = 1;
-                players[pNum].addResource( tmp);
                 if(side.equals("A")) {
                     milestones = new Milestone[3];
                     a = new Property();
@@ -1933,9 +1920,6 @@ public class GamePage extends Scene {
                 sideText2.setTranslateX(300);
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
-                Resource tmp = new Resource( 1);
-                tmp.name[0] = "Stone"; tmp.quantity[0] = 1;
-                players[pNum].addResource( tmp);
                 if(side.equals("A")) {
                     milestones = new Milestone[3];
                     a = new Property();
@@ -2202,18 +2186,20 @@ public class GamePage extends Scene {
             // Resource Part
             resourcesHB = new HBox( 5);
             for(int i = 0; i < players[pNum].resourceCount; i++) {
-                VBox vb = new VBox();
-                vb.setBackground(bg);
-                for(int j = 0; j < players[pNum].resources[i].quantity.length; j++){
-                    is = Files.newInputStream(Paths.get("images/" + players[pNum].resources[i].name[j] + ".png"));
-                    img = new Image(is);
-                    is.close();
-                    imgView = new ImageView(img);
-                    imgView.setFitHeight(min(25,50 / players[pNum].resources[i].quantity.length));
-                    imgView.setFitWidth(25);
-                    vb.getChildren().addAll(imgView);
+                for(int k = 0; k < players[pNum].resources[i].quantity[0]; k++) {
+                    VBox vb = new VBox();
+                    vb.setBackground(bg);
+                    for (int j = 0; j < players[pNum].resources[i].quantity.length; j++) {
+                        is = Files.newInputStream(Paths.get("images/" + players[pNum].resources[i].name[j] + ".png"));
+                        img = new Image(is);
+                        is.close();
+                        imgView = new ImageView(img);
+                        imgView.setFitHeight(min(25, 50 / players[pNum].resources[i].quantity.length));
+                        imgView.setFitWidth(25);
+                        vb.getChildren().addAll(imgView);
+                    }
+                    resourcesHB.getChildren().addAll(vb);
                 }
-                resourcesHB.getChildren().addAll(vb);
             }
             resourcesHB.setTranslateY(100);
             resourcesHB.setTranslateX(5);
@@ -2272,6 +2258,11 @@ public class GamePage extends Scene {
                 tmp = new GamePage.Property();
                 tmp.coin = 3;
                 gainBenefit( 0, false, tmp, "", "");
+                try {
+                    endTurn();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             });
 
             buryButton = new javafx.scene.control.Button("UPGRADE WONDER");
@@ -2279,9 +2270,16 @@ public class GamePage extends Scene {
             buryButton.setTranslateY(70);
             getChildren().add(buryButton);
             buryButton.setOnMouseClicked(event -> {
-                if( checkResources( 0 , true, cost)) {
+                if( players[0].milestoneDone == wb[0].milestones.length) {
+                    giveError("All wonders have already built");
+                }
+                else if( checkResources( 0 , true, cost)) {
                     gainBenefit(0, true, benefit, "", "");
-                    endTurn();
+                    try {
+                        endTurn();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 else {
                     giveError("Not enough resources");
@@ -2295,7 +2293,11 @@ public class GamePage extends Scene {
             buildButton.setOnMouseClicked(event -> {
                 if( checkResources( 0 , false, cost)) {
                     gainBenefit(0, false, benefit, name, color);
-                    endTurn();
+                    try {
+                        endTurn();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 else {
                     giveError("Not enough resources");
