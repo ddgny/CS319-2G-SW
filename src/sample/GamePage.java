@@ -201,38 +201,94 @@ public class GamePage extends Scene {
         tradeLumberLeft.setTranslateX(5);
         tradeLumberLeft.setOnMouseClicked(event -> {
             System.out.println("tradeLumberLeft");
+            players[0].stats.coin = players[0].stats.coin - 2;
+            players[3].stats.coin = players[3].stats.coin + 2;
+
+            try {
+                reDrawWonders();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
 
         Button tradeClayLeft = new Button("Trade");
         tradeClayLeft.setTranslateX(5);
         tradeClayLeft.setOnMouseClicked(event -> {
             System.out.println("tradeClayLeft");
+            players[0].stats.coin = players[0].stats.coin - 2;
+            players[3].stats.coin = players[3].stats.coin + 2;
+
+            try {
+                reDrawWonders();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
         Button tradeOreLeft = new Button("Trade");
         tradeOreLeft.setTranslateX(5);
         tradeOreLeft.setOnMouseClicked(event -> {
             System.out.println("tradeOreLeft");
+            players[0].stats.coin = players[0].stats.coin - 2;
+            players[3].stats.coin = players[3].stats.coin + 2;
+
+            try {
+                reDrawWonders();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
         Button tradeStoneLeft = new Button("Trade");
         tradeStoneLeft.setTranslateX(5);
         tradeStoneLeft.setOnMouseClicked(event -> {
             System.out.println("tradeStoneLeft");
+            players[0].stats.coin = players[0].stats.coin - 2;
+            players[3].stats.coin = players[3].stats.coin + 2;
+
+            try {
+                reDrawWonders();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
 
         Button tradeGlassLeft = new Button("Trade");
         tradeGlassLeft.setTranslateX(5);
         tradeGlassLeft.setOnMouseClicked(event -> {
             System.out.println("tradeGlassLeft");
+            players[0].stats.coin = players[0].stats.coin - 2;
+            players[3].stats.coin = players[3].stats.coin + 2;
+
+            try {
+                reDrawWonders();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
         Button tradePaperLeft = new Button("Trade");
         tradePaperLeft.setTranslateX(5);
         tradePaperLeft.setOnMouseClicked(event -> {
             System.out.println("tradePaperLeft");
+            players[0].stats.coin = players[0].stats.coin - 2;
+            players[3].stats.coin = players[3].stats.coin + 2;
+
+            try {
+                reDrawWonders();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
         Button tradeTextileLeft = new Button("Trade");
         tradeTextileLeft.setTranslateX(5);
         tradeTextileLeft.setOnMouseClicked(event -> {
             System.out.println("tradeTextileLeft");
+            players[0].stats.coin = players[0].stats.coin - 2;
+            players[3].stats.coin = players[3].stats.coin + 2;
+
+            try {
+                reDrawWonders();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
         HBox tradeLumberHBLeft,tradeClayHBLeft,tradeStoneHBLeft,tradeOreHBLeft,tradeGlassHBLeft,tradePaperHBLeft,tradeTextileHBLeft;
 
@@ -419,38 +475,95 @@ public class GamePage extends Scene {
         Button tradeLumberRight = new Button("Trade");
         tradeLumberRight.setTranslateX(5);
         tradeLumberRight.setOnMouseClicked(event -> {
+            players[0].stats.coin = players[0].stats.coin - 2;
+            players[1].stats.coin = players[1].stats.coin + 2;
+
+            try {
+                reDrawWonders();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             System.out.println("tradeLumberRight");
         });
 
         Button tradeClayRight = new Button("Trade");
         tradeClayRight.setTranslateX(5);
         tradeClayRight.setOnMouseClicked(event -> {
+            players[0].stats.coin = players[0].stats.coin - 2;
+            players[1].stats.coin = players[1].stats.coin + 2;
+
+            try {
+                reDrawWonders();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             System.out.println("tradeClayRight");
         });
         Button tradeOreRight = new Button("Trade");
         tradeOreRight.setTranslateX(5);
         tradeOreRight.setOnMouseClicked(event -> {
+            players[0].stats.coin = players[0].stats.coin - 2;
+            players[1].stats.coin = players[1].stats.coin + 2;
+
+            try {
+                reDrawWonders();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             System.out.println("tradeOreRight");
         });
         Button tradeStoneRight = new Button("Trade");
         tradeStoneRight.setTranslateX(5);
         tradeStoneRight.setOnMouseClicked(event -> {
+            players[0].stats.coin = players[0].stats.coin - 2;
+            players[1].stats.coin = players[1].stats.coin + 2;
+
+            try {
+                reDrawWonders();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             System.out.println("tradeStoneRight");
         });
 
         Button tradeGlassRight = new Button("Trade");
         tradeGlassRight.setTranslateX(5);
         tradeGlassRight.setOnMouseClicked(event -> {
+            players[0].stats.coin = players[0].stats.coin - 2;
+            players[1].stats.coin = players[1].stats.coin + 2;
+
+            try {
+                reDrawWonders();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             System.out.println("tradeGlassRight");
         });
         Button tradePaperRight = new Button("Trade");
         tradePaperRight.setTranslateX(5);
         tradePaperRight.setOnMouseClicked(event -> {
+            players[0].stats.coin = players[0].stats.coin - 2;
+            players[1].stats.coin = players[1].stats.coin + 2;
+
+            try {
+                reDrawWonders();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             System.out.println("tradePaperRight");
         });
         Button tradeTextileRight = new Button("Trade");
         tradeTextileRight.setTranslateX(5);
         tradeTextileRight.setOnMouseClicked(event -> {
+            players[0].stats.coin = players[0].stats.coin - 2;
+            players[1].stats.coin = players[1].stats.coin + 2;
+
+            try {
+                reDrawWonders();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             System.out.println("tradeTextileRight");
         });
         HBox tradeLumberHBRight,tradeClayHBRight,tradeStoneHBRight,tradeOreHBRight,tradeGlassHBRight,tradePaperHBRight,tradeTextileHBRight;
@@ -697,6 +810,21 @@ public class GamePage extends Scene {
 
         popup.show(window);
         delay.play();
+    }
+    public void reDrawWonders() throws Exception{
+        sp.getChildren().removeAll(wb);
+        wb[0] = new WonderBoard( sp,wb[0].wonderNum, side, players[0].name, 0);
+        wb[1] = new WonderBoard( sp,wb[1].wonderNum, side, players[1].name, 1);
+        wb[2] = new WonderBoard( sp,wb[2].wonderNum, side, players[2].name, 2);
+        wb[3] = new WonderBoard( sp,wb[3].wonderNum, side, players[3].name, 3);
+        wb[0].setTranslateY(150);
+        wb[0].setTranslateX(350);
+        wb[1].setTranslateY(-150);
+        wb[1].setTranslateX(450);
+        wb[3].setTranslateY(-150);
+        wb[3].setTranslateX(-450);
+        wb[2].setTranslateY(-260);
+        sp.getChildren().addAll(wb);
     }
     public void endTurn() throws Exception {
         // vineyard and bazar check
