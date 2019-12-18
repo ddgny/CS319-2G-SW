@@ -60,6 +60,14 @@ public class GamePage extends Scene {
                 name = new String[optional];
                 quantity = new int[optional];
         }
+        public Resource( Resource dummy) {
+            this.name = new String[dummy.name.length];
+            this.quantity = new int[dummy.quantity.length];
+            for( int i = 0; i < this.quantity.length; i++) {
+                this.name[i] = dummy.name[i];
+                this.quantity[i] = dummy.quantity[i];
+            }
+        }
     }
     public  class Property {
         int coin, shield, mechanic, literature, geometry, victoryPoint;
@@ -691,6 +699,18 @@ public class GamePage extends Scene {
         delay.play();
     }
     public void endTurn() throws Exception {
+        // vineyard and bazar check
+        for( int i = 0; i < 4 ; i++){
+            if(players[i].specialCards[4]) {
+                players[i].stats.coin += (players[(i + 1) % 4].brownCards + players[(i + 3) % 4].brownCards + players[i].brownCards);
+                players[i].specialCards[4] = false;
+            }
+            if(players[i].specialCards[5]) {
+                players[i].stats.coin += (players[(i + 1) % 4].greyCards + players[(i + 3) % 4].greyCards + players[i].greyCards) * 2;
+                players[i].specialCards[5] = false;
+            }
+        }
+
         // wonderboard part
         sp.getChildren().removeAll(wb);
         wb[0] = new WonderBoard( sp,wb[0].wonderNum, side, players[0].name, 0);
@@ -722,10 +742,62 @@ public class GamePage extends Scene {
     public void endGame() {
 
     }
+    public boolean recursiveCheck( Resource[] playersResource, boolean[] pr, Resource costsResource, int cr) {
+        System.out.println("pr.length: " + pr.length);
+        System.out.println("cost length: " + costsResource.quantity.length);
+        System.out.println("player length: " + playersResource.length);
+        if( cr >= costsResource.quantity.length)
+            return true;
+//        System.out.println("cost: " + costsResource.name[cr]);
+        boolean returning = false;
+        for( int i = 0; i < pr.length; i++) {
+            if(!pr[i]) {
+                for (int j = 0; j < playersResource[i].quantity.length; j++) {
+                    if(playersResource[i].name[j].equals(costsResource.name[cr])) {
+                        System.out.println(playersResource[i].name[j] + " -> " + costsResource.name[cr]);
+                        int tmpCr = cr;
+                        boolean[] tmpPr = pr;
+                        Resource[] tmpPlayerResource = new Resource[playersResource.length];
+                        Resource tmpCostResource = new Resource( costsResource);
+                        for( int k = 0; k < pr.length; k++)
+                            tmpPlayerResource[k] = new Resource( playersResource[k]);
+                        tmpCostResource.quantity[cr]--;
+                        if(tmpCostResource.quantity[cr] == 0)
+                            tmpCr++;
+                        tmpPlayerResource[i].quantity[j]--;
+                        if( tmpPlayerResource[i].quantity[j] == 0)
+                            tmpPr[i] = true;
+
+                        if( recursiveCheck(tmpPlayerResource, tmpPr, tmpCostResource, tmpCr))
+                            return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
     public boolean checkResources(int playerNum, boolean isWonderbuild, Property cost) {
         if(isWonderbuild)
             cost = wb[playerNum].milestones[players[playerNum].milestoneDone].cost;
-        return true;
+        if(cost.requiredBuilding != "") {
+            for (int i = 0; i < players[playerNum].buildingsCount; i++) {
+//            System.out.println(players[playerNum].buildings[i]);
+                if (players[playerNum].buildings[i].contains(cost.requiredBuilding)) {
+                    System.out.println(players[playerNum].buildings[i]);
+                    return true;
+                }
+            }
+        }
+        if( players[playerNum].stats.coin < cost.coin)
+            return false;
+        Resource[] tmpPlayerResource;
+        tmpPlayerResource = new Resource[players[playerNum].resources.length];
+        Resource tmpCostResource = new Resource( cost.resource);
+        System.out.println("length" + players[playerNum].resources.length);
+        for( int k = 0; k < players[playerNum].resourceCount; k++)
+            tmpPlayerResource[k] = new Resource( players[playerNum].resources[k]);
+
+        return recursiveCheck( tmpPlayerResource, new boolean[players[playerNum].resourceCount], tmpCostResource, 0);
     }
     public void gainBenefit( int playerNum, boolean isWonderbuild, Property benefit, String buildingName, String buildingColor) {
         if(isWonderbuild) {
@@ -734,6 +806,7 @@ public class GamePage extends Scene {
         }
         else if(!buildingName.equals("")) {
             players[playerNum].buildings[players[playerNum].buildingsCount] = buildingName;
+            players[playerNum].buildingsCount++;
             if(buildingColor.equals("red")) players[playerNum].redCards++;
             else if(buildingColor.equals("grey")) players[playerNum].greyCards++;
             else if(buildingColor.equals("green")) players[playerNum].greenCards++;
@@ -749,6 +822,10 @@ public class GamePage extends Scene {
         players[playerNum].stats.literature += benefit.literature;
         players[playerNum].stats.geometry += benefit.geometry;
         players[playerNum].stats.victoryPoint += benefit.victoryPoint;
+        if(benefit.specialCard == 6)    players[playerNum].stats.coin += players[playerNum].brownCards;
+        else if (benefit.specialCard == 7)  players[playerNum].stats.coin += players[playerNum].yellowCards;
+        else if (benefit.specialCard == 8)  players[playerNum].stats.coin += players[playerNum].greyCards * 2;
+        else if (benefit.specialCard == 9)  players[playerNum].stats.coin += players[playerNum].milestoneDone * 3;
         players[playerNum].specialCards[benefit.specialCard] = true;
     }
     private void definingCards() throws Exception {
@@ -796,7 +873,6 @@ public class GamePage extends Scene {
         a.resource = new Resource(1);
         a.resource.name[0] = "Lumber"; a.resource.quantity[0] = 1;
         b = new Property();
-        b.resource = new Resource(1);
         b.shield = 1;
         cards[0][4] = new Card("stockade","red",a,b);
 
@@ -805,7 +881,6 @@ public class GamePage extends Scene {
         a.resource = new Resource(1);
         a.resource.name[0] = "Ore"; a.resource.quantity[0] = 1;
         b = new Property();
-        b.resource = new Resource(1);
         b.shield = 1;
         cards[0][5] = new Card("barracks","red",a,b);
 
@@ -814,7 +889,6 @@ public class GamePage extends Scene {
         a.resource = new Resource(1);
         a.resource.name[0] = "Clay"; a.resource.quantity[0] = 1;
         b = new Property();
-        b.resource = new Resource(1);
         b.shield = 1;
         cards[0][6] = new Card("guardtower","red",a,b);
 
@@ -823,28 +897,24 @@ public class GamePage extends Scene {
         a.resource = new Resource(1);
         a.resource.name[0] = "Clay"; a.resource.quantity[0] = 1;
         b = new Property();
-        b.resource = new Resource(1);
         b.shield = 1;
         cards[0][7] = new Card("guardtower","red",a,b);
 
         //pawnshop
         a = new Property();
         b = new Property();
-        b.resource = new Resource(1);
         b.victoryPoint = 3;
         cards[0][8] = new Card("pawnshop","blue",a,b);
 
         //altar
         a = new Property();
         b = new Property();
-        b.resource = new Resource(1);
         b.victoryPoint = 2;
         cards[0][9] = new Card("altar","blue",a,b);
 
         //theater
         a = new Property();
         b = new Property();
-        b.resource = new Resource(1);
         b.victoryPoint = 2;
         cards[0][10] = new Card("theater","blue",a,b);
 
@@ -853,7 +923,6 @@ public class GamePage extends Scene {
         a.resource = new Resource(1);
         a.resource.name[0] = "Stone"; a.resource.quantity[0] = 1;
         b = new Property();
-        b.resource = new Resource(1);
         b.victoryPoint = 3;
         cards[0][11] = new Card("baths","blue",a,b);
 
@@ -915,7 +984,6 @@ public class GamePage extends Scene {
 
         //excavation
         a = new Property();
-        a.resource = new Resource(1);
         a.coin = 1;
         b = new Property();
         b.resource = new Resource(2);
@@ -925,7 +993,6 @@ public class GamePage extends Scene {
 
         //clay pit
         a = new Property();
-        a.resource = new Resource(1);
         a.coin = 1;
         b = new Property();
         b.resource = new Resource(2);
@@ -935,7 +1002,6 @@ public class GamePage extends Scene {
 
         //timber yard
         a = new Property();
-        a.resource = new Resource(1);
         a.coin = 1;
         b = new Property();
         b.resource = new Resource(2);
@@ -953,28 +1019,24 @@ public class GamePage extends Scene {
         //tavern
         a = new Property();
         b = new Property();
-        b.resource = new Resource(1);
         b.coin = 5;
         cards[0][24] = new Card("tavern","yellow",a,b);
 
         //east trading post
         a = new Property();
         b = new Property();
-        b.resource = new Resource(1);
         b.specialCard = 1;
         cards[0][25] = new Card("easttradingpost","yellow",a,b);
 
         //west trading post
         a = new Property();
         b = new Property();
-        b.resource = new Resource(1);
         b.specialCard = 2;
         cards[0][26] = new Card("westtradingpost","yellow",a,b);
 
         //marketplace
         a = new Property();
         b = new Property();
-        b.resource = new Resource(1);
         b.specialCard = 3;
         cards[0][27] = new Card("marketplace","yellow",a,b);
 
@@ -1055,6 +1117,7 @@ public class GamePage extends Scene {
 
 //forum
         a = new Property();
+        a.requiredBuilding = "tradingpost";
         a.resource = new Resource(1);
         a.resource.name[0] = "Clay"; a.resource.quantity[0] = 2;
         b = new Property();
