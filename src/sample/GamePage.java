@@ -1563,6 +1563,7 @@ public class GamePage extends Scene {
         HBox greenHB, redHB, yellowHB, greyHB, brownHB, blueHB, resourcesHB;
         public WonderBoard( StackPane sp, int wNumber, String side, String playerName, int pN) throws Exception{
             Property a,b;
+            String wName;
             wonderNum = wNumber;
             setMaxSize(400, 250);
             milestones = new Milestone[3];
@@ -1585,7 +1586,7 @@ public class GamePage extends Scene {
                 Image img = new Image(is);
                 is.close();
                 board.setFill(new ImagePattern(img));
-
+                wName = "rhodos";
                 Text sideText2 = new Text("Rhodos - (" + side + ")");
                 sideText2.setFill(Color.WHITESMOKE);
                 sideText2.setFont(Font.font("Kalam", FontWeight.BOLD,15));
@@ -1631,7 +1632,7 @@ public class GamePage extends Scene {
                 Image img = new Image(is);
                 is.close();
                 board.setFill(new ImagePattern(img));
-
+                wName = "alexandria";
                 Text sideText2 = new Text("Alexandria - (" + side + ")");
                 sideText2.setFill(Color.WHITESMOKE);
                 sideText2.setFont(Font.font("Kalam", FontWeight.BOLD,15));
@@ -1693,7 +1694,7 @@ public class GamePage extends Scene {
                 Image img = new Image(is);
                 is.close();
                 board.setFill(new ImagePattern(img));
-
+                wName = "ephesos";
                 Text sideText2 = new Text("Ephesos - (" + side + ")");
                 sideText2.setFill(Color.WHITESMOKE);
                 sideText2.setFont(Font.font("Kalam", FontWeight.BOLD,15));
@@ -1747,7 +1748,7 @@ public class GamePage extends Scene {
                 Image img = new Image(is);
                 is.close();
                 board.setFill(new ImagePattern(img));
-
+                wName = "babylon";
                 Text sideText2 = new Text("Babylon - (" + side + ")");
                 sideText2.setFill(Color.WHITESMOKE);
                 sideText2.setFont(Font.font("Kalam", FontWeight.BOLD,15));
@@ -1801,7 +1802,7 @@ public class GamePage extends Scene {
                 Image img = new Image(is);
                 is.close();
                 board.setFill(new ImagePattern(img));
-
+                wName = "olympia";
                 Text sideText2 = new Text("Olympia - (" + side + ")");
                 sideText2.setFill(Color.WHITESMOKE);
                 sideText2.setFont(Font.font("Kalam", FontWeight.BOLD,15));
@@ -1853,7 +1854,7 @@ public class GamePage extends Scene {
                 Image img = new Image(is);
                 is.close();
                 board.setFill(new ImagePattern(img));
-
+                wName = "halikarnassus";
                 Text sideText2 = new Text("Halikarnassos - (" + side + ")");
                 sideText2.setFill(Color.WHITESMOKE);
                 sideText2.setFont(Font.font("Kalam", FontWeight.BOLD,15));
@@ -1901,12 +1902,12 @@ public class GamePage extends Scene {
                     milestones[2] = new Milestone(a,b);
                 }
             }
-            else if( wNumber == 7) {
+            else {
                 InputStream is = Files.newInputStream(Paths.get("images/gizeh.jpg"));
                 Image img = new Image(is);
                 is.close();
                 board.setFill(new ImagePattern(img));
-
+                wName = "gizah";
                 Text sideText2 = new Text("Gizeh - (" + side + ")");
                 sideText2.setFill(Color.WHITESMOKE);
                 sideText2.setFont(Font.font("Kalam", FontWeight.BOLD,15));
@@ -1958,6 +1959,24 @@ public class GamePage extends Scene {
                     milestones[2] = new Milestone(a,b);
                 }
             }
+            // milestones part
+            HBox milestoneHB = new HBox(25);
+            milestoneHB.setBackground(bg);
+            for( int i = 1; i <= milestones.length; i++) {
+                InputStream is = Files.newInputStream(Paths.get("images/Wonderpng/" + wName + side + i + ".png"));
+                Image img = new Image(is);
+                is.close();
+                ImageView imgView = new ImageView(img);
+                imgView.setFitHeight(40);
+                if( milestones.length == 4)
+                    imgView.setFitWidth(75);
+                else
+                    imgView.setFitWidth(110);
+                milestoneHB.getChildren().add(imgView);
+            }
+            milestoneHB.setTranslateY(208);
+            milestoneHB.setTranslateX(5);
+
             // coin part
             InputStream is = Files.newInputStream(Paths.get("images/coins.png"));
             Image img = new Image(is);
@@ -2170,12 +2189,8 @@ public class GamePage extends Scene {
             blueHB.setTranslateX(355);
             blueHB.setPrefSize(40,20);
 
-            getChildren().addAll(greenHB, redHB, yellowHB, greyHB, brownHB, blueHB);
+            getChildren().addAll(greenHB, redHB, yellowHB, greyHB, brownHB, blueHB, milestoneHB);
 
-//            Resource resource = new Resource(4);
-//            resource.name[0] = "Ore"; resource.name[1] = "Lumber"; resource.name[2] = "Glass"; resource.name[3] = "Textile";
-//            resource.quantity[0] = 1; resource.quantity[1] = 1; resource.quantity[2] = 1; resource.quantity[3] = 1;
-//            players[pNum].addResource(resource);
             // Resource Part
             resourcesHB = new HBox( 5);
             for(int i = 0; i < players[pNum].resourceCount; i++) {
@@ -2196,14 +2211,26 @@ public class GamePage extends Scene {
             }
             resourcesHB.setTranslateY(100);
             resourcesHB.setTranslateX(5);
-            getChildren().addAll(resourcesHB);
-        }
-        public void makeChanges(){
-            getChildren().remove(coinText);
-            coinText = new Text(players[pNum].stats.coin + "");
-            coinText.setFill(Color.WHITESMOKE);
-            coinText.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-            getChildren().addAll(coinText);
+
+            // special cards part
+            HBox specialHB = new HBox( 5);
+            for(int i = 1; i < 4; i++) {
+                if(players[pNum].specialCards[i]){
+                    VBox vb = new VBox();
+                    vb.setBackground(bg);
+                    is = Files.newInputStream(Paths.get("images/specialcards/" + i + ".png"));
+                    img = new Image(is);
+                    is.close();
+                    imgView = new ImageView(img);
+                    imgView.setFitHeight(30);
+                    imgView.setFitWidth(60);
+                    vb.getChildren().addAll(imgView);
+                    specialHB.getChildren().add(vb);
+                }
+            }
+            specialHB.setTranslateY(160);
+            specialHB.setTranslateX(5);
+            getChildren().addAll(resourcesHB,specialHB);
         }
     }
     public class Milestone extends Pane {
