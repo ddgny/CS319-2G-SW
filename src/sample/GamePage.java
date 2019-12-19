@@ -1,8 +1,7 @@
 package sample;
 
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import java.io.File;
+import javafx.scene.Group;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -10,12 +9,8 @@ import java.nio.file.Paths;
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.SubScene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -28,18 +23,14 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
-import javafx.scene.shape.*;
 
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-import java.awt.*;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.lang.Math.min;
 
@@ -47,10 +38,11 @@ public class GamePage extends Scene {
     public static WonderBoard[] wb;
     public static Player[] players;
     private Card[][] cards;
+    private Card[] cardsAtStake;
     private Stage window;
     private StackPane sp;
     private String side;
-    private int currentAge, currentTurn;
+    private int currentAge, currentTurn, noOfCardsAtStake;
     // mode = ally -> -1 , normal -> 0 , story -> 1,2,3,4,5...
     private int mode;
     private class Resource {
@@ -108,6 +100,8 @@ public class GamePage extends Scene {
     public GamePage(StackPane sp, Scene mainmenu, Stage window, String name, ToggleGroup side, int sMode) throws Exception {
         super(sp, Main.primaryScreenBounds.getWidth(), Main.primaryScreenBounds.getHeight());
         mode = sMode;
+        noOfCardsAtStake = 0;
+        cardsAtStake = new Card[40];
         currentAge = currentTurn = 1;
         this.window = window;
         this.sp = sp;
@@ -203,7 +197,6 @@ public class GamePage extends Scene {
             System.out.println("tradeLumberLeft");
             players[0].stats.coin = players[0].stats.coin - 2;
             players[3].stats.coin = players[3].stats.coin + 2;
-
             try {
                 reDrawWonders();
             } catch (Exception e) {
@@ -944,20 +937,7 @@ public class GamePage extends Scene {
             }
         }
 
-        // wonderboard part
-        sp.getChildren().removeAll(wb);
-        wb[0] = new WonderBoard( sp,wb[0].wonderNum, side, players[0].name, 0);
-        wb[1] = new WonderBoard( sp,wb[1].wonderNum, side, players[1].name, 1);
-        wb[2] = new WonderBoard( sp,wb[2].wonderNum, side, players[2].name, 2);
-        wb[3] = new WonderBoard( sp,wb[3].wonderNum, side, players[3].name, 3);
-        wb[0].setTranslateY(150);
-        wb[0].setTranslateX(350);
-        wb[1].setTranslateY(-150);
-        wb[1].setTranslateX(450);
-        wb[3].setTranslateY(-150);
-        wb[3].setTranslateX(-450);
-        wb[2].setTranslateY(-260);
-        sp.getChildren().addAll(wb);
+
 
         // cards part
         int lastAge = currentAge;
@@ -966,14 +946,18 @@ public class GamePage extends Scene {
 
         if( currentTurn == 7) {
             currentTurn = 1;
+            makeBattles(currentAge);
             currentAge++;
-            if( currentAge == 4) endGame();
+            if( currentAge == 4) {
+                endGame();
+                return;
+            }
         }
         for(int i = ((lastTurn - 1) % 4) * 7; i <= ((lastTurn - 1) % 4) * 7 + 6; i++) sp.getChildren().remove(cards[lastAge - 1][i]);
         for(int i = ((currentTurn - 1) % 4) * 7; i <= ((currentTurn - 1) % 4) * 7 + 6; i++) sp.getChildren().add(cards[currentAge - 1][i]);
+        reDrawWonders();
     }
     public void endGame() {
-
     }
     public boolean recursiveCheck( Resource[] playersResource, boolean[] pr, Resource costsResource, int cr) {
         System.out.println("pr.length: " + pr.length);
@@ -1032,12 +1016,54 @@ public class GamePage extends Scene {
 
         return recursiveCheck( tmpPlayerResource, new boolean[players[playerNum].resourceCount], tmpCostResource, 0);
     }
-    public void gainBenefit( int playerNum, boolean isWonderbuild, Property benefit, String buildingName, String buildingColor) {
+    public void gainBenefit( int playerNum, boolean isWonderbuild, Property benefit, String buildingName, String buildingColor) throws IOException {
+        // specialCard = # : 16= Babylon A, 17 = Babylon B, 18 = olympia A, 19 = olympia B1,    20 = olympiaB3, 21 = Halikarnassos
         if(isWonderbuild) {
             benefit = wb[playerNum].milestones[players[playerNum].milestoneDone].benefit;
             players[playerNum].milestoneDone++;
         }
-        else if(!buildingName.equals("")) {
+        if(benefit.specialCard == 21) {
+            Stage stage = new Stage();
+            stage.setTitle("Reward: Pick a card to build");
+            stage.show();
+            Group  group = new Group();
+            Scene scene = new Scene( group);
+            HBox hBox = new HBox();
+            Rectangle[] board = new Rectangle[noOfCardsAtStake];
+            for( int i = 0; i < noOfCardsAtStake; i++) {
+                board[i] = new Rectangle(140,190,Color.rgb(109,132,118,1));
+                board[i].setArcHeight(15);
+                board[i].setArcWidth(15);
+                InputStream is = Files.newInputStream(Paths.get("images/card images/" + cardsAtStake[i].name + ".png"));
+                Image img = new Image(is);
+                is.close();
+                board[i].setFill(new ImagePattern(img));
+                int finalI = i;
+                board[i].setOnMouseClicked(mouseEvent -> {
+                    try {
+                        gainBenefit(playerNum, false, cardsAtStake[finalI].benefit, cardsAtStake[finalI].name, cardsAtStake[finalI].color);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    stage.close();
+                    try {
+                        reDrawWonders();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        cardsAtStake[finalI].deleteCard();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                hBox.getChildren().add(board[i]);
+            }
+            group.getChildren().add(hBox);
+            stage.setScene( scene);
+            return;
+        }
+        if(!buildingName.equals("")) {
             players[playerNum].buildings[players[playerNum].buildingsCount] = buildingName;
             players[playerNum].buildingsCount++;
             if(buildingColor.equals("red")) players[playerNum].redCards++;
@@ -1877,6 +1903,7 @@ public class GamePage extends Scene {
             getChildren().add(sideText);
 
             // wNumber is 1=Rhodos, 2=Alexandria, 3=Ephesos, 4=Babylon, 5=Olympia, 6=Halikarnassos, 7=Gizah
+            // specialCard = # : 16= Babylon A, 17 = Babylon B, 18 = olympia A, 19 = olympia B1,    20 = olympiaB3, 21 = Halikarnassos
             if( wNumber == 1) {
                 InputStream is = Files.newInputStream(Paths.get("images/setname.jpg"));
                 Image img = new Image(is);
@@ -2573,7 +2600,13 @@ public class GamePage extends Scene {
                 Property tmp;
                 tmp = new GamePage.Property();
                 tmp.coin = 3;
-                gainBenefit( 0, false, tmp, "", "");
+                try {
+                    gainBenefit( 0, false, tmp, "", "");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                cardsAtStake[noOfCardsAtStake] = this;
+                noOfCardsAtStake++;
                 try {
                     deleteCard();
                 } catch (IOException e) {
@@ -2595,7 +2628,11 @@ public class GamePage extends Scene {
                     giveError("All wonders have already built");
                 }
                 else if( checkResources( 0 , true, cost)) {
-                    gainBenefit(0, true, benefit, "", "");
+                    try {
+                        gainBenefit(0, true, benefit, "", "");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     try {
                         deleteCard();
                     } catch (IOException e) {
@@ -2620,7 +2657,11 @@ public class GamePage extends Scene {
                 if( checkResources( 0 , false, cost)) {
                     if(cost.coin != 0)
                         benefit.coin--;
-                    gainBenefit(0, false, benefit, name, color);
+                    try {
+                        gainBenefit(0, false, benefit, name, color);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     try {
                         deleteCard();
                     } catch (IOException e) {
