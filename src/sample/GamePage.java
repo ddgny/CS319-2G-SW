@@ -798,6 +798,111 @@ public class GamePage extends Scene {
 
 
     }
+    private void makeBattles(int age){
+        if(age == 1) {
+            if (players[0].stats.shield > players[1].stats.shield) {
+                players[0].stats.victoryPoint += 1;
+                players[1].stats.victoryPoint -= 1;
+            }
+            if (players[0].stats.shield < players[1].stats.shield) {
+                players[0].stats.victoryPoint -= 1;
+                players[1].stats.victoryPoint += 1;
+            }
+            if (players[0].stats.shield > players[3].stats.shield) {
+                players[0].stats.victoryPoint += 1;
+                players[3].stats.victoryPoint -= 1;
+            }
+            if (players[0].stats.shield < players[3].stats.shield) {
+                players[0].stats.victoryPoint -= 1;
+                players[3].stats.victoryPoint += 1;
+            }
+            if (players[1].stats.shield > players[2].stats.shield) {
+                players[1].stats.victoryPoint += 1;
+                players[2].stats.victoryPoint -= 1;
+            }
+            if (players[1].stats.shield < players[2].stats.shield) {
+                players[1].stats.victoryPoint -= 1;
+                players[2].stats.victoryPoint += 1;
+            }
+            if (players[2].stats.shield > players[3].stats.shield) {
+                players[2].stats.victoryPoint += 1;
+                players[3].stats.victoryPoint -= 1;
+            }
+            if (players[2].stats.shield < players[3].stats.shield) {
+                players[2].stats.victoryPoint -= 1;
+                players[3].stats.victoryPoint += 1;
+            }
+        }
+        else if(age == 2){
+            if (players[0].stats.shield > players[1].stats.shield) {
+                players[0].stats.victoryPoint += 3;
+                players[1].stats.victoryPoint -= 1;
+            }
+            if (players[0].stats.shield < players[1].stats.shield) {
+                players[0].stats.victoryPoint -= 1;
+                players[1].stats.victoryPoint += 3;
+            }
+            if (players[0].stats.shield > players[3].stats.shield) {
+                players[0].stats.victoryPoint += 3;
+                players[3].stats.victoryPoint -= 1;
+            }
+            if (players[0].stats.shield < players[3].stats.shield) {
+                players[0].stats.victoryPoint -= 1;
+                players[3].stats.victoryPoint += 3;
+            }
+            if (players[1].stats.shield > players[2].stats.shield) {
+                players[1].stats.victoryPoint += 3;
+                players[2].stats.victoryPoint -= 1;
+            }
+            if (players[1].stats.shield < players[2].stats.shield) {
+                players[1].stats.victoryPoint -= 1;
+                players[2].stats.victoryPoint += 3;
+            }
+            if (players[2].stats.shield > players[3].stats.shield) {
+                players[2].stats.victoryPoint += 3;
+                players[3].stats.victoryPoint -= 1;
+            }
+            if (players[2].stats.shield < players[3].stats.shield) {
+                players[2].stats.victoryPoint -= 1;
+                players[3].stats.victoryPoint += 3;
+            }
+        }
+        else if(age == 3){
+            if (players[0].stats.shield > players[1].stats.shield) {
+                players[0].stats.victoryPoint += 5;
+                players[1].stats.victoryPoint -= 1;
+            }
+            if (players[0].stats.shield < players[1].stats.shield) {
+                players[0].stats.victoryPoint -= 1;
+                players[1].stats.victoryPoint += 5;
+            }
+            if (players[0].stats.shield > players[3].stats.shield) {
+                players[0].stats.victoryPoint += 5;
+                players[3].stats.victoryPoint -= 1;
+            }
+            if (players[0].stats.shield < players[3].stats.shield) {
+                players[0].stats.victoryPoint -= 1;
+                players[3].stats.victoryPoint += 5;
+            }
+            if (players[1].stats.shield > players[2].stats.shield) {
+                players[1].stats.victoryPoint += 5;
+                players[2].stats.victoryPoint -= 1;
+            }
+            if (players[1].stats.shield < players[2].stats.shield) {
+                players[1].stats.victoryPoint -= 1;
+                players[2].stats.victoryPoint += 5;
+            }
+            if (players[2].stats.shield > players[3].stats.shield) {
+                players[2].stats.victoryPoint += 5;
+                players[3].stats.victoryPoint -= 1;
+            }
+            if (players[2].stats.shield < players[3].stats.shield) {
+                players[2].stats.victoryPoint -= 1;
+                players[3].stats.victoryPoint += 5;
+            }
+        }
+
+    }
     public void giveError( String errorMessage) {
         Popup popup = new Popup();
         Text text = new Text(errorMessage);
