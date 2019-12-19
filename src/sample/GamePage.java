@@ -1,7 +1,14 @@
 package sample;
 
+import javafx.collections.FXCollections;
+import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+
+import java.awt.event.ActionEvent;
+import java.beans.EventHandler;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,10 +20,6 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SubScene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -54,6 +57,7 @@ public class GamePage extends Scene {
     private Stage window;
     private StackPane sp;
     private String side;
+    Text goldValue;
     private int currentAge, currentTurn;
     // mode = ally -> -1 , normal -> 0 , story -> 1,2,3,4,5...
     private int mode;
@@ -92,6 +96,7 @@ public class GamePage extends Scene {
         int resourceCount, buildingsCount;
         boolean[] specialCards;
         Property stats;
+
         public Player(String tmp) {
             stats = new Property();
             stats.coin = 3;
@@ -126,6 +131,226 @@ public class GamePage extends Scene {
         imgView.setFitHeight(Main.primaryScreenBounds.getHeight());
         imgView.setFitWidth(Main.primaryScreenBounds.getWidth());
         sp.getChildren().add(imgView);
+
+
+        //TRADE COMBO BOX
+        String resourcesBox [] = {"Lumber", "Ore","Stone"};
+        ComboBox box = new ComboBox();
+        box.setTranslateX(-520);
+        box.setTranslateY(-300);
+        box.getItems().addAll("Lumber","Ore","Stone","Clay","Glass","Textile","Paper");
+
+
+        Button comboBoxTradeButton = new Button("Trade");
+        comboBoxTradeButton.setTranslateX(-450);
+        comboBoxTradeButton.setTranslateY(-300);
+
+        comboBoxTradeButton.setOnMouseClicked(event -> {
+            String choice= box.getValue().toString();
+
+            if (choice.equals("Ore"))
+            {
+                System.out.println(choice);
+                //trade choice
+            }
+        });
+        comboBoxTradeButton.setDisable(true);
+
+        int worth=2;
+        goldValue = new Text( "for 2");
+        goldValue.setFill(Color.WHITESMOKE);
+        goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+        goldValue.setTranslateX(-610);
+        goldValue.setTranslateY(-300);
+        sp.getChildren().addAll(goldValue);
+        is = Files.newInputStream(Paths.get("images/coins.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgGold = new ImageView(img);
+        imgGold.setFitHeight(25);
+        imgGold.setFitWidth(25);
+        imgGold.setTranslateX(-580);
+        imgGold.setTranslateY(-300);
+        sp.getChildren().addAll(imgGold);
+
+        box.setOnMouseClicked(event -> {
+
+            comboBoxTradeButton.setDisable(false);
+
+
+        });
+
+        box.getSelectionModel().selectedItemProperty().addListener((v,oldvalue,newValue) -> {
+            System.out.println(newValue);
+            if (newValue.toString().equals("Ore"))
+            {
+                if (players[0].specialCards[2]==true)
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 1");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-610);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                   //checkForTrade("a");
+                }
+                else
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 2");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-610);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+            }
+            else if (newValue.toString().equals("Lumber"))
+            {
+                if (players[0].specialCards[2]==true)
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 1");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-610);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+                else
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 2");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-610);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+            }
+            else if (newValue.toString().equals("Clay"))
+            {
+                if (players[0].specialCards[2]==true)
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 1");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-610);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+                else
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 2");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-610);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+            }
+            else if (newValue.toString().equals("Stone"))
+            {
+                if (players[0].specialCards[2]==true)
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 1");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-610);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+                else
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 2");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-610);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+            }
+            else if (newValue.toString().equals("Glass"))
+            {
+                if (players[0].specialCards[3]==true)
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 1");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-610);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+                else
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 2");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-610);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+            }
+            else if (newValue.toString().equals("Paper"))
+            {
+                if (players[0].specialCards[3]==true)
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 1");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-610);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+                else
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 2");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-610);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+            }
+            else if (newValue.toString().equals("Textile"))
+            {
+                if (players[0].specialCards[3]==true)
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 1");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-610);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+                else
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 2");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-610);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+            }
+
+
+        });
+
+
+        sp.getChildren().addAll(box,comboBoxTradeButton);
+
 
 
         // TESTING FOR TRADE
@@ -408,6 +633,8 @@ public class GamePage extends Scene {
         tradeTextileHBLeft.setTranslateY(450);
         tradeTextileHBLeft.setTranslateX(60);
         tradeTextileHBLeft.setPrefSize(60,60);
+
+
 
         sp.getChildren().addAll(tradeLumberHBLeft,tradeClayHBLeft,tradeOreHBLeft,tradeStoneHBLeft,tradeGlassHBLeft,tradePaperHBLeft,tradeTextileHBLeft);
         // TESTING FOR TRADE
@@ -799,6 +1026,47 @@ public class GamePage extends Scene {
 
         sp.getChildren().addAll(wb);
 
+
+
+    }
+
+    public void checkForTrade(String resource) {
+        int worth=2;
+
+        if ( resource.equals("Ore"))
+        {
+            if(players[0].specialCards[2]==true)
+            {
+            }
+        }
+        if ( resource.equals("Stone"))
+        {
+            if(players[0].specialCards[2]==true)
+            {
+                worth = 1;
+            }
+        }
+        if ( resource.equals("Lumber"))
+        {
+            if(players[0].specialCards[2]==true)
+            {
+                worth = 1;
+            }
+        }
+        if ( resource.equals("Clay"))
+        {
+            if(players[0].specialCards[2]==true)
+            {
+                worth = 1;
+            }
+        }
+
+
+        Text cost;
+        cost = new Text( "for" + worth+"gold");
+        cost.setTranslateX(-600);
+        cost.setTranslateY(-300);
+        sp.getChildren().addAll(cost);
 
 
     }
