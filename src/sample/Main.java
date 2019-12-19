@@ -34,7 +34,7 @@ import java.awt.*;
 public class Main extends Application {
     private GameMenu gameMenu;
     private static Stage window;
-    private static StackPane root, options, htp, setName;
+    private static StackPane root, options, htp,credits, setName;
     private static Scene mainMenu;
     public static Rectangle2D primaryScreenBounds;
     public static MediaPlayer mediaPlayer;
@@ -62,7 +62,7 @@ public class Main extends Application {
         window.show();
     }
     private static class GameMenu extends Parent {
-        MenuButton btnStart, btnLoadGame, btnOptions, btnHTP, btnExit;
+        MenuButton btnStart, btnLoadGame, btnOptions, btnHTP, btnCredits, btnExit;
         private void modeSelectionMenu() {
             VBox menu2 = new VBox(20);
             menu2.setTranslateX(200);
@@ -105,6 +105,7 @@ public class Main extends Application {
                 btnLoadGame.setVisible(true);
                 btnOptions.setVisible(true);
                 btnHTP.setVisible(true);
+                btnCredits.setVisible(true);
                 btnExit.setVisible(true);
             });
             menu2.getChildren().addAll(btnStory, btnQuickmatch, btnCancel);
@@ -121,12 +122,14 @@ public class Main extends Application {
             btnLoadGame = new MenuButton("Load Game");
             btnOptions = new MenuButton("Options");
             btnHTP = new MenuButton("How to Play");
+            btnCredits = new MenuButton("Credits");
             btnExit = new MenuButton("Exit Game");
             btnStart.setOnMouseClicked(event -> {
                 btnStart.setVisible(false);
                 btnLoadGame.setVisible(false);
                 btnOptions.setVisible(false);
                 btnHTP.setVisible(false);
+                btnCredits.setVisible(false);
                 btnExit.setVisible(false);
                 modeSelectionMenu();
 //                Scene scene = null;
@@ -167,12 +170,23 @@ public class Main extends Application {
                 }
                 window.setScene( scene);
             });
+            //Credits Game button
+            btnCredits.setOnMouseClicked(event -> {
+                Scene scene = null;
+                try {
+                    credits = new StackPane();
+                    scene = new CreditsPage(credits, mainMenu, window);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                window.setScene( scene);
+            });
 
             // Exit Game button
             btnExit.setOnMouseClicked(event -> {
                 System.exit(0);
             });
-            menu1.getChildren().addAll(btnStart, btnLoadGame, btnOptions, btnHTP, btnExit);
+            menu1.getChildren().addAll(btnStart, btnLoadGame, btnOptions, btnHTP, btnCredits, btnExit);
             getChildren().add(menu1);
         }
     }
