@@ -37,7 +37,6 @@ import javafx.stage.Stage;
 
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import jdk.jshell.spi.ExecutionControl;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -59,6 +58,7 @@ public class GamePage extends Scene {
     private Stage window;
     private StackPane sp;
     private String side;
+    Text goldValue;
     private int currentAge, currentTurn, noOfCardsAtStake;
     // mode = ally -> -1 , normal -> 0 , story -> 1,2,3,4,5...
     private int mode;
@@ -3025,6 +3025,8 @@ public class GamePage extends Scene {
                     Property tmp = new GamePage.Property();
                     tmp.coin = 3;
                     gainBenefit( playerNum, false, tmp, "", "");
+                    cardsAtStake[noOfCardsAtStake] = this;
+                    noOfCardsAtStake++;
                     break;
 
                 case BURY:
