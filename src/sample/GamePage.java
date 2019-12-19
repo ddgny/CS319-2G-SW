@@ -26,11 +26,20 @@ import javafx.stage.Stage;
 
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import jdk.jshell.spi.ExecutionControl;
 
+<<<<<<< HEAD
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
+=======
+import java.awt.*;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
+>>>>>>> 5d211b3b13e8f08b6961419ccfe552b203ef24e6
 
 import static java.lang.Math.min;
 
@@ -49,8 +58,8 @@ public class GamePage extends Scene {
         String[] name;
         int[] quantity;
         public Resource( int optional) {
-                name = new String[optional];
-                quantity = new int[optional];
+            name = new String[optional];
+            quantity = new int[optional];
         }
         public Resource( Resource dummy) {
             this.name = new String[dummy.name.length];
@@ -94,6 +103,38 @@ public class GamePage extends Scene {
             resources[resourceCount] = add;
             resourceCount++;
         }
+
+        /**
+         * Play for a player randomly
+         * @param playerNum player index
+         */
+        void randomPlay(int playerNum) throws Exception { //TODO you should not use playerNum here!!!
+            int baseCardNum = ((currentTurn + playerNum - 1) % 4) * 7;
+            boolean tmpResult = false;
+
+            //create deck
+            ArrayList<Integer> deck = new ArrayList<>();
+            for (int i = 0; i < 7; i++) deck.add(baseCardNum + i);
+            Collections.shuffle(deck);
+
+            //first, try bury for all cards, randomly
+            for (int i = 0; i < deck.size() && !(tmpResult = cards[currentAge-1][deck.get(i)].playCard(playerNum, CardAction.BURY)); i++);
+
+            //if no success
+            if (!tmpResult) {
+                if (players[playerNum].stats.coin < 5) // and coin<5, sell random card
+                    for (int i = 0; i < deck.size() && !(tmpResult = cards[currentAge-1][deck.get(i)].playCard(playerNum, CardAction.SELL)); i++);
+                else // and coin>5, try build all cards, randomly
+                    for (int i = 0; i < deck.size() && !(tmpResult = cards[currentAge-1][deck.get(i)].playCard(playerNum, CardAction.BUILD)); i++);
+            }
+
+            //if no success and no success, sell random card
+            if (!tmpResult)
+                for (int i = 0; i < deck.size() && !(tmpResult = cards[currentAge-1][deck.get(i)].playCard(playerNum, CardAction.SELL)); i++);
+
+            System.out.println(String.format("Player %d, made %sa move", playerNum, tmpResult ? "" : " not"));
+        }
+
     }
 
 
@@ -412,7 +453,7 @@ public class GamePage extends Scene {
         is = Files.newInputStream(Paths.get("images/Lumber.png"));
         img = new Image(is);
         is.close();
-         imgLumber = new ImageView(img);
+        imgLumber = new ImageView(img);
         imgLumber.setFitHeight(35);
         imgLumber.setFitWidth(35);
         imgLumber.setTranslateX(10);
@@ -691,24 +732,24 @@ public class GamePage extends Scene {
             Main.MenuButton btnExit2 = new Main.MenuButton("Exit Game");
             Main.MenuButton btnMain = new Main.MenuButton("Main Menu");
             btnResume.setOnMouseClicked( event2 -> {
-                        btnResume.setVisible(false);
-                        btnExit2.setVisible(false);
-                        btnMain.setVisible(false);
-                        menu2.getChildren().removeAll(btnResume, btnExit2, btnMain);
-                        sp.getChildren().remove(menu2);
-                        sp.getChildren().remove(r);
+                btnResume.setVisible(false);
+                btnExit2.setVisible(false);
+                btnMain.setVisible(false);
+                menu2.getChildren().removeAll(btnResume, btnExit2, btnMain);
+                sp.getChildren().remove(menu2);
+                sp.getChildren().remove(r);
             });
             btnExit2.setOnMouseClicked( event2 -> {
-                        System.exit(0);
+                System.exit(0);
             });
             btnMain.setOnMouseClicked( event2 -> {
-                        btnResume.setVisible(false);
-                        btnExit2.setVisible(false);
-                        btnMain.setVisible(false);
-                        menu2.getChildren().removeAll(btnResume, btnExit2, btnMain);
-                        sp.getChildren().remove(menu2);
-                        sp.getChildren().remove(r);
-                        window.setScene( mainmenu);
+                btnResume.setVisible(false);
+                btnExit2.setVisible(false);
+                btnMain.setVisible(false);
+                menu2.getChildren().removeAll(btnResume, btnExit2, btnMain);
+                sp.getChildren().remove(menu2);
+                sp.getChildren().remove(r);
+                window.setScene( mainmenu);
             });
             menu2.getChildren().addAll(btnResume, btnExit2, btnMain);
             sp.getChildren().add(menu2);
@@ -924,7 +965,28 @@ public class GamePage extends Scene {
         wb[2].setTranslateY(-260);
         sp.getChildren().addAll(wb);
     }
+    public boolean isBot(int playerNum) {
+        return playerNum != 0;
+    }
+
+    /**
+     * Makes all the bots play
+     */
+    public void playBots() {
+        // bot turns (player 1-3)
+        for (int i = 1; i < 4; i++) {
+            try {
+                players[i].randomPlay(i);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void endTurn() throws Exception {
+
+        playBots();
+
         // vineyard and bazar check
         for( int i = 0; i < 4 ; i++){
             if(players[i].specialCards[4]) {
@@ -1095,7 +1157,7 @@ public class GamePage extends Scene {
         // # -> east Trading post = 1,  west trading post = 2,  marketplace = 3,    vineyard = 4,   bazar = 5,  haven = 6,
         // lighthouse =7,  chamber of commerce = 8,    arena = 9,  workers guild = 10, craftsmens guild = 11,  traders guild = 12, philosophers guild = 13,
         // spies guild = 14,   magistrates guild = 15
-        
+
         //1st age cards
         //scriptorium1
         a.resource = new Resource(1);
@@ -2563,14 +2625,22 @@ public class GamePage extends Scene {
             this.benefit = benefit;
         }
     }
+
+    /**
+     * Enum for possible card actions
+     */
+    private enum CardAction { SELL, BURY, BUILD; }
     public class Card extends Pane {
         String name, color;
         javafx.scene.control.Button sellButton,buryButton,buildButton;
         Rectangle board;
         GamePage.Property cost, benefit;
+        boolean isUsed;
+
         public Card(String name, String color, GamePage.Property a, GamePage.Property b ) throws  Exception{
             this.name = name;
             this.color = color;
+            this.isUsed = false;
             cost = a;
             benefit = b;
             //bg = new Background( new BackgroundFill(Color.rgb(109,132,118,0.1), CornerRadii.EMPTY, Insets.EMPTY));
@@ -2591,12 +2661,15 @@ public class GamePage extends Scene {
             setMaxSize(140, 190);
         }
         public void  mouseEnteredHere(){
+            if (this.isUsed)
+                return;
             board.setOpacity(0.65);
             sellButton = new javafx.scene.control.Button("SELL");
             sellButton.setTranslateX(55);
             sellButton.setTranslateY(30);
             getChildren().add(sellButton);
             sellButton.setOnMouseClicked(event -> {
+<<<<<<< HEAD
                 Property tmp;
                 tmp = new GamePage.Property();
                 tmp.coin = 3;
@@ -2612,8 +2685,10 @@ public class GamePage extends Scene {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+=======
+>>>>>>> 5d211b3b13e8f08b6961419ccfe552b203ef24e6
                 try {
-                    endTurn();
+                    playCard(0, CardAction.SELL);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -2624,6 +2699,7 @@ public class GamePage extends Scene {
             buryButton.setTranslateY(70);
             getChildren().add(buryButton);
             buryButton.setOnMouseClicked(event -> {
+<<<<<<< HEAD
                 if( players[0].milestoneDone == wb[0].milestones.length) {
                     giveError("All wonders have already built");
                 }
@@ -2646,6 +2722,12 @@ public class GamePage extends Scene {
                 }
                 else {
                     giveError("Not enough resources");
+=======
+                try {
+                    playCard(0, CardAction.BURY);
+                } catch (Exception e) {
+                    e.printStackTrace();
+>>>>>>> 5d211b3b13e8f08b6961419ccfe552b203ef24e6
                 }
             });
 
@@ -2654,6 +2736,7 @@ public class GamePage extends Scene {
             buildButton.setTranslateY(110);
             getChildren().add(buildButton);
             buildButton.setOnMouseClicked(event -> {
+<<<<<<< HEAD
                 if( checkResources( 0 , false, cost)) {
                     if(cost.coin != 0)
                         benefit.coin--;
@@ -2675,6 +2758,12 @@ public class GamePage extends Scene {
                 }
                 else {
                     giveError("Not enough resources");
+=======
+                try {
+                    playCard(0, CardAction.BUILD);
+                } catch (Exception e) {
+                    e.printStackTrace();
+>>>>>>> 5d211b3b13e8f08b6961419ccfe552b203ef24e6
                 }
             });
 
@@ -2691,6 +2780,8 @@ public class GamePage extends Scene {
         }
 
         public void  mouseExitedHere(){
+            if (this.isUsed)
+                return;
             board.setOpacity(1);
             getChildren().remove(sellButton);
             getChildren().remove(buryButton);
@@ -2709,6 +2800,62 @@ public class GamePage extends Scene {
             });
             this.setOnMouseExited(event -> {
             });
+            this.isUsed = true;
+        }
+
+        /**
+         * Plays card for a player randomly
+         * @param playerNum player index
+         * @param action what to do with this card
+         * @return if the card played successfully
+         * @throws Exception when turn cannot be ended(Exception)
+         * @throws IOException when card cannot be deleted(IOException)
+         */
+        public boolean playCard(int playerNum, CardAction action) throws IOException, Exception {
+            if (isUsed) // check if it is used or not
+                return false;
+
+            switch (action) {
+                case SELL:
+                    Property tmp = new GamePage.Property();
+                    tmp.coin = 3;
+                    gainBenefit( playerNum, false, tmp, "", "");
+                    break;
+
+                case BURY:
+                    if (players[playerNum].milestoneDone == wb[playerNum].milestones.length) {
+                        if (!isBot(playerNum))
+                            giveError("All wonders have already built");
+                        return false;
+                    }
+
+                    if (!checkResources(playerNum, true, cost)) {
+                        if (!isBot(playerNum))
+                            giveError("Not enough resources");
+                        return false;
+                    }
+
+                    gainBenefit(playerNum, true, benefit, "", "");
+                    break;
+
+                case BUILD:
+                    if (!checkResources(playerNum, false, cost)) {
+                        if (!isBot(playerNum))
+                            giveError("Not enough resources");
+                        return false;
+                    }
+
+                    if(cost.coin != 0)
+                        benefit.coin--;
+                    gainBenefit(playerNum, false, benefit, name, color);
+
+                    break;
+            }
+
+            deleteCard();
+            if (!isBot(playerNum))
+                endTurn();
+            return true;
         }
     }
 }
