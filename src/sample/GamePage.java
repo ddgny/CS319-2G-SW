@@ -37,7 +37,6 @@ import javafx.stage.Stage;
 
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import jdk.jshell.spi.ExecutionControl;
 
 import java.util.Arrays;
 import java.util.Collections;
