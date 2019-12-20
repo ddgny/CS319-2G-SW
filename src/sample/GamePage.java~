@@ -1,15 +1,5 @@
-package sample;
+﻿package sample;
 
-import javafx.collections.FXCollections;
-import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-
-import java.awt.event.ActionEvent;
-import java.beans.EventHandler;
-import java.io.File;
 import javafx.scene.Group;
 
 import java.io.IOException;
@@ -22,7 +12,6 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.SubScene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -38,15 +27,18 @@ import javafx.stage.Stage;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
+<<<<<<< HEAD
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
+=======
+import java.awt.*;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
+>>>>>>> 5d211b3b13e8f08b6961419ccfe552b203ef24e6
 
 import static java.lang.Math.min;
 
@@ -58,7 +50,6 @@ public class GamePage extends Scene {
     private Stage window;
     private StackPane sp;
     private String side;
-    Text goldValue;
     private int currentAge, currentTurn, noOfCardsAtStake;
     // mode = ally -> -1 , normal -> 0 , story -> 1,2,3,4,5...
     private int mode;
@@ -97,7 +88,6 @@ public class GamePage extends Scene {
         int resourceCount, buildingsCount;
         boolean[] specialCards;
         Property stats;
-
         public Player(String tmp) {
             stats = new Property();
             stats.coin = 3;
@@ -166,226 +156,6 @@ public class GamePage extends Scene {
         imgView.setFitHeight(Main.primaryScreenBounds.getHeight());
         imgView.setFitWidth(Main.primaryScreenBounds.getWidth());
         sp.getChildren().add(imgView);
-
-
-        //TRADE COMBO BOX
-        String resourcesBox [] = {"Lumber", "Ore","Stone"};
-        ComboBox box = new ComboBox();
-        box.setTranslateX(-520);
-        box.setTranslateY(-300);
-        box.getItems().addAll("Lumber","Ore","Stone","Clay","Glass","Textile","Paper");
-
-
-        Button comboBoxTradeButton = new Button("Trade");
-        comboBoxTradeButton.setTranslateX(-450);
-        comboBoxTradeButton.setTranslateY(-300);
-
-        comboBoxTradeButton.setOnMouseClicked(event -> {
-            String choice= box.getValue().toString();
-
-            if (choice.equals("Ore"))
-            {
-                System.out.println(choice);
-                //trade choice
-            }
-        });
-        comboBoxTradeButton.setDisable(true);
-
-        int worth=2;
-        goldValue = new Text( "for 2");
-        goldValue.setFill(Color.WHITESMOKE);
-        goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-        goldValue.setTranslateX(-610);
-        goldValue.setTranslateY(-300);
-        sp.getChildren().addAll(goldValue);
-        is = Files.newInputStream(Paths.get("images/coins.png"));
-        img = new Image(is);
-        is.close();
-        ImageView imgGold = new ImageView(img);
-        imgGold.setFitHeight(25);
-        imgGold.setFitWidth(25);
-        imgGold.setTranslateX(-580);
-        imgGold.setTranslateY(-300);
-        sp.getChildren().addAll(imgGold);
-
-        box.setOnMouseClicked(event -> {
-
-            comboBoxTradeButton.setDisable(false);
-
-
-        });
-
-        box.getSelectionModel().selectedItemProperty().addListener((v,oldvalue,newValue) -> {
-            System.out.println(newValue);
-            if (newValue.toString().equals("Ore"))
-            {
-                if (players[0].specialCards[2]==true)
-                {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 1");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
-                   //checkForTrade("a");
-                }
-                else
-                {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 2");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
-                }
-            }
-            else if (newValue.toString().equals("Lumber"))
-            {
-                if (players[0].specialCards[2]==true)
-                {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 1");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
-                }
-                else
-                {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 2");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
-                }
-            }
-            else if (newValue.toString().equals("Clay"))
-            {
-                if (players[0].specialCards[2]==true)
-                {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 1");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
-                }
-                else
-                {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 2");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
-                }
-            }
-            else if (newValue.toString().equals("Stone"))
-            {
-                if (players[0].specialCards[2]==true)
-                {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 1");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
-                }
-                else
-                {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 2");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
-                }
-            }
-            else if (newValue.toString().equals("Glass"))
-            {
-                if (players[0].specialCards[3]==true)
-                {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 1");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
-                }
-                else
-                {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 2");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
-                }
-            }
-            else if (newValue.toString().equals("Paper"))
-            {
-                if (players[0].specialCards[3]==true)
-                {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 1");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
-                }
-                else
-                {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 2");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
-                }
-            }
-            else if (newValue.toString().equals("Textile"))
-            {
-                if (players[0].specialCards[3]==true)
-                {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 1");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
-                }
-                else
-                {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 2");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
-                }
-            }
-
-
-        });
-
-
-        sp.getChildren().addAll(box,comboBoxTradeButton);
-
 
 
         // TESTING FOR TRADE
@@ -667,8 +437,6 @@ public class GamePage extends Scene {
         tradeTextileHBLeft.setTranslateY(450);
         tradeTextileHBLeft.setTranslateX(60);
         tradeTextileHBLeft.setPrefSize(60,60);
-
-
 
         sp.getChildren().addAll(tradeLumberHBLeft,tradeClayHBLeft,tradeOreHBLeft,tradeStoneHBLeft,tradeGlassHBLeft,tradePaperHBLeft,tradeTextileHBLeft);
         // TESTING FOR TRADE
@@ -1063,47 +831,6 @@ public class GamePage extends Scene {
 
 
     }
-
-    public void checkForTrade(String resource) {
-        int worth=2;
-
-        if ( resource.equals("Ore"))
-        {
-            if(players[0].specialCards[2]==true)
-            {
-            }
-        }
-        if ( resource.equals("Stone"))
-        {
-            if(players[0].specialCards[2]==true)
-            {
-                worth = 1;
-            }
-        }
-        if ( resource.equals("Lumber"))
-        {
-            if(players[0].specialCards[2]==true)
-            {
-                worth = 1;
-            }
-        }
-        if ( resource.equals("Clay"))
-        {
-            if(players[0].specialCards[2]==true)
-            {
-                worth = 1;
-            }
-        }
-
-
-        Text cost;
-        cost = new Text( "for" + worth+"gold");
-        cost.setTranslateX(-600);
-        cost.setTranslateY(-300);
-        sp.getChildren().addAll(cost);
-
-
-    }
     private void makeBattles(int age){
         if(age == 1) {
             if (players[0].stats.shield > players[1].stats.shield) {
@@ -1350,22 +1077,13 @@ public class GamePage extends Scene {
 
         return recursiveCheck( tmpPlayerResource, new boolean[players[playerNum].resourceCount], tmpCostResource, 0);
     }
-    public void gainBenefit( int playerNum, boolean isWonderbuild, Property benefit, String buildingName, String buildingColor) throws Exception {
+    public void gainBenefit( int playerNum, boolean isWonderbuild, Property benefit, String buildingName, String buildingColor) throws IOException {
         // specialCard = # : 16= Babylon A, 17 = Babylon B, 18 = olympia A, 19 = olympia B1,    20 = olympiaB3, 21 = Halikarnassos
         if(isWonderbuild) {
             benefit = wb[playerNum].milestones[players[playerNum].milestoneDone].benefit;
             players[playerNum].milestoneDone++;
         }
-        // halikarnassos feature
-        if(benefit.specialCard == 21 ) {
-            if(noOfCardsAtStake == 0) return;
-            if( playerNum != 0) {
-                Random rand = new Random();
-                int random = rand.nextInt(noOfCardsAtStake);
-                gainBenefit( playerNum, false, cardsAtStake[random].benefit, cardsAtStake[random].name, cardsAtStake[random].color);
-                cardsAtStake[random].deleteCard();
-                return;
-            }
+        if(benefit.specialCard == 21) {
             Stage stage = new Stage();
             stage.setTitle("Reward: Pick a card to build");
             stage.show();
@@ -1385,7 +1103,7 @@ public class GamePage extends Scene {
                 board[i].setOnMouseClicked(mouseEvent -> {
                     try {
                         gainBenefit(playerNum, false, cardsAtStake[finalI].benefit, cardsAtStake[finalI].name, cardsAtStake[finalI].color);
-                    } catch (Exception e) {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                     stage.close();
@@ -1406,90 +1124,6 @@ public class GamePage extends Scene {
             stage.setScene( scene);
             return;
         }
-        // olympia b3 feature
-        if( benefit.specialCard == 20) {
-            int leftNeighbor, rightNeighbor, i = 0;
-            rightNeighbor = ((playerNum + 1) % 4);
-            leftNeighbor = ((playerNum + 3) % 4);
-            Card[] guildDeck = new Card[players[leftNeighbor].purpleCards + players[rightNeighbor].purpleCards];
-            if( players[leftNeighbor].specialCards[10] || players[rightNeighbor].specialCards[10]) {
-                Property tmp = new Property();
-                tmp.specialCard = 10;
-                guildDeck[i] = new Card("workersguild","purple", new Property(), tmp);
-                i++;
-            }
-            if( players[leftNeighbor].specialCards[11] || players[rightNeighbor].specialCards[11]) {
-                Property tmp = new Property();
-                tmp.specialCard = 11;
-                guildDeck[i] = new Card("craftsmensguild","purple", new Property(), tmp);
-                i++;
-            }
-            if( players[leftNeighbor].specialCards[12] || players[rightNeighbor].specialCards[12]) {
-                Property tmp = new Property();
-                tmp.specialCard = 12;
-                guildDeck[i] = new Card("tradersguild","purple", new Property(), tmp);
-                i++;
-            }
-            if( players[leftNeighbor].specialCards[13] || players[rightNeighbor].specialCards[13]) {
-                Property tmp = new Property();
-                tmp.specialCard = 13;
-                guildDeck[i] = new Card("philosophersguild","purple", new Property(), tmp);
-                i++;
-            }
-            if( players[leftNeighbor].specialCards[14] || players[rightNeighbor].specialCards[14]) {
-                Property tmp = new Property();
-                tmp.specialCard = 14;
-                guildDeck[i] = new Card("spiesguild","purple", new Property(), tmp);
-                i++;
-            }
-            if( players[leftNeighbor].specialCards[15] || players[rightNeighbor].specialCards[15]) {
-                Property tmp = new Property();
-                tmp.specialCard = 15;
-                guildDeck[i] = new Card("magistratesguild","purple", new Property(), tmp);
-                i++;
-            }
-            if(i == 0) return;
-            if( playerNum != 0) {
-                Random rand = new Random();
-                int random = rand.nextInt(i);
-                gainBenefit( playerNum, false, guildDeck[random].benefit, guildDeck[random].name, guildDeck[random].color);
-                return;
-            }
-            Stage stage = new Stage();
-            stage.setTitle("Reward: Pick a guild to copy");
-            stage.show();
-            Group  group = new Group();
-            Scene scene = new Scene( group);
-            HBox hBox = new HBox();
-            Rectangle[] board = new Rectangle[i];
-            for( int j = 0; j < i; j++) {
-                board[j] = new Rectangle(140,190,Color.rgb(109,132,118,1));
-                board[j].setArcHeight(15);
-                board[j].setArcWidth(15);
-                InputStream is = Files.newInputStream(Paths.get("images/card images/" + guildDeck[j].name + ".png"));
-                Image img = new Image(is);
-                is.close();
-                board[j].setFill(new ImagePattern(img));
-                int finalI = j;
-                board[j].setOnMouseClicked(mouseEvent -> {
-                    try {
-                        gainBenefit(playerNum, false, guildDeck[finalI].benefit, guildDeck[finalI].name, guildDeck[finalI].color);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    stage.close();
-                    try {
-                        reDrawWonders();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
-                hBox.getChildren().add(board[j]);
-            }
-            group.getChildren().add(hBox);
-            stage.setScene( scene);
-            return;
-        }
         if(!buildingName.equals("")) {
             players[playerNum].buildings[players[playerNum].buildingsCount] = buildingName;
             players[playerNum].buildingsCount++;
@@ -1499,7 +1133,6 @@ public class GamePage extends Scene {
             else if(buildingColor.equals("blue")) players[playerNum].blueCards++;
             else if(buildingColor.equals("yellow")) players[playerNum].yellowCards++;
             else if(buildingColor.equals("brown")) players[playerNum].brownCards++;
-            else if(buildingColor.equals("purple")) players[playerNum].purpleCards++;
         }
         if(benefit.resource.quantity.length != 0)
             players[playerNum].addResource(benefit.resource);
@@ -2965,11 +2598,11 @@ public class GamePage extends Scene {
 
             // special cards part
             HBox specialHB = new HBox( 5);
-            for(int i = 1; i < 16; i++) {
-                if(players[pNum].specialCards[i] && i != 4 && i != 5){
+            for(int i = 1; i < 4; i++) {
+                if(players[pNum].specialCards[i]){
                     VBox vb = new VBox();
                     vb.setBackground(bg);
-                    is = Files.newInputStream(Paths.get("images/cardskill/" + i + ".png"));
+                    is = Files.newInputStream(Paths.get("images/specialcards/" + i + ".png"));
                     img = new Image(is);
                     is.close();
                     imgView = new ImageView(img);
@@ -3035,6 +2668,24 @@ public class GamePage extends Scene {
             sellButton.setTranslateY(30);
             getChildren().add(sellButton);
             sellButton.setOnMouseClicked(event -> {
+<<<<<<< HEAD
+                Property tmp;
+                tmp = new GamePage.Property();
+                tmp.coin = 3;
+                try {
+                    gainBenefit( 0, false, tmp, "", "");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                cardsAtStake[noOfCardsAtStake] = this;
+                noOfCardsAtStake++;
+                try {
+                    deleteCard();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+=======
+>>>>>>> 5d211b3b13e8f08b6961419ccfe552b203ef24e6
                 try {
                     playCard(0, CardAction.SELL);
                 } catch (Exception e) {
@@ -3047,10 +2698,35 @@ public class GamePage extends Scene {
             buryButton.setTranslateY(70);
             getChildren().add(buryButton);
             buryButton.setOnMouseClicked(event -> {
+<<<<<<< HEAD
+                if( players[0].milestoneDone == wb[0].milestones.length) {
+                    giveError("All wonders have already built");
+                }
+                else if( checkResources( 0 , true, cost)) {
+                    try {
+                        gainBenefit(0, true, benefit, "", "");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        deleteCard();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        endTurn();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    giveError("Not enough resources");
+=======
                 try {
                     playCard(0, CardAction.BURY);
                 } catch (Exception e) {
                     e.printStackTrace();
+>>>>>>> 5d211b3b13e8f08b6961419ccfe552b203ef24e6
                 }
             });
 
@@ -3059,10 +2735,34 @@ public class GamePage extends Scene {
             buildButton.setTranslateY(110);
             getChildren().add(buildButton);
             buildButton.setOnMouseClicked(event -> {
+<<<<<<< HEAD
+                if( checkResources( 0 , false, cost)) {
+                    if(cost.coin != 0)
+                        benefit.coin--;
+                    try {
+                        gainBenefit(0, false, benefit, name, color);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        deleteCard();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        endTurn();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    giveError("Not enough resources");
+=======
                 try {
                     playCard(0, CardAction.BUILD);
                 } catch (Exception e) {
                     e.printStackTrace();
+>>>>>>> 5d211b3b13e8f08b6961419ccfe552b203ef24e6
                 }
             });
 
@@ -3119,8 +2819,6 @@ public class GamePage extends Scene {
                     Property tmp = new GamePage.Property();
                     tmp.coin = 3;
                     gainBenefit( playerNum, false, tmp, "", "");
-                    cardsAtStake[noOfCardsAtStake] = this;
-                    noOfCardsAtStake++;
                     break;
 
                 case BURY:
