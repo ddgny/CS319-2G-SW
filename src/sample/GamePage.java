@@ -59,6 +59,7 @@ public class GamePage extends Scene {
     private StackPane sp;
     private String side;
     Text goldValue;
+    Text goldValueRight;
     private int currentAge, currentTurn, noOfCardsAtStake;
     // mode = ally -> -1 , normal -> 0 , story -> 1,2,3,4,5...
     private int mode;
@@ -169,21 +170,462 @@ public class GamePage extends Scene {
 
 
         //TRADE COMBO BOX
-        String resourcesBox [] = {"Lumber", "Ore","Stone"};
-        ComboBox box = new ComboBox();
-        box.setTranslateX(-520);
-        box.setTranslateY(-300);
-        box.getItems().addAll("Lumber","Ore","Stone","Clay","Glass","Textile","Paper");
+
+        //images for hboxes
+        is = Files.newInputStream(Paths.get("images/coins.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgComboGold = new ImageView(img);
+        imgComboGold.setFitWidth(20);
+        imgComboGold.setFitHeight(20);
+        imgComboGold.setTranslateX(25);
+
+        is = Files.newInputStream(Paths.get("images/Lumber.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgComboLumber = new ImageView(img);
+        imgComboLumber.setFitHeight(20);
+        imgComboLumber.setFitWidth(20);
+        imgComboLumber.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/ore.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgComboOre = new ImageView(img);
+        imgComboOre.setFitHeight(20);
+        imgComboOre.setFitWidth(20);
+        imgComboOre.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/Clay.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgComboClay = new ImageView(img);
+        imgComboClay.setFitHeight(20);
+        imgComboClay.setFitWidth(20);
+        imgComboClay.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/Paper.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgComboPaper = new ImageView(img);
+        imgComboPaper.setFitHeight(20);
+        imgComboPaper.setFitWidth(20);
+        imgComboPaper.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/Glass.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgComboGlass = new ImageView(img);
+        imgComboGlass.setFitHeight(20);
+        imgComboGlass.setFitWidth(20);
+        imgComboGlass.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/Textile.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgComboTextile = new ImageView(img);
+        imgComboTextile.setFitHeight(20);
+        imgComboTextile.setFitWidth(20);
+        imgComboTextile.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/Stone.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgComboStone  = new ImageView(img);
+        imgComboStone.setFitHeight(20);
+        imgComboStone.setFitWidth(20);
+        imgComboStone.setTranslateX(10);
 
 
+        HBox lumberhbox,orebox,stonebox,claybox,glassbox,textilebox,paperbox;
+
+        //texts and hboxes
+        Text lumberText = new Text("Lumber");
+        lumberText.setTranslateX(5);
+        lumberText.setFill(Color.BROWN);
+        lumberText.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+        lumberhbox = new HBox(lumberText,imgComboLumber);
+        lumberhbox.setPrefSize(10,10);
+
+        Text oreText = new Text("Ore");
+        oreText.setTranslateX(5);
+        oreText.setFill(Color.BLACK);
+        oreText.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+        orebox = new HBox(oreText,imgComboOre);
+        orebox.setPrefSize(10,10);
+
+        Text stoneText = new Text("Stone");
+        stoneText.setTranslateX(5);
+        stoneText.setFill(Color.GREY);
+        stoneText.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+        stonebox = new HBox(stoneText,imgComboStone);
+        stonebox.setPrefSize(10,10);
+
+        Text clayText = new Text("Clay");
+        clayText.setTranslateX(5);
+        clayText.setFill(Color.RED);
+        clayText.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+        claybox = new HBox(clayText,imgComboClay);
+        claybox.setPrefSize(10,10);
+
+        Text glassText = new Text("Glass");
+        glassText.setTranslateX(5);
+        glassText.setFill(Color.BLUE);
+        glassText.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+        glassbox = new HBox(glassText,imgComboGlass);
+        glassbox.setPrefSize(10,10);
+
+
+        Text paperText = new Text("Paper");
+        paperText.setTranslateX(5);
+        paperText.setFill(Color.rgb(172,118,75,1));
+        paperText.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+        paperbox = new HBox(paperText,imgComboPaper);
+        paperbox.setPrefSize(10,10);
+
+        Text textileText = new Text("Textile");
+        textileText.setTranslateX(5);
+        textileText.setFill(Color.PURPLE);
+        textileText.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+        textilebox = new HBox(textileText,imgComboTextile);
+        textilebox.setPrefSize(10,10);
+
+
+        ComboBox<HBox> comboHbox = new ComboBox<HBox>();
+        comboHbox.setTranslateX(-500);
+        comboHbox.setTranslateY(-300);
+        comboHbox.getItems().addAll(lumberhbox,orebox,stonebox,claybox,glassbox,textilebox,paperbox);
+        comboHbox.getSelectionModel().selectFirst();
+
+
+
+        //making trade button
         Button comboBoxTradeButton = new Button("Trade");
-        comboBoxTradeButton.setTranslateX(-450);
+        comboBoxTradeButton.setTranslateX(-600);
         comboBoxTradeButton.setTranslateY(-300);
 
+
+
+
+
+        comboHbox.setOnMouseClicked(event -> {
+            comboBoxTradeButton.setDisable(false);//enable button
+            String temporarytwo = ((Text)comboHbox.getValue().getChildren().get(0)).getText();
+            if (temporarytwo.equals("Lumber"))
+            {
+                comboHbox.getItems().remove(orebox);
+                comboHbox.getItems().add(orebox);
+                comboHbox.getItems().remove(stonebox);
+                comboHbox.getItems().add(stonebox);
+                comboHbox.getItems().remove(claybox);
+                comboHbox.getItems().add(claybox);
+                //comboHbox.getItems().remove(lumberhbox);
+                //comboHbox.getItems().add(lumberhbox);
+                comboHbox.getItems().remove(textilebox);
+                comboHbox.getItems().add(textilebox);
+                comboHbox.getItems().remove(glassbox);
+                comboHbox.getItems().add(glassbox);
+                comboHbox.getItems().remove(paperbox);
+                comboHbox.getItems().add(paperbox);
+            }
+            if (temporarytwo.equals("Ore"))
+            {
+                //comboHbox.getItems().remove(orebox);
+                //comboHbox.getItems().add(orebox);
+                comboHbox.getItems().remove(stonebox);
+                comboHbox.getItems().add(stonebox);
+                comboHbox.getItems().remove(claybox);
+                comboHbox.getItems().add(claybox);
+                comboHbox.getItems().remove(lumberhbox);
+                comboHbox.getItems().add(lumberhbox);
+                comboHbox.getItems().remove(textilebox);
+                comboHbox.getItems().add(textilebox);
+                comboHbox.getItems().remove(glassbox);
+                comboHbox.getItems().add(glassbox);
+                comboHbox.getItems().remove(paperbox);
+                comboHbox.getItems().add(paperbox);
+            }
+
+            if (temporarytwo.equals("Clay"))
+            {
+                comboHbox.getItems().remove(orebox);
+                comboHbox.getItems().add(orebox);
+                comboHbox.getItems().remove(stonebox);
+                comboHbox.getItems().add(stonebox);
+                //comboHbox.getItems().remove(claybox);
+                //comboHbox.getItems().add(claybox);
+                comboHbox.getItems().remove(lumberhbox);
+                comboHbox.getItems().add(lumberhbox);
+                comboHbox.getItems().remove(textilebox);
+                comboHbox.getItems().add(textilebox);
+                comboHbox.getItems().remove(glassbox);
+                comboHbox.getItems().add(glassbox);
+                comboHbox.getItems().remove(paperbox);
+                comboHbox.getItems().add(paperbox);
+            }
+
+            if (temporarytwo.equals("Stone"))
+            {
+                comboHbox.getItems().remove(orebox);
+                comboHbox.getItems().add(orebox);
+               //comboHbox.getItems().remove(stonebox);
+                //comboHbox.getItems().add(stonebox);
+                comboHbox.getItems().remove(claybox);
+                comboHbox.getItems().add(claybox);
+                comboHbox.getItems().remove(lumberhbox);
+                comboHbox.getItems().add(lumberhbox);
+                comboHbox.getItems().remove(textilebox);
+                comboHbox.getItems().add(textilebox);
+                comboHbox.getItems().remove(glassbox);
+                comboHbox.getItems().add(glassbox);
+                comboHbox.getItems().remove(paperbox);
+                comboHbox.getItems().add(paperbox);
+            }
+            if (temporarytwo.equals("Glass"))
+            {
+                comboHbox.getItems().remove(orebox);
+                comboHbox.getItems().add(orebox);
+                comboHbox.getItems().remove(stonebox);
+                comboHbox.getItems().add(stonebox);
+                comboHbox.getItems().remove(claybox);
+                comboHbox.getItems().add(claybox);
+                comboHbox.getItems().remove(lumberhbox);
+                comboHbox.getItems().add(lumberhbox);
+                comboHbox.getItems().remove(textilebox);
+                comboHbox.getItems().add(textilebox);
+                //comboHbox.getItems().remove(glassbox);
+                //comboHbox.getItems().add(glassbox);
+                comboHbox.getItems().remove(paperbox);
+                comboHbox.getItems().add(paperbox);
+            }
+            if (temporarytwo.equals("Paper"))
+            {
+                comboHbox.getItems().remove(orebox);
+                comboHbox.getItems().add(orebox);
+                comboHbox.getItems().remove(stonebox);
+                comboHbox.getItems().add(stonebox);
+                comboHbox.getItems().remove(claybox);
+                comboHbox.getItems().add(claybox);
+                comboHbox.getItems().remove(lumberhbox);
+                comboHbox.getItems().add(lumberhbox);
+                comboHbox.getItems().remove(textilebox);
+                comboHbox.getItems().add(textilebox);
+                comboHbox.getItems().remove(glassbox);
+                comboHbox.getItems().add(glassbox);
+                //comboHbox.getItems().remove(paperbox);
+                //comboHbox.getItems().add(paperbox);
+            }
+
+        });
+
+
+        comboHbox.getSelectionModel().selectedItemProperty().addListener((v,oldvalue,newValue) -> {
+            String checkType= ((Text)newValue.getChildren().get(0)).getText();
+
+            System.out.println(checkType);
+            if (checkType.equals("Ore"))
+            {
+                if (players[0].specialCards[2]==true)
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 1");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-410);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                    //checkForTrade("a");
+                }
+                else
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 2");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-410);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+            }
+            else if (checkType.equals("Lumber"))
+            {
+                if (players[0].specialCards[2]==true)
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 1");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-410);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+                else
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 2");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-410);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+            }
+            else if (checkType.equals("Clay"))
+            {
+                if (players[0].specialCards[2]==true)
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 1");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-410);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+                else
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 2");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-410);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+            }
+            else if (checkType.equals("Stone"))
+            {
+                if (players[0].specialCards[2]==true)
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 1");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-410);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+                else
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 2");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-410);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+            }
+            else if (checkType.equals("Glass"))
+            {
+                if (players[0].specialCards[3]==true)
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 1");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-410);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+                else
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 2");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-410);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+            }
+            else if (checkType.equals("Paper"))
+            {
+                if (players[0].specialCards[3]==true)
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 1");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-410);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+                else
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 2");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-410);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+            }
+            else if (checkType.equals("Textile"))
+            {
+                if (players[0].specialCards[3]==true)
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 1");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-410);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+                else
+                {
+                    sp.getChildren().remove(goldValue);
+                    goldValue = new Text("for 2");
+                    goldValue.setFill(Color.WHITESMOKE);
+                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValue.setTranslateX(-410);
+                    goldValue.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValue);
+                }
+            }
+
+
+
+
+        });
+
+
         comboBoxTradeButton.setOnMouseClicked(event -> {
-            String choice= box.getValue().toString();
+            String choice = ((Text)comboHbox.getValue().getChildren().get(0)).getText();
 
             if (choice.equals("Ore"))
+            {
+                System.out.println(choice);
+                //trade choice
+            }
+            if (choice.equals("Clay"))
+            {
+                System.out.println(choice);
+                //trade choice
+            }
+            if (choice.equals("Lumber"))
+            {
+                System.out.println(choice);
+                //trade choice
+            }
+            if (choice.equals("Stone"))
+            {
+                System.out.println(choice);
+                //trade choice
+            }
+            if (choice.equals("Glass"))
+            {
+                System.out.println(choice);
+                //trade choice
+            }
+            if (choice.equals("Paper"))
+            {
+                System.out.println(choice);
+                //trade choice
+            }
+            if (choice.equals("Textile"))
             {
                 System.out.println(choice);
                 //trade choice
@@ -192,10 +634,11 @@ public class GamePage extends Scene {
         comboBoxTradeButton.setDisable(true);
 
         int worth=2;
+        //adding trade gold image
         goldValue = new Text( "for 2");
         goldValue.setFill(Color.WHITESMOKE);
         goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-        goldValue.setTranslateX(-610);
+        goldValue.setTranslateX(-410);
         goldValue.setTranslateY(-300);
         sp.getChildren().addAll(goldValue);
         is = Files.newInputStream(Paths.get("images/coins.png"));
@@ -204,187 +647,525 @@ public class GamePage extends Scene {
         ImageView imgGold = new ImageView(img);
         imgGold.setFitHeight(25);
         imgGold.setFitWidth(25);
-        imgGold.setTranslateX(-580);
+        imgGold.setTranslateX(-380);
         imgGold.setTranslateY(-300);
         sp.getChildren().addAll(imgGold);
 
-        box.setOnMouseClicked(event -> {
 
-            comboBoxTradeButton.setDisable(false);
+
+
+
+        sp.getChildren().addAll(comboBoxTradeButton,comboHbox);
+
+
+        //Trade with right
+
+
+        goldValueRight = new Text( "for 2");
+        goldValueRight.setFill(Color.WHITESMOKE);
+        goldValueRight.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+        goldValueRight.setTranslateX(580);
+        goldValueRight.setTranslateY(-300);
+        sp.getChildren().addAll(goldValueRight);
+        is = Files.newInputStream(Paths.get("images/coins.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgGoldRight = new ImageView(img);
+        imgGoldRight.setFitHeight(25);
+        imgGoldRight.setFitWidth(25);
+        imgGoldRight.setTranslateX(610);
+        imgGoldRight.setTranslateY(-300);
+        sp.getChildren().addAll(imgGoldRight);
+
+        HBox lumberhboxright,oreboxright,stoneboxright,clayboxright,glassboxright,textileboxright,paperboxright;
+
+
+
+        //images for hboxes
+        is = Files.newInputStream(Paths.get("images/coins.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgComboGoldright = new ImageView(img);
+        imgComboGoldright.setFitWidth(20);
+        imgComboGoldright.setFitHeight(20);
+        imgComboGoldright.setTranslateX(25);
+
+        is = Files.newInputStream(Paths.get("images/Lumber.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgComboLumberright = new ImageView(img);
+        imgComboLumberright.setFitHeight(20);
+        imgComboLumberright.setFitWidth(20);
+        imgComboLumberright.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/ore.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgComboOreright = new ImageView(img);
+        imgComboOreright.setFitHeight(20);
+        imgComboOreright.setFitWidth(20);
+        imgComboOreright.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/Clay.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgComboClayright = new ImageView(img);
+        imgComboClayright.setFitHeight(20);
+        imgComboClayright.setFitWidth(20);
+        imgComboClayright.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/Paper.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgComboPaperright = new ImageView(img);
+        imgComboPaperright.setFitHeight(20);
+        imgComboPaperright.setFitWidth(20);
+        imgComboPaperright.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/Glass.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgComboGlassright = new ImageView(img);
+        imgComboGlassright.setFitHeight(20);
+        imgComboGlassright.setFitWidth(20);
+        imgComboGlassright.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/Textile.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgComboTextileright = new ImageView(img);
+        imgComboTextileright.setFitHeight(20);
+        imgComboTextileright.setFitWidth(20);
+        imgComboTextileright.setTranslateX(10);
+
+        is = Files.newInputStream(Paths.get("images/Stone.png"));
+        img = new Image(is);
+        is.close();
+        ImageView imgComboStoneright  = new ImageView(img);
+        imgComboStoneright.setFitHeight(20);
+        imgComboStoneright.setFitWidth(20);
+        imgComboStoneright.setTranslateX(10);
+
+
+        //texts
+        Text lumberTextRight = new Text("Lumber");
+        lumberTextRight.setTranslateX(5);
+        lumberTextRight.setFill(Color.BROWN);
+        lumberTextRight.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+        lumberhboxright = new HBox(lumberTextRight,imgComboLumberright);
+        lumberhboxright.setPrefSize(10,10);
+
+        Text oreTextRight = new Text("Ore");
+        oreTextRight.setTranslateX(5);
+        oreTextRight.setFill(Color.BLACK);
+        oreTextRight.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+        oreboxright = new HBox(oreTextRight,imgComboOreright);
+        oreboxright.setPrefSize(10,10);
+
+        Text stoneTextRight = new Text("Stone");
+        stoneTextRight.setTranslateX(5);
+        stoneTextRight.setFill(Color.GREY);
+        stoneTextRight.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+        stoneboxright = new HBox(stoneTextRight,imgComboStoneright);
+        stoneboxright.setPrefSize(10,10);
+
+        Text clayTextRight = new Text("Clay");
+        clayTextRight.setTranslateX(5);
+        clayTextRight.setFill(Color.RED);
+        clayTextRight.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+        clayboxright = new HBox(clayTextRight,imgComboClayright);
+        clayboxright.setPrefSize(10,10);
+
+        Text glassTextRight = new Text("Glass");
+        glassTextRight.setTranslateX(5);
+        glassTextRight.setFill(Color.BLUE);
+        glassTextRight.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+        glassboxright = new HBox(glassTextRight,imgComboGlassright);
+        glassboxright.setPrefSize(10,10);
+
+        Text paperTextRight = new Text("Paper");
+        paperTextRight.setTranslateX(5);
+        paperTextRight.setFill(Color.rgb(172,118,75,1));
+        paperTextRight.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+        paperboxright = new HBox(paperTextRight,imgComboPaperright);
+        paperboxright.setPrefSize(10,10);
+
+
+        Text textileTextRight = new Text("Textile");
+        textileTextRight.setTranslateX(5);
+        textileTextRight.setFill(Color.PURPLE);
+        textileTextRight.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+        textileboxright = new HBox(textileTextRight,imgComboTextileright);
+        textileboxright.setPrefSize(10,10);
+
+
+        ComboBox<HBox> comboHboxRight = new ComboBox<HBox>();
+        comboHboxRight.setTranslateX(500);
+        comboHboxRight.setTranslateY(-300);
+        comboHboxRight.getItems().addAll(lumberhboxright,oreboxright,stoneboxright,clayboxright,glassboxright,textileboxright,paperboxright);
+        comboHboxRight.getSelectionModel().selectFirst();
+
+
+
+        //making trade button
+        Button comboBoxTradeButtonRight = new Button("Trade");
+        comboBoxTradeButtonRight.setTranslateX(410);
+        comboBoxTradeButtonRight.setTranslateY(-300);
+
+
+
+
+
+        comboHboxRight.setOnMouseClicked(event -> {
+            comboBoxTradeButtonRight.setDisable(false);//enable button
+            String topresource = ((Text)comboHboxRight.getValue().getChildren().get(0)).getText();
+            if (topresource.equals("Lumber"))
+            {
+                comboHboxRight.getItems().remove(oreboxright);
+                comboHboxRight.getItems().add(oreboxright);
+                comboHboxRight.getItems().remove(stoneboxright);
+                comboHboxRight.getItems().add(stoneboxright);
+                comboHboxRight.getItems().remove(clayboxright);
+                comboHboxRight.getItems().add(clayboxright);
+                //comboHboxRight.getItems().remove(lumberhboxright);
+                //comboHboxRight.getItems().add(lumberhboxright);
+                comboHboxRight.getItems().remove(textileboxright);
+                comboHboxRight.getItems().add(textileboxright);
+                comboHboxRight.getItems().remove(glassboxright);
+                comboHboxRight.getItems().add(glassboxright);
+                comboHboxRight.getItems().remove(paperboxright);
+                comboHboxRight.getItems().add(paperboxright);
+            }
+            if (topresource.equals("Ore"))
+            {
+                //comboHboxRight.getItems().remove(oreboxright);
+                //comboHboxRight.getItems().add(oreboxright);
+                comboHboxRight.getItems().remove(stoneboxright);
+                comboHboxRight.getItems().add(stoneboxright);
+                comboHboxRight.getItems().remove(clayboxright);
+                comboHboxRight.getItems().add(clayboxright);
+                comboHboxRight.getItems().remove(lumberhboxright);
+                comboHboxRight.getItems().add(lumberhboxright);
+                comboHboxRight.getItems().remove(textileboxright);
+                comboHboxRight.getItems().add(textileboxright);
+                comboHboxRight.getItems().remove(glassboxright);
+                comboHboxRight.getItems().add(glassboxright);
+                comboHboxRight.getItems().remove(paperboxright);
+                comboHboxRight.getItems().add(paperboxright);
+            }
+
+            if (topresource.equals("Clay"))
+            {
+                comboHboxRight.getItems().remove(oreboxright);
+                comboHboxRight.getItems().add(oreboxright);
+                comboHboxRight.getItems().remove(stoneboxright);
+                comboHboxRight.getItems().add(stoneboxright);
+                //comboHboxRight.getItems().remove(clayboxright);
+                //comboHboxRight.getItems().add(clayboxright);
+                comboHboxRight.getItems().remove(lumberhboxright);
+                comboHboxRight.getItems().add(lumberhboxright);
+                comboHboxRight.getItems().remove(textileboxright);
+                comboHboxRight.getItems().add(textileboxright);
+                comboHboxRight.getItems().remove(glassboxright);
+                comboHboxRight.getItems().add(glassboxright);
+                comboHboxRight.getItems().remove(paperboxright);
+                comboHboxRight.getItems().add(paperboxright);
+            }
+
+            if (topresource.equals("Stone"))
+            {
+                comboHboxRight.getItems().remove(oreboxright);
+                comboHboxRight.getItems().add(oreboxright);
+                //comboHboxRight.getItems().remove(stoneboxright);
+                //comboHboxRight.getItems().add(stoneboxright);
+                comboHboxRight.getItems().remove(clayboxright);
+                comboHboxRight.getItems().add(clayboxright);
+                comboHboxRight.getItems().remove(lumberhboxright);
+                comboHboxRight.getItems().add(lumberhboxright);
+                comboHboxRight.getItems().remove(textileboxright);
+                comboHboxRight.getItems().add(textileboxright);
+                comboHboxRight.getItems().remove(glassboxright);
+                comboHboxRight.getItems().add(glassboxright);
+                comboHboxRight.getItems().remove(paperboxright);
+                comboHboxRight.getItems().add(paperboxright);
+            }
+            if (topresource.equals("Glass"))
+            {
+                comboHboxRight.getItems().remove(oreboxright);
+                comboHboxRight.getItems().add(oreboxright);
+                comboHboxRight.getItems().remove(stoneboxright);
+                comboHboxRight.getItems().add(stoneboxright);
+                comboHboxRight.getItems().remove(clayboxright);
+                comboHboxRight.getItems().add(clayboxright);
+                comboHboxRight.getItems().remove(lumberhboxright);
+                comboHboxRight.getItems().add(lumberhboxright);
+                comboHboxRight.getItems().remove(textileboxright);
+                comboHboxRight.getItems().add(textileboxright);
+                //comboHboxRight.getItems().remove(glassboxright);
+                //comboHboxRight.getItems().add(glassboxright);
+                comboHboxRight.getItems().remove(paperboxright);
+                comboHboxRight.getItems().add(paperboxright);
+            }
+            if (topresource.equals("Paper"))
+            {
+                comboHboxRight.getItems().remove(oreboxright);
+                comboHboxRight.getItems().add(oreboxright);
+                comboHboxRight.getItems().remove(stoneboxright);
+                comboHboxRight.getItems().add(stoneboxright);
+                comboHboxRight.getItems().remove(clayboxright);
+                comboHboxRight.getItems().add(clayboxright);
+                comboHboxRight.getItems().remove(lumberhboxright);
+                comboHboxRight.getItems().add(lumberhboxright);
+                comboHboxRight.getItems().remove(textileboxright);
+                comboHboxRight.getItems().add(textileboxright);
+                comboHboxRight.getItems().remove(glassboxright);
+                comboHboxRight.getItems().add(glassboxright);
+               // comboHboxRight.getItems().remove(paperboxright);
+                //comboHboxRight.getItems().add(paperboxright);
+            }
+            if (topresource.equals("Textile"))
+            {
+                comboHboxRight.getItems().remove(oreboxright);
+                comboHboxRight.getItems().add(oreboxright);
+                comboHboxRight.getItems().remove(stoneboxright);
+                comboHboxRight.getItems().add(stoneboxright);
+                comboHboxRight.getItems().remove(clayboxright);
+                comboHboxRight.getItems().add(clayboxright);
+                comboHboxRight.getItems().remove(lumberhboxright);
+                comboHboxRight.getItems().add(lumberhboxright);
+                //comboHboxRight.getItems().remove(textileboxright);
+                //comboHboxRight.getItems().add(textileboxright);
+                comboHboxRight.getItems().remove(glassboxright);
+                comboHboxRight.getItems().add(glassboxright);
+                comboHboxRight.getItems().remove(paperboxright);
+                comboHboxRight.getItems().add(paperboxright);
+            }
 
 
         });
 
-        box.getSelectionModel().selectedItemProperty().addListener((v,oldvalue,newValue) -> {
-            System.out.println(newValue);
-            if (newValue.toString().equals("Ore"))
+
+        comboHboxRight.getSelectionModel().selectedItemProperty().addListener((v,oldvalue,newValue) -> {
+            String checkType= ((Text)newValue.getChildren().get(0)).getText();
+
+            System.out.println(checkType);
+            if (checkType.equals("Ore"))
             {
-                if (players[0].specialCards[2]==true)
+                if (players[0].specialCards[1]==true)
                 {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 1");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
-                   //checkForTrade("a");
+                    sp.getChildren().remove(goldValueRight);
+                    goldValueRight = new Text("for 1");
+                    goldValueRight.setFill(Color.WHITESMOKE);
+                    goldValueRight.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValueRight.setTranslateX(580);
+                    goldValueRight.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValueRight);
+                    //checkForTrade("a");
                 }
                 else
                 {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 2");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
+                    sp.getChildren().remove(goldValueRight);
+                    goldValueRight = new Text("for 2");
+                    goldValueRight.setFill(Color.WHITESMOKE);
+                    goldValueRight.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValueRight.setTranslateX(580);
+                    goldValueRight.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValueRight);
                 }
             }
-            else if (newValue.toString().equals("Lumber"))
+            else if (checkType.equals("Lumber"))
             {
-                if (players[0].specialCards[2]==true)
+                if (players[0].specialCards[1]==true)
                 {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 1");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
+                    sp.getChildren().remove(goldValueRight);
+                    goldValueRight = new Text("for 1");
+                    goldValueRight.setFill(Color.WHITESMOKE);
+                    goldValueRight.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValueRight.setTranslateX(580);
+                    goldValueRight.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValueRight);
+                    //checkForTrade("a");
                 }
                 else
                 {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 2");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
+                    sp.getChildren().remove(goldValueRight);
+                    goldValueRight = new Text("for 2");
+                    goldValueRight.setFill(Color.WHITESMOKE);
+                    goldValueRight.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValueRight.setTranslateX(580);
+                    goldValueRight.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValueRight);
                 }
             }
-            else if (newValue.toString().equals("Clay"))
+            else if (checkType.equals("Clay"))
             {
-                if (players[0].specialCards[2]==true)
+                if (players[0].specialCards[1]==true)
                 {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 1");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
+                    sp.getChildren().remove(goldValueRight);
+                    goldValueRight = new Text("for 1");
+                    goldValueRight.setFill(Color.WHITESMOKE);
+                    goldValueRight.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValueRight.setTranslateX(580);
+                    goldValueRight.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValueRight);
+                    //checkForTrade("a");
                 }
                 else
                 {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 2");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
+                    sp.getChildren().remove(goldValueRight);
+                    goldValueRight = new Text("for 2");
+                    goldValueRight.setFill(Color.WHITESMOKE);
+                    goldValueRight.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValueRight.setTranslateX(580);
+                    goldValueRight.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValueRight);
                 }
             }
-            else if (newValue.toString().equals("Stone"))
+            else if (checkType.equals("Stone"))
             {
-                if (players[0].specialCards[2]==true)
+                if (players[0].specialCards[1]==true)
                 {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 1");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
+                    sp.getChildren().remove(goldValueRight);
+                    goldValueRight = new Text("for 1");
+                    goldValueRight.setFill(Color.WHITESMOKE);
+                    goldValueRight.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValueRight.setTranslateX(580);
+                    goldValueRight.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValueRight);
+                    //checkForTrade("a");
                 }
                 else
                 {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 2");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
+                    sp.getChildren().remove(goldValueRight);
+                    goldValueRight = new Text("for 2");
+                    goldValueRight.setFill(Color.WHITESMOKE);
+                    goldValueRight.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValueRight.setTranslateX(580);
+                    goldValueRight.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValueRight);
                 }
             }
-            else if (newValue.toString().equals("Glass"))
-            {
-                if (players[0].specialCards[3]==true)
-                {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 1");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
-                }
-                else
-                {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 2");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
-                }
-            }
-            else if (newValue.toString().equals("Paper"))
+            else if (checkType.equals("Glass"))
             {
                 if (players[0].specialCards[3]==true)
                 {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 1");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
+                    sp.getChildren().remove(goldValueRight);
+                    goldValueRight = new Text("for 1");
+                    goldValueRight.setFill(Color.WHITESMOKE);
+                    goldValueRight.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValueRight.setTranslateX(580);
+                    goldValueRight.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValueRight);
+                    //checkForTrade("a");
                 }
                 else
                 {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 2");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
+                    sp.getChildren().remove(goldValueRight);
+                    goldValueRight = new Text("for 2");
+                    goldValueRight.setFill(Color.WHITESMOKE);
+                    goldValueRight.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValueRight.setTranslateX(580);
+                    goldValueRight.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValueRight);
                 }
             }
-            else if (newValue.toString().equals("Textile"))
+            else if (checkType.equals("Paper"))
             {
                 if (players[0].specialCards[3]==true)
                 {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 1");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
+                    sp.getChildren().remove(goldValueRight);
+                    goldValueRight = new Text("for 1");
+                    goldValueRight.setFill(Color.WHITESMOKE);
+                    goldValueRight.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValueRight.setTranslateX(580);
+                    goldValueRight.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValueRight);
+                    //checkForTrade("a");
                 }
                 else
                 {
-                    sp.getChildren().remove(goldValue);
-                    goldValue = new Text("for 2");
-                    goldValue.setFill(Color.WHITESMOKE);
-                    goldValue.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
-                    goldValue.setTranslateX(-610);
-                    goldValue.setTranslateY(-300);
-                    sp.getChildren().addAll(goldValue);
+                    sp.getChildren().remove(goldValueRight);
+                    goldValueRight = new Text("for 2");
+                    goldValueRight.setFill(Color.WHITESMOKE);
+                    goldValueRight.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValueRight.setTranslateX(580);
+                    goldValueRight.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValueRight);
                 }
             }
+            else if (checkType.equals("Textile"))
+            {
+                if (players[0].specialCards[3]==true)
+                {
+                    sp.getChildren().remove(goldValueRight);
+                    goldValueRight = new Text("for 1");
+                    goldValueRight.setFill(Color.WHITESMOKE);
+                    goldValueRight.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValueRight.setTranslateX(580);
+                    goldValueRight.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValueRight);
+                    //checkForTrade("a");
+                }
+                else
+                {
+                    sp.getChildren().remove(goldValueRight);
+                    goldValueRight = new Text("for 2");
+                    goldValueRight.setFill(Color.WHITESMOKE);
+                    goldValueRight.setFont(Font.font("Kalam", FontPosture.ITALIC,15));
+                    goldValueRight.setTranslateX(580);
+                    goldValueRight.setTranslateY(-300);
+                    sp.getChildren().addAll(goldValueRight);
+                }
+            }
+
+
 
 
         });
 
 
-        sp.getChildren().addAll(box,comboBoxTradeButton);
+        comboBoxTradeButtonRight.setOnMouseClicked(event -> {
+            String choice = ((Text)comboHboxRight.getValue().getChildren().get(0)).getText();
+
+            if (choice.equals("Ore"))
+            {
+                System.out.println(choice);
+                //trade choice
+            }
+            if (choice.equals("Clay"))
+            {
+                System.out.println(choice);
+                //trade choice
+            }
+            if (choice.equals("Lumber"))
+            {
+                System.out.println(choice);
+                //trade choice
+            }
+            if (choice.equals("Stone"))
+            {
+                System.out.println(choice);
+                //trade choice
+            }
+            if (choice.equals("Glass"))
+            {
+                System.out.println(choice);
+                //trade choice
+            }
+            if (choice.equals("Paper"))
+            {
+                System.out.println(choice);
+                //trade choice
+            }
+            if (choice.equals("Textile"))
+            {
+                System.out.println(choice);
+                //trade choice
+            }
+        });
+        comboBoxTradeButtonRight.setDisable(true);
+        sp.getChildren().addAll(comboBoxTradeButtonRight,comboHboxRight);
+
 
 
 
@@ -1061,6 +1842,15 @@ public class GamePage extends Scene {
         sp.getChildren().addAll(wb);
 
 
+
+    }
+    /*
+    *player 1 receives the resource
+    * player 2 gains the gold
+    * side is to check if player 2 is on the right or left of player 1
+     */
+    public void makeTrade(Player p1, Player p2, String resource, String side )
+    {
 
     }
 
