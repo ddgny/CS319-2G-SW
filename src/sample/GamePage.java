@@ -58,7 +58,7 @@ public class GamePage extends Scene {
     private Card[][] cards;
     private Card[] cardsAtStake;
     private Stage window;
-    private StackPane sp;
+    private StackPane sp,endgame;
     private String side;
     Text goldValue;
     Text goldValueRight;
@@ -92,7 +92,7 @@ public class GamePage extends Scene {
             resource = new Resource(0);
         }
     }
-    private class Player {
+    public class Player {
         String name;
         int battlePoint, greenCards, redCards, yellowCards, greyCards, purpleCards, brownCards, blueCards, milestoneDone;
         String[] buildings;
@@ -1577,6 +1577,23 @@ public class GamePage extends Scene {
 
 
     public void endGame() {
+
+        Button viewStats = new Button("View endgame Stats");
+        viewStats.setPrefHeight(50);
+        viewStats.setPrefWidth(200);
+        viewStats.setTranslateY(-100);
+        viewStats.setTranslateX(0);
+        sp.getChildren().add(viewStats);
+        viewStats.setOnMouseClicked(event -> {
+            Scene scene = null;
+            try {
+                endgame = new StackPane();
+                scene = new EndGamePage(endgame, players, window);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            window.setScene( scene);
+        });
 
     }
     public void victoryPointCalculator() {

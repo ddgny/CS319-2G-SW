@@ -118,6 +118,7 @@ public class Main extends Application {
             menu1.setTranslateY(20);
 
 
+
             // start game button
             btnStart = new MenuButton("Start a New Game");
             btnLoadGame = new MenuButton("Load Game");
