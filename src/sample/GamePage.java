@@ -1655,13 +1655,23 @@ public class GamePage extends Scene {
         if( players[playerNum].stats.coin < cost.coin)
             return false;
         Resource[] tmpPlayerResource;
-        tmpPlayerResource = new Resource[players[playerNum].resources.length];
+        tmpPlayerResource = new Resource[60];
         Resource tmpCostResource = new Resource( cost.resource);
         System.out.println("length" + players[playerNum].resources.length);
-        for( int k = 0; k < players[playerNum].resourceCount; k++)
+        int k;
+        for( k = 0; k < players[playerNum].resourceCount; k++)
             tmpPlayerResource[k] = new Resource( players[playerNum].resources[k]);
-
-        return recursiveCheck( tmpPlayerResource, new boolean[players[playerNum].resourceCount], tmpCostResource, 0);
+        for(int i = 0; i < players[playerNum].leftTradedResources.name.length; i++,k++) {
+            tmpPlayerResource[k] = new Resource( 1);
+            tmpPlayerResource[k].name[0] = players[playerNum].leftTradedResources.name[i];
+            tmpPlayerResource[k].quantity[0] = players[playerNum].leftTradedResources.quantity[i];
+        }
+        for(int i = 0; i < players[playerNum].rightTradedResources.name.length; i++,k++) {
+            tmpPlayerResource[k] = new Resource( 1);
+            tmpPlayerResource[k].name[0] = players[playerNum].rightTradedResources.name[i];
+            tmpPlayerResource[k].quantity[0] = players[playerNum].rightTradedResources.quantity[i];
+        }
+        return recursiveCheck( tmpPlayerResource, new boolean[players[playerNum].resourceCount + players[playerNum].rightTradedResources.quantity.length + players[playerNum].leftTradedResources.quantity.length], tmpCostResource, 0);
     }
     public void gainBenefit( int playerNum, boolean isWonderbuild, Property benefit, String buildingName, String buildingColor) throws Exception {
         // specialCard = # : 16= Babylon A, 17 = Babylon B, 18 = olympia A, 19 = olympia B1,    20 = olympiaB3, 21 = Halikarnassos
