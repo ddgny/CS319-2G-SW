@@ -1502,7 +1502,7 @@ public class GamePage extends Scene {
     public void endGame() {
 
     }
-    public void victoryPointCalculator(){
+    public void victoryPointCalculator() {
         int[] total = new int[4];
         for (int i = 0; i < 4; i++)
             total[i] = 0;
@@ -1549,37 +1549,37 @@ public class GamePage extends Scene {
         //workers guild special
         for (int i = 0; i < 4; i++) {
             if (players[i].specialCards[10]) {
-                endSpecialPurple[i] += players[(i + 1 % 4)].brownCards + players[(i + 3) % 4].brownCards;
+                endSpecialPurple[i] += players[(i + 1) % 4].brownCards + players[(i + 3) % 4].brownCards;
             }
         }
         //craftsmen guild special
         for (int i = 0; i < 4; i++) {
             if (players[i].specialCards[11]) {
-                endSpecialPurple[i] += (players[(i + 1 % 4)].greyCards) * 2 + (players[(i + 3) % 4].greyCards) * 2;
+                endSpecialPurple[i] += (players[(i + 1) % 4].greyCards) * 2 + (players[(i + 3) % 4].greyCards) * 2;
             }
         }
         //traders guild special
         for (int i = 0; i < 4; i++) {
             if (players[i].specialCards[12]) {
-                endSpecialPurple[i] += players[(i + 1 % 4)].yellowCards + players[(i + 3) % 4].yellowCards;
+                endSpecialPurple[i] += players[(i + 1) % 4].yellowCards + players[(i + 3) % 4].yellowCards;
             }
         }
         //philosophers guil special
         for (int i = 0; i < 4; i++) {
             if (players[i].specialCards[13]) {
-                endSpecialPurple[i] += players[(i + 1 % 4)].greenCards + players[(i + 3) % 4].greenCards;
+                endSpecialPurple[i] += players[(i + 1) % 4].greenCards + players[(i + 3) % 4].greenCards;
             }
         }
         //spies guild special
         for (int i = 0; i < 4; i++) {
             if (players[i].specialCards[14]) {
-                endSpecialPurple[i] += players[(i + 1 % 4)].redCards + players[(i + 3) % 4].redCards;
+                endSpecialPurple[i] += players[(i + 1) % 4].redCards + players[(i + 3) % 4].redCards;
             }
         }
         //magistrates guild special
         for (int i = 0; i < 4; i++) {
             if (players[i].specialCards[15]) {
-                endSpecialPurple[i] += players[(i + 1 % 4)].blueCards + players[(i + 3) % 4].blueCards;
+                endSpecialPurple[i] += players[(i + 1) % 4].blueCards + players[(i + 3) % 4].blueCards;
             }
         }
         //haven special
