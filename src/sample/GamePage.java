@@ -110,8 +110,8 @@ public class GamePage extends Scene {
             resources = new Resource[22];
             rightTradedResources = new Resource(0);
             leftTradedResources = new Resource(0);
-            specialCards = new boolean[22];
-            for(int i = 0; i < 22; i++) specialCards[i] = false;
+            specialCards = new boolean[23];
+            for(int i = 0; i < 23; i++) specialCards[i] = false;
         }
         void addResource( Resource add) {
             resources[resourceCount] = add;
@@ -1445,6 +1445,7 @@ public class GamePage extends Scene {
         int lastTurn = currentTurn;
         currentTurn++;
 
+        // end age
         if( currentTurn == 7) {
             currentTurn = 1;
             makeBattles(currentAge);
@@ -1458,6 +1459,10 @@ public class GamePage extends Scene {
                     cardsAtStake[noOfCardsAtStake] = cards[currentAge - 2][i];
                     noOfCardsAtStake++;
                 }
+            }
+            for( int i = 0; i < 4; i++) {
+                if ( players[i].specialCards[22])
+                    players[i].specialCards[18] = true;
             }
         }
         for(int i = ((lastTurn - 1) % 4) * 7; i <= ((lastTurn - 1) % 4) * 7 + 6; i++) sp.getChildren().remove(cards[lastAge - 1][i]);
@@ -1674,7 +1679,7 @@ public class GamePage extends Scene {
         return recursiveCheck( tmpPlayerResource, new boolean[players[playerNum].resourceCount + players[playerNum].rightTradedResources.quantity.length + players[playerNum].leftTradedResources.quantity.length], tmpCostResource, 0);
     }
     public void gainBenefit( int playerNum, boolean isWonderbuild, Property benefit, String buildingName, String buildingColor) throws Exception {
-        // specialCard = # : 16= Babylon A, 17 = Babylon B, 18 = olympia A, 19 = olympia B1,    20 = olympiaB3, 21 = Halikarnassos
+        // specialCard = # : 16= Babylon A, 17 = Babylon B, 18 = olympia A, 19 = olympia B1,    20 = olympiaB3, 21 = Halikarnassos, 22 = check of olympiaA
         if(isWonderbuild) {
             benefit = wb[playerNum].milestones[players[playerNum].milestoneDone].benefit;
             players[playerNum].milestoneDone++;
@@ -1837,6 +1842,7 @@ public class GamePage extends Scene {
         else if (benefit.specialCard == 8)  players[playerNum].stats.coin += players[playerNum].greyCards * 2;
         else if (benefit.specialCard == 9)  players[playerNum].stats.coin += players[playerNum].milestoneDone * 3;
         players[playerNum].specialCards[benefit.specialCard] = true;
+        if(benefit.specialCard == 18)  players[playerNum].specialCards[22] = true;
     }
     private void definingCards() throws Exception {
         Property a = new Property();
@@ -3473,7 +3479,7 @@ public class GamePage extends Scene {
     private enum CardAction { SELL, BURY, BUILD; }
     public class Card extends Pane {
         String name, color;
-        javafx.scene.control.Button sellButton,buryButton,buildButton;
+        Button sellButton,buryButton,buildButton,olympiaButton;
         Rectangle board;
         GamePage.Property cost, benefit;
         boolean isUsed;
@@ -3505,7 +3511,7 @@ public class GamePage extends Scene {
             if (this.isUsed)
                 return;
             board.setOpacity(0.65);
-            sellButton = new javafx.scene.control.Button("SELL");
+            sellButton = new Button("SELL");
             sellButton.setTranslateX(55);
             sellButton.setTranslateY(30);
             getChildren().add(sellButton);
@@ -3517,7 +3523,7 @@ public class GamePage extends Scene {
                 }
             });
 
-            buryButton = new javafx.scene.control.Button("UPGRADE WONDER");
+            buryButton = new Button("UPGRADE WONDER");
             buryButton.setTranslateX(10);
             buryButton.setTranslateY(70);
             getChildren().add(buryButton);
@@ -3541,6 +3547,31 @@ public class GamePage extends Scene {
                 }
             });
 
+            if( players[0].specialCards[18]) {
+                olympiaButton = new Button("BUILD FREE");
+                olympiaButton.setTranslateX(50);
+                olympiaButton.setTranslateY(150);
+                getChildren().add(olympiaButton);
+                olympiaButton.setOnMouseClicked(event -> {
+                    try {
+                        gainBenefit( 0, false, this.benefit, this.name, this.color);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        deleteCard();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        endTurn();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    players[0].specialCards[18] = false;
+                });
+            }
+
         /*
         sell = new Text("Sell");
         sell.setFill(Color.WHITESMOKE);
@@ -3560,6 +3591,7 @@ public class GamePage extends Scene {
             getChildren().remove(sellButton);
             getChildren().remove(buryButton);
             getChildren().remove(buildButton);
+            getChildren().remove(olympiaButton);
         }
         public void deleteCard() throws IOException {
             board.setOpacity(1);
