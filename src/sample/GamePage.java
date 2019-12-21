@@ -1897,104 +1897,104 @@ public class GamePage extends Scene {
     private void makeBattles(int age){
         if(age == 1) {
             if (players[0].stats.shield > players[1].stats.shield) {
-                players[0].stats.victoryPoint += 1;
-                players[1].stats.victoryPoint -= 1;
+                players[0].battlePoint += 1;
+                players[1].battlePoint -= 1;
             }
             if (players[0].stats.shield < players[1].stats.shield) {
-                players[0].stats.victoryPoint -= 1;
-                players[1].stats.victoryPoint += 1;
+                players[0].battlePoint -= 1;
+                players[1].battlePoint += 1;
             }
             if (players[0].stats.shield > players[3].stats.shield) {
-                players[0].stats.victoryPoint += 1;
-                players[3].stats.victoryPoint -= 1;
+                players[0].battlePoint += 1;
+                players[3].battlePoint -= 1;
             }
             if (players[0].stats.shield < players[3].stats.shield) {
-                players[0].stats.victoryPoint -= 1;
-                players[3].stats.victoryPoint += 1;
+                players[0].battlePoint -= 1;
+                players[3].battlePoint += 1;
             }
             if (players[1].stats.shield > players[2].stats.shield) {
-                players[1].stats.victoryPoint += 1;
-                players[2].stats.victoryPoint -= 1;
+                players[1].battlePoint += 1;
+                players[2].battlePoint -= 1;
             }
             if (players[1].stats.shield < players[2].stats.shield) {
-                players[1].stats.victoryPoint -= 1;
-                players[2].stats.victoryPoint += 1;
+                players[1].battlePoint -= 1;
+                players[2].battlePoint += 1;
             }
             if (players[2].stats.shield > players[3].stats.shield) {
-                players[2].stats.victoryPoint += 1;
-                players[3].stats.victoryPoint -= 1;
+                players[2].battlePoint += 1;
+                players[3].battlePoint -= 1;
             }
             if (players[2].stats.shield < players[3].stats.shield) {
-                players[2].stats.victoryPoint -= 1;
-                players[3].stats.victoryPoint += 1;
+                players[2].battlePoint -= 1;
+                players[3].battlePoint += 1;
             }
         }
         else if(age == 2){
             if (players[0].stats.shield > players[1].stats.shield) {
-                players[0].stats.victoryPoint += 3;
-                players[1].stats.victoryPoint -= 1;
+                players[0].battlePoint += 3;
+                players[1].battlePoint -= 1;
             }
             if (players[0].stats.shield < players[1].stats.shield) {
-                players[0].stats.victoryPoint -= 1;
-                players[1].stats.victoryPoint += 3;
+                players[0].battlePoint -= 1;
+                players[1].battlePoint += 3;
             }
             if (players[0].stats.shield > players[3].stats.shield) {
-                players[0].stats.victoryPoint += 3;
-                players[3].stats.victoryPoint -= 1;
+                players[0].battlePoint += 3;
+                players[3].battlePoint -= 1;
             }
             if (players[0].stats.shield < players[3].stats.shield) {
-                players[0].stats.victoryPoint -= 1;
-                players[3].stats.victoryPoint += 3;
+                players[0].battlePoint -= 1;
+                players[3].battlePoint += 3;
             }
             if (players[1].stats.shield > players[2].stats.shield) {
-                players[1].stats.victoryPoint += 3;
-                players[2].stats.victoryPoint -= 1;
+                players[1].battlePoint += 3;
+                players[2].battlePoint -= 1;
             }
             if (players[1].stats.shield < players[2].stats.shield) {
-                players[1].stats.victoryPoint -= 1;
-                players[2].stats.victoryPoint += 3;
+                players[1].battlePoint -= 1;
+                players[2].battlePoint += 3;
             }
             if (players[2].stats.shield > players[3].stats.shield) {
-                players[2].stats.victoryPoint += 3;
-                players[3].stats.victoryPoint -= 1;
+                players[2].battlePoint += 3;
+                players[3].battlePoint -= 1;
             }
             if (players[2].stats.shield < players[3].stats.shield) {
-                players[2].stats.victoryPoint -= 1;
-                players[3].stats.victoryPoint += 3;
+                players[2].battlePoint -= 1;
+                players[3].battlePoint += 3;
             }
         }
         else if(age == 3){
             if (players[0].stats.shield > players[1].stats.shield) {
-                players[0].stats.victoryPoint += 5;
-                players[1].stats.victoryPoint -= 1;
+                players[0].battlePoint += 5;
+                players[1].battlePoint -= 1;
             }
             if (players[0].stats.shield < players[1].stats.shield) {
-                players[0].stats.victoryPoint -= 1;
-                players[1].stats.victoryPoint += 5;
+                players[0].battlePoint -= 1;
+                players[1].battlePoint += 5;
             }
             if (players[0].stats.shield > players[3].stats.shield) {
-                players[0].stats.victoryPoint += 5;
-                players[3].stats.victoryPoint -= 1;
+                players[0].battlePoint += 5;
+                players[3].battlePoint -= 1;
             }
             if (players[0].stats.shield < players[3].stats.shield) {
-                players[0].stats.victoryPoint -= 1;
-                players[3].stats.victoryPoint += 5;
+                players[0].battlePoint -= 1;
+                players[3].battlePoint += 5;
             }
             if (players[1].stats.shield > players[2].stats.shield) {
-                players[1].stats.victoryPoint += 5;
-                players[2].stats.victoryPoint -= 1;
+                players[1].battlePoint += 5;
+                players[2].battlePoint -= 1;
             }
             if (players[1].stats.shield < players[2].stats.shield) {
-                players[1].stats.victoryPoint -= 1;
-                players[2].stats.victoryPoint += 5;
+                players[1].battlePoint -= 1;
+                players[2].battlePoint += 5;
             }
             if (players[2].stats.shield > players[3].stats.shield) {
-                players[2].stats.victoryPoint += 5;
-                players[3].stats.victoryPoint -= 1;
+                players[2].battlePoint += 5;
+                players[3].battlePoint -= 1;
             }
             if (players[2].stats.shield < players[3].stats.shield) {
-                players[2].stats.victoryPoint -= 1;
-                players[3].stats.victoryPoint += 5;
+                players[2].battlePoint -= 1;
+                players[3].battlePoint += 5;
             }
         }
 
@@ -2528,6 +2528,11 @@ public class GamePage extends Scene {
         b.resource.name[0] = "Lumber"; b.resource.quantity[0] = 2;
         cards[1][0] = new Card("sawmill","brown",a,b);
 //sawmill2
+        a = new Property();
+        a.coin = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Lumber"; b.resource.quantity[0] = 2;
         cards[1][1] = new Card("sawmill","brown",a,b);
 
 //quarry
@@ -2538,6 +2543,11 @@ public class GamePage extends Scene {
         b.resource.name[0] = "Stone"; b.resource.quantity[0] = 2;
         cards[1][2] = new Card("quarry","brown",a,b);
 //quarry2
+        a = new Property();
+        a.coin = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Stone"; b.resource.quantity[0] = 2;
         cards[1][3] = new Card("quarry","brown",a,b);
 
 //brickyard
@@ -2548,6 +2558,11 @@ public class GamePage extends Scene {
         b.resource.name[0] = "Clay"; b.resource.quantity[0] = 2;
         cards[1][4] = new Card("brickyard","brown",a,b);
 //brickyard2
+        a = new Property();
+        a.coin = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Clay"; b.resource.quantity[0] = 2;
         cards[1][5] = new Card("brickyard","brown",a,b);
 
 
@@ -2559,6 +2574,11 @@ public class GamePage extends Scene {
         b.resource.name[0] = "Ore"; b.resource.quantity[0] = 2;
         cards[1][6] = new Card("foundry","brown",a,b);
 //foundry2
+        a = new Property();
+        a.coin = 1;
+        b = new Property();
+        b.resource = new Resource(1);
+        b.resource.name[0] = "Ore"; b.resource.quantity[0] = 2;
         cards[1][7] = new Card("foundry","brown",a,b);
 
 
