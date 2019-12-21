@@ -2076,6 +2076,12 @@ public class GamePage extends Scene {
                 endGame();
                 return;
             }
+            for( int i = 0; i < 28; i++) {
+                if( !cards[currentAge - 2][i].isUsed) {
+                    cardsAtStake[noOfCardsAtStake] = cards[currentAge - 2][i];
+                    noOfCardsAtStake++;
+                }
+            }
         }
         for(int i = ((lastTurn - 1) % 4) * 7; i <= ((lastTurn - 1) % 4) * 7 + 6; i++) sp.getChildren().remove(cards[lastAge - 1][i]);
         for(int i = ((currentTurn - 1) % 4) * 7; i <= ((currentTurn - 1) % 4) * 7 + 6; i++) sp.getChildren().add(cards[currentAge - 1][i]);
