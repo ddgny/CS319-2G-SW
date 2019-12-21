@@ -157,6 +157,7 @@ public class GamePage extends Scene {
         super(sp, Main.primaryScreenBounds.getWidth(), Main.primaryScreenBounds.getHeight());
         mode = sMode;
         noOfCardsAtStake = 0;
+
         cardsAtStake = new Card[40];
         currentAge = currentTurn = 1;
         this.window = window;
@@ -1219,8 +1220,9 @@ public class GamePage extends Scene {
         distributeWonders( sp, side, name);
 
         sp.getChildren().addAll(wb);
-
-
+        if(mode!=0){
+            slidingText("Story Mode!!"+mode);
+        }
 
     }
     /**
