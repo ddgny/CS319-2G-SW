@@ -1469,12 +1469,55 @@ public class GamePage extends Scene {
         for(int i = ((currentTurn - 1) % 4) * 7; i <= ((currentTurn - 1) % 4) * 7 + 6; i++) sp.getChildren().add(cards[currentAge - 1][i]);
         for(int i = 0; i < 4; i++) { players[i].leftTradedResources = new Resource(0); players[i].rightTradedResources = new Resource( 0);}
         reDrawWonders();
+        if( currentTurn == 1) {
+            if (players[0].stats.shield == players[1].stats.shield) {
+                if (players[0].stats.shield == players[3].stats.shield)
+                    slidingText("Age "+ currentAge +" Ended!! \n "+players[0].name+" did two battles. \n"+"The battles was drawn!!");
+                else {
+                    if (players[0].stats.shield > players[3].stats.shield)
+                        slidingText("Age "+ currentAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[3].name + "\n But drawn the battle against " + players[1].name);
+                    else
+                        slidingText("Age "+ currentAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " lost the battle against " + players[3].name + "\n But drawn the battle against " + players[1].name);
+                }
+
+            }
+
+            if (players[0].stats.shield > players[1].stats.shield) {
+                if (players[0].stats.shield > players[3].stats.shield)
+                    slidingText("Age "+ currentAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won all the battles!!");
+                else if (players[0].stats.shield < players[3].stats.shield)
+                    slidingText("Age "+ currentAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[1].name + "\n But lost the battle against " + players[3].name);
+                else
+                    slidingText("Age "+ currentAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[1].name + "\n But drawn the battle against " + players[3].name);
+
+            }
+            if (players[0].stats.shield < players[1].stats.shield) {
+                if (players[0].stats.shield < players[3].stats.shield)
+                    slidingText("Age "+ currentAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " lost all the battles!!");
+                else if (players[0].stats.shield > players[3].stats.shield)
+                    slidingText("Age "+ currentAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[3].name + "\n But lost the battle against " + players[1].name);
+                else
+                    slidingText("Age "+ currentAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " lost the battle against " + players[1].name + "\n But drawn the battle against " + players[3].name);
+            }
+        }
+//            if( currentTurn == 2) {
+//                if(players[0].stats.shield == players[1].stats.shield){
+//                    if(players[0].stats.shield == players[3].stats.shield)
+//                        slidingText("In Age 2 \n The battles was drawn!!");
+//                    else{
+//                        if(players[0].stats.shield > players[3].stats.shield)
+//                            slidingText("In Age 2 \n "+ players[0].name +" won the battle against " +players[3].name+ "\n But drawn the battle against "+ players[1].name);
+//                        else
+//                            slidingText("In Age 2 \n "+ players[0].name +" lost the battle against " +players[3].name+ "\n But drawn the battle against "+ players[1].name);
+//                    }
+//
+//                }
 
     }
-    public void slidingText(String text){
+    public void slidingText(String text) throws Exception{
         final String content = text;
         final Text textArea = new Text(10, 20, "");
-        textArea.setWrappingWidth(350);
+        textArea.setWrappingWidth(550);
         textArea.maxHeight(500);
         textArea.setFill(Color.WHITESMOKE);
         textArea.setFont(Font.font("Verdana", FontWeight.THIN, 30));
@@ -1494,16 +1537,43 @@ public class GamePage extends Scene {
 
         animation.play();
 
-
-        Circle bg = new Circle(350);
-
-        bg.setOpacity(0.6);
-        bg.setFill(Color.BLACK);
+        Rectangle bg = new Rectangle(1250,680);
+        Rectangle bg2 = new Rectangle(1350,680);
+        bg2.setFill(Color.BLACK);
+        bg2.setEffect( new GaussianBlur(3.5));
+        bg2.setTranslateZ(100);
+        bg2.setOpacity(0.9);
+        InputStream ageWar = Files.newInputStream(Paths.get("images/AgeWar.png"));
+        Image img1 = new Image(ageWar);
+        bg.setOpacity(0.5);
+        bg.setFill(new ImagePattern(img1));
+        //bg.setFill(Color.BLACK);
         bg.setEffect( new GaussianBlur(3.5));
         bg.setTranslateZ(100);
         textArea.setTranslateZ(100);
-        sp.getChildren().addAll(bg, textArea);
+        InputStream continueImg = Files.newInputStream(Paths.get("images/icons8.png"));
+        Image img2 = new Image(continueImg);
+//        Button btnCont =new Button("Continue");
+//        btnCont.setTranslateX(0);
+//        btnCont.setTranslateY(0);
+        Rectangle contRec =new Rectangle(200,200);
+        contRec.setFill(new ImagePattern(img2));
+        contRec.setTranslateX(550);
+        contRec.setTranslateY(200);
+        contRec.setOnMouseClicked(event -> {
+            try {
+                sp.getChildren().removeAll(bg2,bg,textArea,contRec);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        });
+
+        sp.getChildren().addAll(bg2,bg, textArea,contRec);
+
     }
+
+
     public void endGame() {
 
     }
@@ -1545,7 +1615,7 @@ public class GamePage extends Scene {
                 int litSci = sciencePointCalculator(players[i].stats.mechanic, players[i].stats.literature + 1, players[i].stats.geometry);
                 int geoSci = sciencePointCalculator(players[i].stats.mechanic , players[i].stats.literature, players[i].stats.geometry + 1);
 
-                endScience[i] =  max( mecSci , max( litSci , geoSci));
+                //endScience[i] =  max( mecSci , max( litSci , geoSci));
             }
             else
                 endScience[i] = sciencePointCalculator(players[i].stats.mechanic, players[i].stats.literature, players[i].stats.geometry);
