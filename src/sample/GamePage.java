@@ -37,7 +37,7 @@ import javafx.stage.Stage;
 
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-
+import java.lang.Math;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
@@ -2082,6 +2082,105 @@ public class GamePage extends Scene {
         reDrawWonders();
     }
     public void endGame() {
+
+    }
+    public void victoryPointCalculator(){
+        int[] total = new int[4];
+        for(int i = 0 ; i < 4; i++)
+            total[i] = 0;
+
+        int[] endCoin = new int[4];
+        for(int i = 0 ; i < 4; i++)
+            endCoin[i] = 0;
+
+        int[] endScience = new int[4];
+        for(int i = 0 ; i < 4; i++)
+            endScience[i] = 0;
+
+        int[] endSpecialPurple = new int[4] ;
+        for(int i = 0; i < 4; i++)
+            endSpecialPurple[i] = 0;
+
+        int[] endSpecialYellow = new int[4];
+        for(int i = 0 ; i < 4; i++)
+            endSpecialYellow[i] = 0;
+
+        //point from coin
+        for( int i = 0; i < 4; i++ )
+            endCoin[i] = players[i].stats.coin / 3;
+
+        for( int i = 0; i < 4; i++ ) {
+            endScience[i] += players[i].stats.mechanic * players[i].stats.mechanic + players[i].stats.literature * players[i].stats.literature
+                    + players[i].stats.geometry * players[i].stats.geometry;
+            for(int j = 0; j < 5; j++){
+                if(players[i].stats.mechanic > j && players[i].stats.literature > j && players[i].stats.geometry > j) endScience[i] += 7;
+            }
+        }
+
+        //workers guild special
+        for(int i = 0 ; i < 4 ; i ++) {
+            if (players[i].specialCards[10]) {
+                endSpecialPurple[i] += players[(i + 1 % 4)].brownCards + players[(i + 3) % 4].brownCards;
+            }
+        }
+        //craftsmen guild special
+        for(int i = 0 ; i < 4 ; i ++) {
+            if (players[i].specialCards[11]) {
+                endSpecialPurple[i] += (players[(i + 1 % 4)].greyCards)*2 + (players[(i + 3) % 4].greyCards)*2;
+            }
+        }
+        //traders guild special
+        for(int i = 0 ; i < 4 ; i ++) {
+            if (players[i].specialCards[12]) {
+                endSpecialPurple[i] += players[(i + 1 % 4)].yellowCards + players[(i + 3) % 4].yellowCards;
+            }
+        }
+        //philosophers guil special
+        for(int i = 0 ; i < 4 ; i ++) {
+            if (players[i].specialCards[13]) {
+                endSpecialPurple[i] += players[(i + 1 % 4)].greenCards + players[(i + 3) % 4].greenCards;
+            }
+        }
+        //spies guild special
+        for(int i = 0 ; i < 4 ; i ++) {
+            if (players[i].specialCards[14]) {
+                endSpecialPurple[i] += players[(i + 1 % 4)].redCards + players[(i + 3) % 4].redCards;
+            }
+        }
+        //magistrates guild special
+        for(int i = 0 ; i < 4 ; i ++) {
+            if (players[i].specialCards[15]) {
+                endSpecialPurple[i] += players[(i + 1 % 4)].blueCards + players[(i + 3) % 4].blueCards;
+            }
+        }
+        //haven special
+        for(int i = 0 ; i < 4 ; i ++) {
+            if (players[i].specialCards[6]) {
+                endSpecialYellow[i] += players[i].brownCards;
+            }
+        }
+        //lighthouse special
+        for(int i = 0 ; i < 4 ; i ++) {
+            if (players[i].specialCards[7]) {
+                endSpecialYellow[i] += players[i].yellowCards;
+            }
+        }
+        //chamber of commerce special
+        for(int i = 0 ; i < 4 ; i ++) {
+            if (players[i].specialCards[8]) {
+                endSpecialYellow[i] += (players[i].greyCards)*2;
+            }
+        }
+        //arena special
+        for(int i = 0 ; i < 4 ; i ++) {
+            if (players[i].specialCards[9]) {
+                endSpecialYellow[i] += players[i].milestoneDone;
+            }
+        }
+        //total point
+        for(int i = 0; i < 4; i++)
+            total[i] = endCoin[i] + endScience[i] + endSpecialPurple[i] + endSpecialYellow[i] + players[0].stats.victoryPoint
+                    + players[i].battlePoint;
     }
     public boolean recursiveCheck( Resource[] playersResource, boolean[] pr, Resource costsResource, int cr) {
         System.out.println("pr.length: " + pr.length);
