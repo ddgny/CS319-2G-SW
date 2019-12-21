@@ -49,6 +49,7 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.*;
 
+import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class GamePage extends Scene {
@@ -1470,34 +1471,35 @@ public class GamePage extends Scene {
         for(int i = 0; i < 4; i++) { players[i].leftTradedResources = new Resource(0); players[i].rightTradedResources = new Resource( 0);}
         reDrawWonders();
         if( currentTurn == 1) {
+            int endAge=currentAge-1;
             if (players[0].stats.shield == players[1].stats.shield) {
                 if (players[0].stats.shield == players[3].stats.shield)
-                    slidingText("Age "+ currentAge +" Ended!! \n "+players[0].name+" did two battles. \n"+"The battles was drawn!!");
+                    slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n"+"The battles was drawn!!");
                 else {
                     if (players[0].stats.shield > players[3].stats.shield)
-                        slidingText("Age "+ currentAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[3].name + "\n But drawn the battle against " + players[1].name);
+                        slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[3].name + "\n But drawn the battle against " + players[1].name);
                     else
-                        slidingText("Age "+ currentAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " lost the battle against " + players[3].name + "\n But drawn the battle against " + players[1].name);
+                        slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " lost the battle against " + players[3].name + "\n But drawn the battle against " + players[1].name);
                 }
 
             }
 
             if (players[0].stats.shield > players[1].stats.shield) {
                 if (players[0].stats.shield > players[3].stats.shield)
-                    slidingText("Age "+ currentAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won all the battles!!");
+                    slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won all the battles!!");
                 else if (players[0].stats.shield < players[3].stats.shield)
-                    slidingText("Age "+ currentAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[1].name + "\n But lost the battle against " + players[3].name);
+                    slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[1].name + "\n But lost the battle against " + players[3].name);
                 else
-                    slidingText("Age "+ currentAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[1].name + "\n But drawn the battle against " + players[3].name);
+                    slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[1].name + "\n But drawn the battle against " + players[3].name);
 
             }
             if (players[0].stats.shield < players[1].stats.shield) {
                 if (players[0].stats.shield < players[3].stats.shield)
-                    slidingText("Age "+ currentAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " lost all the battles!!");
+                    slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " lost all the battles!!");
                 else if (players[0].stats.shield > players[3].stats.shield)
-                    slidingText("Age "+ currentAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[3].name + "\n But lost the battle against " + players[1].name);
+                    slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[3].name + "\n But lost the battle against " + players[1].name);
                 else
-                    slidingText("Age "+ currentAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " lost the battle against " + players[1].name + "\n But drawn the battle against " + players[3].name);
+                    slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " lost the battle against " + players[1].name + "\n But drawn the battle against " + players[3].name);
             }
         }
 //            if( currentTurn == 2) {
@@ -1615,7 +1617,7 @@ public class GamePage extends Scene {
                 int litSci = sciencePointCalculator(players[i].stats.mechanic, players[i].stats.literature + 1, players[i].stats.geometry);
                 int geoSci = sciencePointCalculator(players[i].stats.mechanic , players[i].stats.literature, players[i].stats.geometry + 1);
 
-                //endScience[i] =  max( mecSci , max( litSci , geoSci));
+                endScience[i] =  max( mecSci , max( litSci , geoSci));
             }
             else
                 endScience[i] = sciencePointCalculator(players[i].stats.mechanic, players[i].stats.literature, players[i].stats.geometry);
