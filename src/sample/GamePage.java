@@ -1631,7 +1631,7 @@ public class GamePage extends Scene {
 
         for (int i = 0; i < 4; i++) {
             if(players[i].specialCards[16]){
-                int mec = 0; int lit = 0; int geo = 0;
+                
                 int mecSci = sciencePointCalculator(players[i].stats.mechanic + 1 , players[i].stats.literature, players[i].stats.geometry);
                 int litSci = sciencePointCalculator(players[i].stats.mechanic, players[i].stats.literature + 1, players[i].stats.geometry);
                 int geoSci = sciencePointCalculator(players[i].stats.mechanic , players[i].stats.literature, players[i].stats.geometry + 1);
@@ -1711,9 +1711,9 @@ public class GamePage extends Scene {
     }
     public int sciencePointCalculator(int a, int b, int c){
         int m = 0;
-        for( int i = 0; i < 4; i++ ) {
-            m += a * a + b * b + c* c;
-        }
+        
+        m += a * a + b * b + c* c;
+        
         int l = min( a, min(b, c));
         m += 7 * l;
         return m;
