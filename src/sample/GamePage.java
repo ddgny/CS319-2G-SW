@@ -3162,28 +3162,29 @@ public class GamePage extends Scene {
         Milestone[] milestones;
         VBox coinVB, shieldVB, battleVB, vicPointVB, literatureVB, mechanicVB, geometryVB;
         HBox greenHB, redHB, yellowHB, greyHB, brownHB, blueHB, resourcesHB;
-        public WonderBoard( StackPane sp, int wNumber, String side, String playerName, int pN) throws Exception{
-            Property a,b;
+        public WonderBoard( StackPane sp, int wNumber, String side, String playerName, int pN) throws Exception {
+            Property a, b;
             String wName;
             wonderNum = wNumber;
             setMaxSize(400, 250);
             milestones = new Milestone[3];
             pNum = pN;
-            bg = new Background( new BackgroundFill(Color.rgb(0,0,0,0.6), CornerRadii.EMPTY, Insets.EMPTY));
-            Rectangle board = new Rectangle(400,250);
+            bg = new Background(new BackgroundFill(Color.rgb(0, 0, 0, 0.6), CornerRadii.EMPTY, Insets.EMPTY));
+            Rectangle board = new Rectangle(400, 250);
             board.setArcHeight(15);
             board.setArcWidth(15);
             getChildren().add(board);
             Text sideText = new Text(playerName);
             sideText.setFill(Color.WHITESMOKE);
-            sideText.setFont(Font.font("Kalam", FontWeight.BOLD,15));
+            sideText.setFont(Font.font("Kalam", FontWeight.BOLD, 15));
             sideText.setTranslateX(10);
             sideText.setTranslateY(20);
             getChildren().add(sideText);
 
+
             // wNumber is 1=Rhodos, 2=Alexandria, 3=Ephesos, 4=Babylon, 5=Olympia, 6=Halikarnassos, 7=Gizah
             // specialCard = # : 16= Babylon A, 17 = Babylon B, 18 = olympia A, 19 = olympia B1,    20 = olympiaB3, 21 = Halikarnassos
-            if( wNumber == 1) {
+            if (wNumber == 1) {
                 InputStream is = Files.newInputStream(Paths.get("images/setname.jpg"));
                 Image img = new Image(is);
                 is.close();
@@ -3191,45 +3192,55 @@ public class GamePage extends Scene {
                 wName = "rhodos";
                 Text sideText2 = new Text("Rhodos - (" + side + ")");
                 sideText2.setFill(Color.WHITESMOKE);
-                sideText2.setFont(Font.font("Kalam", FontWeight.BOLD,15));
+                sideText2.setFont(Font.font("Kalam", FontWeight.BOLD, 15));
                 sideText2.setTranslateX(300);
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
-                if(side.equals("A")) {
+                if (side.equals("A")) {
                     milestones = new Milestone[3];
                     a = new Property();
                     b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Lumber";  a.resource.quantity[0] = 2;
+                    a.resource.name[0] = "Lumber";
+                    a.resource.quantity[0] = 2;
                     b.victoryPoint = 3;
-                    milestones[0] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    milestones[0] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Clay";    a.resource.quantity[0] = 3;
+                    a.resource.name[0] = "Clay";
+                    a.resource.quantity[0] = 3;
                     b.shield = 2;
-                    milestones[1] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    milestones[1] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Ore";  a.resource.quantity[0] = 4;
+                    a.resource.name[0] = "Ore";
+                    a.resource.quantity[0] = 4;
                     b.victoryPoint = 7;
-                    milestones[2] = new Milestone(a,b);
-                }
-                else {
+                    milestones[2] = new Milestone(a, b);
+                } else {
                     milestones = new Milestone[2];
                     a = new Property();
                     b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 3;
-                    b.victoryPoint = 3; b.coin = 3; b.shield = 1;
-                    milestones[0] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    a.resource.name[0] = "Stone";
+                    a.resource.quantity[0] = 3;
+                    b.victoryPoint = 3;
+                    b.coin = 3;
+                    b.shield = 1;
+                    milestones[0] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Ore";    a.resource.quantity[0] = 4;
-                    b.shield = 1;   b.victoryPoint = 4; b.coin = 4;
-                    milestones[1] = new Milestone(a,b);
+                    a.resource.name[0] = "Ore";
+                    a.resource.quantity[0] = 4;
+                    b.shield = 1;
+                    b.victoryPoint = 4;
+                    b.coin = 4;
+                    milestones[1] = new Milestone(a, b);
                 }
-            }
-            else if( wNumber == 2) {
+            } else if (wNumber == 2) {
                 InputStream is = Files.newInputStream(Paths.get("images/alexandria.jpg"));
                 Image img = new Image(is);
                 is.close();
@@ -3237,61 +3248,80 @@ public class GamePage extends Scene {
                 wName = "alexandria";
                 Text sideText2 = new Text("Alexandria - (" + side + ")");
                 sideText2.setFill(Color.WHITESMOKE);
-                sideText2.setFont(Font.font("Kalam", FontWeight.BOLD,15));
+                sideText2.setFont(Font.font("Kalam", FontWeight.BOLD, 15));
                 sideText2.setTranslateX(280);
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
-                if(side.equals("A")) {
+                if (side.equals("A")) {
                     milestones = new Milestone[3];
                     a = new Property();
                     b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 2;
+                    a.resource.name[0] = "Stone";
+                    a.resource.quantity[0] = 2;
                     b.victoryPoint = 3;
-                    milestones[0] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    milestones[0] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Ore";    a.resource.quantity[0] = 2;
+                    a.resource.name[0] = "Ore";
+                    a.resource.quantity[0] = 2;
                     b.resource = new Resource(4);
-                    b.resource.name[0] = "Lumber";  b.resource.quantity[0] = 1;
-                    b.resource.name[1] = "Ore";  b.resource.quantity[1] = 1;
-                    b.resource.name[2] = "Stone";  b.resource.quantity[2] = 1;
-                    b.resource.name[3] = "Clay";  b.resource.quantity[3] = 1;
-                    milestones[1] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    b.resource.name[0] = "Lumber";
+                    b.resource.quantity[0] = 1;
+                    b.resource.name[1] = "Ore";
+                    b.resource.quantity[1] = 1;
+                    b.resource.name[2] = "Stone";
+                    b.resource.quantity[2] = 1;
+                    b.resource.name[3] = "Clay";
+                    b.resource.quantity[3] = 1;
+                    milestones[1] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Glass";  a.resource.quantity[0] = 2;
+                    a.resource.name[0] = "Glass";
+                    a.resource.quantity[0] = 2;
                     b.victoryPoint = 7;
-                    milestones[2] = new Milestone(a,b);
-                }
-                else {
+                    milestones[2] = new Milestone(a, b);
+                } else {
                     milestones = new Milestone[3];
                     a = new Property();
                     b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Clay";  a.resource.quantity[0] = 2;
+                    a.resource.name[0] = "Clay";
+                    a.resource.quantity[0] = 2;
                     b.resource = new Resource(4);
-                    b.resource.name[0] = "Lumber";  b.resource.quantity[0] = 1;
-                    b.resource.name[1] = "Ore";  b.resource.quantity[1] = 1;
-                    b.resource.name[2] = "Stone";  b.resource.quantity[2] = 1;
-                    b.resource.name[3] = "Clay";  b.resource.quantity[3] = 1;
-                    milestones[0] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    b.resource.name[0] = "Lumber";
+                    b.resource.quantity[0] = 1;
+                    b.resource.name[1] = "Ore";
+                    b.resource.quantity[1] = 1;
+                    b.resource.name[2] = "Stone";
+                    b.resource.quantity[2] = 1;
+                    b.resource.name[3] = "Clay";
+                    b.resource.quantity[3] = 1;
+                    milestones[0] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Lumber";    a.resource.quantity[0] = 2;
+                    a.resource.name[0] = "Lumber";
+                    a.resource.quantity[0] = 2;
                     b.resource = new Resource(3);
-                    b.resource.name[0] = "Glass";  b.resource.quantity[0] = 1;
-                    b.resource.name[1] = "Textile";  b.resource.quantity[1] = 1;
-                    b.resource.name[2] = "Paper";  b.resource.quantity[2] = 1;
-                    milestones[1] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    b.resource.name[0] = "Glass";
+                    b.resource.quantity[0] = 1;
+                    b.resource.name[1] = "Textile";
+                    b.resource.quantity[1] = 1;
+                    b.resource.name[2] = "Paper";
+                    b.resource.quantity[2] = 1;
+                    milestones[1] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 3;
+                    a.resource.name[0] = "Stone";
+                    a.resource.quantity[0] = 3;
                     b.victoryPoint = 7;
-                    milestones[2] = new Milestone(a,b);
+                    milestones[2] = new Milestone(a, b);
                 }
-            }
-            else if( wNumber == 3) {
+            } else if (wNumber == 3) {
                 InputStream is = Files.newInputStream(Paths.get("images/gamepage.jpg"));
                 Image img = new Image(is);
                 is.close();
@@ -3299,53 +3329,66 @@ public class GamePage extends Scene {
                 wName = "ephesos";
                 Text sideText2 = new Text("Ephesos - (" + side + ")");
                 sideText2.setFill(Color.WHITESMOKE);
-                sideText2.setFont(Font.font("Kalam", FontWeight.BOLD,15));
+                sideText2.setFont(Font.font("Kalam", FontWeight.BOLD, 15));
                 sideText2.setTranslateX(290);
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
-                if(side.equals("A")) {
+                if (side.equals("A")) {
                     milestones = new Milestone[3];
                     a = new Property();
                     b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 2;
+                    a.resource.name[0] = "Stone";
+                    a.resource.quantity[0] = 2;
                     b.victoryPoint = 3;
-                    milestones[0] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    milestones[0] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Lumber";    a.resource.quantity[0] = 2;
+                    a.resource.name[0] = "Lumber";
+                    a.resource.quantity[0] = 2;
                     b.resource = new Resource(4);
                     b.coin = 9;
-                    milestones[1] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    milestones[1] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Paper";  a.resource.quantity[0] = 2;
+                    a.resource.name[0] = "Paper";
+                    a.resource.quantity[0] = 2;
                     b.victoryPoint = 7;
-                    milestones[2] = new Milestone(a,b);
-                }
-                else {
+                    milestones[2] = new Milestone(a, b);
+                } else {
                     milestones = new Milestone[3];
                     a = new Property();
                     b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 2;
-                    b.victoryPoint = 2; b.coin = 4;
-                    milestones[0] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    a.resource.name[0] = "Stone";
+                    a.resource.quantity[0] = 2;
+                    b.victoryPoint = 2;
+                    b.coin = 4;
+                    milestones[0] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Lumber";    a.resource.quantity[0] = 2;
-                    b.victoryPoint = 3; b.coin= 4;
-                    milestones[1] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    a.resource.name[0] = "Lumber";
+                    a.resource.quantity[0] = 2;
+                    b.victoryPoint = 3;
+                    b.coin = 4;
+                    milestones[1] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(3);
-                    a.resource.name[0] = "Paper";  a.resource.quantity[0] = 1;
-                    a.resource.name[1] = "Glass";  a.resource.quantity[1] = 1;
-                    a.resource.name[2] = "Textile";  a.resource.quantity[2] = 1;
-                    b.victoryPoint = 5; b.coin = 4;
-                    milestones[2] = new Milestone(a,b);
+                    a.resource.name[0] = "Paper";
+                    a.resource.quantity[0] = 1;
+                    a.resource.name[1] = "Glass";
+                    a.resource.quantity[1] = 1;
+                    a.resource.name[2] = "Textile";
+                    a.resource.quantity[2] = 1;
+                    b.victoryPoint = 5;
+                    b.coin = 4;
+                    milestones[2] = new Milestone(a, b);
                 }
-            }
-            else if( wNumber == 4) {
+            } else if (wNumber == 4) {
                 InputStream is = Files.newInputStream(Paths.get("images/babylon.jpg"));
                 Image img = new Image(is);
                 is.close();
@@ -3353,53 +3396,64 @@ public class GamePage extends Scene {
                 wName = "babylon";
                 Text sideText2 = new Text("Babylon - (" + side + ")");
                 sideText2.setFill(Color.WHITESMOKE);
-                sideText2.setFont(Font.font("Kalam", FontWeight.BOLD,15));
+                sideText2.setFont(Font.font("Kalam", FontWeight.BOLD, 15));
                 sideText2.setTranslateX(290);
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
-                if(side.equals("A")) {
+                if (side.equals("A")) {
                     milestones = new Milestone[3];
                     a = new Property();
                     b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Clay";  a.resource.quantity[0] = 2;
+                    a.resource.name[0] = "Clay";
+                    a.resource.quantity[0] = 2;
                     b.victoryPoint = 3;
-                    milestones[0] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    milestones[0] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Lumber";    a.resource.quantity[0] = 3;
+                    a.resource.name[0] = "Lumber";
+                    a.resource.quantity[0] = 3;
                     b.specialCard = 16;
-                    milestones[1] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    milestones[1] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Clay";  a.resource.quantity[0] = 4;
+                    a.resource.name[0] = "Clay";
+                    a.resource.quantity[0] = 4;
                     b.victoryPoint = 7;
-                    milestones[2] = new Milestone(a,b);
-                }
-                else {
+                    milestones[2] = new Milestone(a, b);
+                } else {
                     milestones = new Milestone[3];
                     a = new Property();
                     b = new Property();
                     a.resource = new Resource(2);
-                    a.resource.name[0] = "Textile";  a.resource.quantity[0] = 1;
-                    a.resource.name[1] = "Clay";  a.resource.quantity[1] = 1;
+                    a.resource.name[0] = "Textile";
+                    a.resource.quantity[0] = 1;
+                    a.resource.name[1] = "Clay";
+                    a.resource.quantity[1] = 1;
                     b.victoryPoint = 3;
-                    milestones[0] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    milestones[0] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(2);
-                    a.resource.name[0] = "Lumber";    a.resource.quantity[0] = 2;
-                    a.resource.name[1] = "Glass";    a.resource.quantity[1] = 1;
+                    a.resource.name[0] = "Lumber";
+                    a.resource.quantity[0] = 2;
+                    a.resource.name[1] = "Glass";
+                    a.resource.quantity[1] = 1;
                     b.specialCard = 17;
-                    milestones[1] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    milestones[1] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(2);
-                    a.resource.name[0] = "Clay";  a.resource.quantity[0] = 3;
-                    a.resource.name[1] = "Paper";  a.resource.quantity[1] = 1;
+                    a.resource.name[0] = "Clay";
+                    a.resource.quantity[0] = 3;
+                    a.resource.name[1] = "Paper";
+                    a.resource.quantity[1] = 1;
                     b.specialCard = 16;
-                    milestones[2] = new Milestone(a,b);
+                    milestones[2] = new Milestone(a, b);
                 }
-            }
-            else if( wNumber == 5) {
+            } else if (wNumber == 5) {
                 InputStream is = Files.newInputStream(Paths.get("images/olympia.jpg"));
                 Image img = new Image(is);
                 is.close();
@@ -3407,51 +3461,60 @@ public class GamePage extends Scene {
                 wName = "olympia";
                 Text sideText2 = new Text("Olympia - (" + side + ")");
                 sideText2.setFill(Color.WHITESMOKE);
-                sideText2.setFont(Font.font("Kalam", FontWeight.BOLD,15));
+                sideText2.setFont(Font.font("Kalam", FontWeight.BOLD, 15));
                 sideText2.setTranslateX(290);
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
-                if(side.equals("A")) {
+                if (side.equals("A")) {
                     milestones = new Milestone[3];
                     a = new Property();
                     b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Lumber";  a.resource.quantity[0] = 2;
+                    a.resource.name[0] = "Lumber";
+                    a.resource.quantity[0] = 2;
                     b.victoryPoint = 3;
-                    milestones[0] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    milestones[0] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Stone";    a.resource.quantity[0] = 2;
+                    a.resource.name[0] = "Stone";
+                    a.resource.quantity[0] = 2;
                     b.specialCard = 18;
-                    milestones[1] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    milestones[1] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Ore";  a.resource.quantity[0] = 2;
+                    a.resource.name[0] = "Ore";
+                    a.resource.quantity[0] = 2;
                     b.victoryPoint = 7;
-                    milestones[2] = new Milestone(a,b);
-                }
-                else {
+                    milestones[2] = new Milestone(a, b);
+                } else {
                     milestones = new Milestone[3];
                     a = new Property();
                     b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Lumber";  a.resource.quantity[0] = 2;
+                    a.resource.name[0] = "Lumber";
+                    a.resource.quantity[0] = 2;
                     b.specialCard = 19;
-                    milestones[0] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    milestones[0] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Stone";    a.resource.quantity[0] = 2;
+                    a.resource.name[0] = "Stone";
+                    a.resource.quantity[0] = 2;
                     b.victoryPoint = 5;
-                    milestones[1] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    milestones[1] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(2);
-                    a.resource.name[0] = "Ore";  a.resource.quantity[0] = 2;
-                    a.resource.name[1] = "Textile";  a.resource.quantity[1] = 1;
+                    a.resource.name[0] = "Ore";
+                    a.resource.quantity[0] = 2;
+                    a.resource.name[1] = "Textile";
+                    a.resource.quantity[1] = 1;
                     b.specialCard = 20;
-                    milestones[2] = new Milestone(a,b);
+                    milestones[2] = new Milestone(a, b);
                 }
-            }
-            else if( wNumber == 6) {
+            } else if (wNumber == 6) {
                 InputStream is = Files.newInputStream(Paths.get("images/halikarnassos.jpg"));
                 Image img = new Image(is);
                 is.close();
@@ -3459,52 +3522,64 @@ public class GamePage extends Scene {
                 wName = "halikarnassus";
                 Text sideText2 = new Text("Halikarnassos - (" + side + ")");
                 sideText2.setFill(Color.WHITESMOKE);
-                sideText2.setFont(Font.font("Kalam", FontWeight.BOLD,15));
+                sideText2.setFont(Font.font("Kalam", FontWeight.BOLD, 15));
                 sideText2.setTranslateX(250);
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
-                if(side.equals("A")) {
+                if (side.equals("A")) {
                     milestones = new Milestone[3];
                     a = new Property();
                     b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Clay";  a.resource.quantity[0] = 2;
+                    a.resource.name[0] = "Clay";
+                    a.resource.quantity[0] = 2;
                     b.victoryPoint = 3;
-                    milestones[0] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    milestones[0] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Ore";    a.resource.quantity[0] = 3;
+                    a.resource.name[0] = "Ore";
+                    a.resource.quantity[0] = 3;
                     b.specialCard = 21;
-                    milestones[1] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    milestones[1] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Textile";  a.resource.quantity[0] = 2;
+                    a.resource.name[0] = "Textile";
+                    a.resource.quantity[0] = 2;
                     b.victoryPoint = 7;
-                    milestones[2] = new Milestone(a,b);
-                }
-                else {
+                    milestones[2] = new Milestone(a, b);
+                } else {
                     milestones = new Milestone[3];
                     a = new Property();
                     b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Ore";  a.resource.quantity[0] = 2;
-                    b.specialCard = 21; b.victoryPoint = 2;
-                    milestones[0] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
-                    a.resource = new Resource(1);
-                    a.resource.name[0] = "Clay";    a.resource.quantity[0] = 3;
-                    b.specialCard = 21; b.victoryPoint = 1;
-                    milestones[1] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
-                    a.resource = new Resource(3);
-                    a.resource.name[0] = "Glass";  a.resource.quantity[0] = 1;
-                    a.resource.name[1] = "Textile";  a.resource.quantity[1] = 1;
-                    a.resource.name[2] = "Paper";  a.resource.quantity[2] = 1;
+                    a.resource.name[0] = "Ore";
+                    a.resource.quantity[0] = 2;
                     b.specialCard = 21;
-                    milestones[2] = new Milestone(a,b);
+                    b.victoryPoint = 2;
+                    milestones[0] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(1);
+                    a.resource.name[0] = "Clay";
+                    a.resource.quantity[0] = 3;
+                    b.specialCard = 21;
+                    b.victoryPoint = 1;
+                    milestones[1] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
+                    a.resource = new Resource(3);
+                    a.resource.name[0] = "Glass";
+                    a.resource.quantity[0] = 1;
+                    a.resource.name[1] = "Textile";
+                    a.resource.quantity[1] = 1;
+                    a.resource.name[2] = "Paper";
+                    a.resource.quantity[2] = 1;
+                    b.specialCard = 21;
+                    milestones[2] = new Milestone(a, b);
                 }
-            }
-            else {
+            } else {
                 InputStream is = Files.newInputStream(Paths.get("images/gizeh.jpg"));
                 Image img = new Image(is);
                 is.close();
@@ -3512,65 +3587,77 @@ public class GamePage extends Scene {
                 wName = "gizah";
                 Text sideText2 = new Text("Gizeh - (" + side + ")");
                 sideText2.setFill(Color.WHITESMOKE);
-                sideText2.setFont(Font.font("Kalam", FontWeight.BOLD,15));
+                sideText2.setFont(Font.font("Kalam", FontWeight.BOLD, 15));
                 sideText2.setTranslateX(300);
                 sideText2.setTranslateY(20);
                 getChildren().addAll(sideText2);
-                if(side.equals("A")) {
+                if (side.equals("A")) {
                     milestones = new Milestone[3];
                     a = new Property();
                     b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 2;
+                    a.resource.name[0] = "Stone";
+                    a.resource.quantity[0] = 2;
                     b.victoryPoint = 3;
-                    milestones[0] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    milestones[0] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Lumber";    a.resource.quantity[0] = 3;
+                    a.resource.name[0] = "Lumber";
+                    a.resource.quantity[0] = 3;
                     b.victoryPoint = 5;
-                    milestones[1] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    milestones[1] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 4;
+                    a.resource.name[0] = "Stone";
+                    a.resource.quantity[0] = 4;
                     b.victoryPoint = 7;
-                    milestones[2] = new Milestone(a,b);
-                }
-                else {
+                    milestones[2] = new Milestone(a, b);
+                } else {
                     milestones = new Milestone[4];
                     a = new Property();
                     b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Lumber";  a.resource.quantity[0] = 2;
+                    a.resource.name[0] = "Lumber";
+                    a.resource.quantity[0] = 2;
                     b.victoryPoint = 3;
-                    milestones[0] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    milestones[0] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Stone";    a.resource.quantity[0] = 3;
+                    a.resource.name[0] = "Stone";
+                    a.resource.quantity[0] = 3;
                     b.victoryPoint = 5;
-                    milestones[1] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    milestones[1] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(1);
-                    a.resource.name[0] = "Clay";  a.resource.quantity[0] = 3;
+                    a.resource.name[0] = "Clay";
+                    a.resource.quantity[0] = 3;
                     b.victoryPoint = 5;
-                    milestones[2] = new Milestone(a,b);
-                    a = new Property(); b = new Property();
+                    milestones[2] = new Milestone(a, b);
+                    a = new Property();
+                    b = new Property();
                     a.resource = new Resource(2);
-                    a.resource.name[0] = "Stone";  a.resource.quantity[0] = 4;
-                    a.resource.name[1] = "Paper";  a.resource.quantity[1] = 1;
+                    a.resource.name[0] = "Stone";
+                    a.resource.quantity[0] = 4;
+                    a.resource.name[1] = "Paper";
+                    a.resource.quantity[1] = 1;
                     b.victoryPoint = 7;
-                    milestones[2] = new Milestone(a,b);
+                    milestones[2] = new Milestone(a, b);
                 }
             }
             // milestones part
             HBox milestoneHB = new HBox(25);
             milestoneHB.setBackground(bg);
-            for( int i = 1; i <= milestones.length; i++) {
+            for (int i = 1; i <= milestones.length; i++) {
                 InputStream is = Files.newInputStream(Paths.get("images/Wonderpng/" + wName + side + i + ".png"));
                 Image img = new Image(is);
                 is.close();
                 ImageView imgView = new ImageView(img);
                 imgView.setFitHeight(40);
-                if( milestones.length == 4)
+                if (milestones.length == 4)
                     imgView.setFitWidth(75);
                 else
                     imgView.setFitWidth(110);
@@ -3588,7 +3675,7 @@ public class GamePage extends Scene {
             imgView.setFitWidth(35);
             coinText = new Text(players[pNum].stats.coin + "");
             coinText.setFill(Color.WHITESMOKE);
-            coinText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+            coinText.setFont(Font.font("Kalam", FontPosture.ITALIC, 20));
             coinText.setTranslateX(5);
             coinVB = new VBox(imgView, coinText);
             coinVB.setBackground(bg);
@@ -3604,7 +3691,7 @@ public class GamePage extends Scene {
             imgView.setFitWidth(35);
             shieldText = new Text(players[pNum].stats.shield + "");
             shieldText.setFill(Color.WHITESMOKE);
-            shieldText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+            shieldText.setFont(Font.font("Kalam", FontPosture.ITALIC, 20));
             shieldText.setTranslateX(5);
             shieldVB = new VBox(imgView, shieldText);
             shieldVB.setBackground(bg);
@@ -3620,7 +3707,7 @@ public class GamePage extends Scene {
             imgView.setFitWidth(35);
             battleText = new Text(players[pNum].battlePoint + "");
             battleText.setFill(Color.WHITESMOKE);
-            battleText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+            battleText.setFont(Font.font("Kalam", FontPosture.ITALIC, 20));
             battleText.setTranslateX(5);
             battleVB = new VBox(imgView, battleText);
             battleVB.setBackground(bg);
@@ -3636,7 +3723,7 @@ public class GamePage extends Scene {
             imgView.setFitWidth(35);
             vicPointText = new Text(players[pNum].stats.victoryPoint + "");
             vicPointText.setFill(Color.WHITESMOKE);
-            vicPointText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+            vicPointText.setFont(Font.font("Kalam", FontPosture.ITALIC, 20));
             vicPointText.setTranslateX(5);
             vicPointVB = new VBox(imgView, vicPointText);
             vicPointVB.setBackground(bg);
@@ -3652,7 +3739,7 @@ public class GamePage extends Scene {
             imgView.setFitWidth(35);
             literatureText = new Text(players[pNum].stats.literature + "");
             literatureText.setFill(Color.WHITESMOKE);
-            literatureText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+            literatureText.setFont(Font.font("Kalam", FontPosture.ITALIC, 20));
             literatureText.setTranslateX(5);
             literatureVB = new VBox(imgView, literatureText);
             literatureVB.setBackground(bg);
@@ -3668,7 +3755,7 @@ public class GamePage extends Scene {
             imgView.setFitWidth(35);
             mechanicText = new Text(players[pNum].stats.mechanic + "");
             mechanicText.setFill(Color.WHITESMOKE);
-            mechanicText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+            mechanicText.setFont(Font.font("Kalam", FontPosture.ITALIC, 20));
             mechanicText.setTranslateX(5);
             mechanicVB = new VBox(imgView, mechanicText);
             mechanicVB.setBackground(bg);
@@ -3684,7 +3771,7 @@ public class GamePage extends Scene {
             imgView.setFitWidth(35);
             geometryText = new Text(players[pNum].stats.geometry + "");
             geometryText.setFill(Color.WHITESMOKE);
-            geometryText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+            geometryText.setFont(Font.font("Kalam", FontPosture.ITALIC, 20));
             geometryText.setTranslateX(5);
             geometryVB = new VBox(imgView, geometryText);
             geometryVB.setBackground(bg);
@@ -3696,107 +3783,107 @@ public class GamePage extends Scene {
             // Used Cards parts
 
             // Green Cards
-            Rectangle card = new Rectangle( 15,20, Color.GREEN);
+            Rectangle card = new Rectangle(15, 20, Color.GREEN);
             card.setArcWidth(5);
             card.setArcHeight(5);
             card.setTranslateX(5);
             card.setTranslateY(5);
             greenText = new Text(players[pNum].greenCards + "");
             greenText.setFill(Color.WHITESMOKE);
-            greenText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+            greenText.setFont(Font.font("Kalam", FontPosture.ITALIC, 20));
             greenText.setTranslateX(10);
             greenHB = new HBox(card, greenText);
             greenHB.setBackground(bg);
             greenHB.setTranslateY(30);
             greenHB.setTranslateX(355);
-            greenHB.setPrefSize(40,20);
+            greenHB.setPrefSize(40, 20);
 
             // red Cards
-            card = new Rectangle( 15,20, Color.RED);
+            card = new Rectangle(15, 20, Color.RED);
             card.setArcWidth(5);
             card.setArcHeight(5);
             card.setTranslateX(5);
             card.setTranslateY(5);
             redText = new Text(players[pNum].redCards + "");
             redText.setFill(Color.WHITESMOKE);
-            redText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+            redText.setFont(Font.font("Kalam", FontPosture.ITALIC, 20));
             redText.setTranslateX(10);
             redHB = new HBox(card, redText);
             redHB.setBackground(bg);
             redHB.setTranslateY(60);
             redHB.setTranslateX(355);
-            redHB.setPrefSize(40,20);
+            redHB.setPrefSize(40, 20);
 
             // yellow Cards
-            card = new Rectangle( 15,20, Color.YELLOW);
+            card = new Rectangle(15, 20, Color.YELLOW);
             card.setArcWidth(5);
             card.setArcHeight(5);
             card.setTranslateX(5);
             card.setTranslateY(5);
             yellowText = new Text(players[pNum].yellowCards + "");
             yellowText.setFill(Color.WHITESMOKE);
-            yellowText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+            yellowText.setFont(Font.font("Kalam", FontPosture.ITALIC, 20));
             yellowText.setTranslateX(10);
             yellowHB = new HBox(card, yellowText);
             yellowHB.setBackground(bg);
             yellowHB.setTranslateY(90);
             yellowHB.setTranslateX(355);
-            yellowHB.setPrefSize(40,20);
+            yellowHB.setPrefSize(40, 20);
 
             // grey Cards
-            card = new Rectangle( 15,20, Color.GREY);
+            card = new Rectangle(15, 20, Color.GREY);
             card.setArcWidth(5);
             card.setArcHeight(5);
             card.setTranslateX(5);
             card.setTranslateY(5);
             greyText = new Text(players[pNum].greyCards + "");
             greyText.setFill(Color.WHITESMOKE);
-            greyText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+            greyText.setFont(Font.font("Kalam", FontPosture.ITALIC, 20));
             greyText.setTranslateX(10);
             greyHB = new HBox(card, greyText);
             greyHB.setBackground(bg);
             greyHB.setTranslateY(120);
             greyHB.setTranslateX(355);
-            greyHB.setPrefSize(40,20);
+            greyHB.setPrefSize(40, 20);
 
             // brown Cards
-            card = new Rectangle( 15,20, Color.BROWN);
+            card = new Rectangle(15, 20, Color.BROWN);
             card.setArcWidth(5);
             card.setArcHeight(5);
             card.setTranslateX(5);
             card.setTranslateY(5);
             brownText = new Text(players[pNum].brownCards + "");
             brownText.setFill(Color.WHITESMOKE);
-            brownText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+            brownText.setFont(Font.font("Kalam", FontPosture.ITALIC, 20));
             brownText.setTranslateX(10);
             brownHB = new HBox(card, brownText);
             brownHB.setBackground(bg);
             brownHB.setTranslateY(150);
             brownHB.setTranslateX(355);
-            brownHB.setPrefSize(40,20);
+            brownHB.setPrefSize(40, 20);
 
             // blue Cards
-            card = new Rectangle( 15,20, Color.BLUE);
+            card = new Rectangle(15, 20, Color.BLUE);
             card.setArcWidth(5);
             card.setArcHeight(5);
             card.setTranslateX(5);
             card.setTranslateY(5);
             blueText = new Text(players[pNum].blueCards + "");
             blueText.setFill(Color.WHITESMOKE);
-            blueText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
+            blueText.setFont(Font.font("Kalam", FontPosture.ITALIC, 20));
             blueText.setTranslateX(10);
             blueHB = new HBox(card, blueText);
             blueHB.setBackground(bg);
             blueHB.setTranslateY(180);
             blueHB.setTranslateX(355);
-            blueHB.setPrefSize(40,20);
+            blueHB.setPrefSize(40, 20);
 
             getChildren().addAll(greenHB, redHB, yellowHB, greyHB, brownHB, blueHB, milestoneHB);
 
             // Resource Part
-            resourcesHB = new HBox( 5);
-            for(int i = 0; i < players[pNum].resourceCount; i++) {
-                for(int k = 0; k < players[pNum].resources[i].quantity[0]; k++) {
+            resourcesHB = new HBox(5);
+            for (int i = 0; i < players[pNum].resourceCount; i++) {
+                for (int k = 0; k < players[pNum].resources[i].quantity[0]; k++) {
                     VBox vb = new VBox();
                     vb.setBackground(bg);
                     for (int j = 0; j < players[pNum].resources[i].quantity.length; j++) {
@@ -3815,9 +3902,9 @@ public class GamePage extends Scene {
             resourcesHB.setTranslateX(5);
 
             // special cards part
-            HBox specialHB = new HBox( 5);
-            for(int i = 1; i < 16; i++) {
-                if(players[pNum].specialCards[i] && i != 4 && i != 5){
+            HBox specialHB = new HBox(5);
+            for (int i = 1; i < 16; i++) {
+                if (players[pNum].specialCards[i] && i != 4 && i != 5) {
                     VBox vb = new VBox();
                     vb.setBackground(bg);
                     is = Files.newInputStream(Paths.get("images/cardskill/" + i + ".png"));
@@ -3832,7 +3919,28 @@ public class GamePage extends Scene {
             }
             specialHB.setTranslateY(160);
             specialHB.setTranslateX(5);
-            getChildren().addAll(resourcesHB,specialHB);
+            getChildren().addAll(resourcesHB, specialHB);
+            InputStream is5 = Files.newInputStream(Paths.get("images/tick.png"));
+            Image img5 = new Image(is5);
+            is5.close();
+
+            HBox milestoneTick = new HBox();
+            milestoneTick.setTranslateX(40);
+            milestoneTick.setTranslateY(210);
+            if(milestones.length < 4) {
+                milestoneTick.setSpacing(100);
+            }
+            if(milestones.length == 4) {
+                milestoneTick.setSpacing(63);
+                milestoneTick.setTranslateX(32);
+            }
+            for (int i = 0; i < players[pNum].milestoneDone; i++) {
+                ImageView imgTick = new ImageView(img5);
+                imgTick.setFitHeight(37);
+                imgTick.setFitWidth(37);
+                milestoneTick.getChildren().add(imgTick);
+            }
+            getChildren().add(milestoneTick);
         }
     }
     public class Milestone extends Pane {
