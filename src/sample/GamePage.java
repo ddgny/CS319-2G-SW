@@ -1,9 +1,12 @@
 package sample;
 
+import javafx.animation.Animation;
+import javafx.animation.Transition;
 import javafx.collections.FXCollections;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -28,10 +31,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.*;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 
@@ -2080,6 +2081,40 @@ public class GamePage extends Scene {
         for(int i = ((lastTurn - 1) % 4) * 7; i <= ((lastTurn - 1) % 4) * 7 + 6; i++) sp.getChildren().remove(cards[lastAge - 1][i]);
         for(int i = ((currentTurn - 1) % 4) * 7; i <= ((currentTurn - 1) % 4) * 7 + 6; i++) sp.getChildren().add(cards[currentAge - 1][i]);
         reDrawWonders();
+
+    }
+    public void slidingText(String text){
+        final String content = text;
+        final Text textArea = new Text(10, 20, "");
+        textArea.setWrappingWidth(350);
+        textArea.maxHeight(500);
+        textArea.setFill(Color.WHITESMOKE);
+        textArea.setFont(Font.font("Verdana", FontWeight.THIN, 30));
+        textArea.setTextAlignment(TextAlignment.CENTER);
+        final Animation animation = new Transition() {
+            {
+                setCycleDuration(Duration.millis(8000));
+            }
+
+            protected void interpolate(double frac) {
+                final int length = content.length();
+                final int n = Math.round(length * (float) frac);
+                textArea.setText(content.substring(0, n));
+            }
+
+        };
+
+        animation.play();
+
+
+        Circle bg = new Circle(350);
+
+        bg.setOpacity(0.6);
+        bg.setFill(Color.BLACK);
+        bg.setEffect( new GaussianBlur(3.5));
+        bg.setTranslateZ(100);
+        textArea.setTranslateZ(100);
+        sp.getChildren().addAll(bg, textArea);
     }
     public void endGame() {
     }
