@@ -1522,6 +1522,10 @@ public class GamePage extends Scene {
         int[] endSpecialYellow = new int[4];
         for(int i = 0 ; i < 4; i++)
             endSpecialYellow[i] = 0;
+        
+        int[] endSpecial = new int[4];
+        for(int i = 0 ; i < 4; i++)
+            endSpecial[i] = 0;
 
         //point from coin
         for( int i = 0; i < 4; i++ )
@@ -1595,6 +1599,8 @@ public class GamePage extends Scene {
                 endSpecialYellow[i] += players[i].milestoneDone;
             }
         }
+        for(int i = 0 ; i < 4; i++)
+            endSpecial[i] += endSpecialPurple[i] + endSpecialYellow[i];
         //total point
         for(int i = 0; i < 4; i++)
             total[i] = endCoin[i] + endScience[i] + endSpecialPurple[i] + endSpecialYellow[i] + players[0].stats.victoryPoint
