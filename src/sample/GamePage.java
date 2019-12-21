@@ -1,9 +1,12 @@
 package sample;
 
+import javafx.animation.Animation;
+import javafx.animation.Transition;
 import javafx.collections.FXCollections;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -28,10 +31,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.*;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 
@@ -95,6 +96,7 @@ public class GamePage extends Scene {
         int battlePoint, greenCards, redCards, yellowCards, greyCards, purpleCards, brownCards, blueCards, milestoneDone;
         String[] buildings;
         Resource[] resources;
+        Resource leftTradedResources, rightTradedResources;
         int resourceCount, buildingsCount;
         boolean[] specialCards;
         Property stats;
@@ -106,6 +108,8 @@ public class GamePage extends Scene {
             battlePoint = greenCards = redCards = yellowCards = greyCards = purpleCards = brownCards = blueCards = milestoneDone = buildingsCount = resourceCount = 0;
             buildings = new String[22];
             resources = new Resource[22];
+            rightTradedResources = new Resource(0);
+            leftTradedResources = new Resource(0);
             specialCards = new boolean[22];
             for(int i = 0; i < 22; i++) specialCards[i] = false;
         }
@@ -594,46 +598,15 @@ public class GamePage extends Scene {
 
         comboBoxTradeButton.setOnMouseClicked(event -> {
             String choice = ((Text)comboHbox.getValue().getChildren().get(0)).getText();
-
-            if (choice.equals("Ore"))
-            {
-                System.out.println(choice);
-                //trade choice
-            }
-            if (choice.equals("Clay"))
-            {
-                System.out.println(choice);
-                //trade choice
-            }
-            if (choice.equals("Lumber"))
-            {
-                System.out.println(choice);
-                //trade choice
-            }
-            if (choice.equals("Stone"))
-            {
-                System.out.println(choice);
-                //trade choice
-            }
-            if (choice.equals("Glass"))
-            {
-                System.out.println(choice);
-                //trade choice
-            }
-            if (choice.equals("Paper"))
-            {
-                System.out.println(choice);
-                //trade choice
-            }
-            if (choice.equals("Textile"))
-            {
-                System.out.println(choice);
-                //trade choice
+            try {
+                makeTrade( 0, 3, choice);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
         comboBoxTradeButton.setDisable(true);
 
-        int worth=2;
+
         //adding trade gold image
         goldValue = new Text( "for 2");
         goldValue.setFill(Color.WHITESMOKE);
@@ -1126,609 +1099,14 @@ public class GamePage extends Scene {
 
         comboBoxTradeButtonRight.setOnMouseClicked(event -> {
             String choice = ((Text)comboHboxRight.getValue().getChildren().get(0)).getText();
-
-            if (choice.equals("Ore"))
-            {
-                System.out.println(choice);
-                //trade choice
-            }
-            if (choice.equals("Clay"))
-            {
-                System.out.println(choice);
-                //trade choice
-            }
-            if (choice.equals("Lumber"))
-            {
-                System.out.println(choice);
-                //trade choice
-            }
-            if (choice.equals("Stone"))
-            {
-                System.out.println(choice);
-                //trade choice
-            }
-            if (choice.equals("Glass"))
-            {
-                System.out.println(choice);
-                //trade choice
-            }
-            if (choice.equals("Paper"))
-            {
-                System.out.println(choice);
-                //trade choice
-            }
-            if (choice.equals("Textile"))
-            {
-                System.out.println(choice);
-                //trade choice
+            try {
+                makeTrade(0, 1, choice);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
         comboBoxTradeButtonRight.setDisable(true);
         sp.getChildren().addAll(comboBoxTradeButtonRight,comboHboxRight);
-
-
-
-
-        // TESTING FOR TRADE
-        is = Files.newInputStream(Paths.get("images/coins.png"));
-        img = new Image(is);
-        is.close();
-        ImageView imgCoin = new ImageView(img);
-        imgCoin.setFitHeight(35);
-        imgCoin.setFitWidth(35);
-        imgCoin.setTranslateX(20);
-
-        is = Files.newInputStream(Paths.get("images/Lumber.png"));
-        img = new Image(is);
-        is.close();
-        ImageView imgLumber = new ImageView(img);
-        imgLumber.setFitHeight(35);
-        imgLumber.setFitWidth(35);
-        imgLumber.setTranslateX(10);
-
-        is = Files.newInputStream(Paths.get("images/ore.png"));
-        img = new Image(is);
-        is.close();
-        ImageView imgOre = new ImageView(img);
-        imgOre.setFitHeight(35);
-        imgOre.setFitWidth(35);
-        imgOre.setTranslateX(10);
-
-        is = Files.newInputStream(Paths.get("images/Clay.png"));
-        img = new Image(is);
-        is.close();
-        ImageView imgClay = new ImageView(img);
-        imgClay.setFitHeight(35);
-        imgClay.setFitWidth(35);
-        imgClay.setTranslateX(10);
-
-        is = Files.newInputStream(Paths.get("images/Paper.png"));
-        img = new Image(is);
-        is.close();
-        ImageView imgPaper = new ImageView(img);
-        imgPaper.setFitHeight(35);
-        imgPaper.setFitWidth(35);
-        imgPaper.setTranslateX(10);
-
-        is = Files.newInputStream(Paths.get("images/Glass.png"));
-        img = new Image(is);
-        is.close();
-        ImageView imgGlass = new ImageView(img);
-        imgGlass.setFitHeight(35);
-        imgGlass.setFitWidth(35);
-        imgGlass.setTranslateX(10);
-
-        is = Files.newInputStream(Paths.get("images/Textile.png"));
-        img = new Image(is);
-        is.close();
-        ImageView imgTextile = new ImageView(img);
-        imgTextile.setFitHeight(35);
-        imgTextile.setFitWidth(35);
-        imgTextile.setTranslateX(10);
-
-        is = Files.newInputStream(Paths.get("images/Stone.png"));
-        img = new Image(is);
-        is.close();
-        ImageView imgStone  = new ImageView(img);
-        imgStone.setFitHeight(35);
-        imgStone.setFitWidth(35);
-        imgStone.setTranslateX(10);
-
-        Text ForText;
-        ForText = new Text("For 2 ");
-        ForText.setFill(Color.WHITESMOKE);
-        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
-        ForText.setTranslateX(15);
-
-
-
-        Button tradeLumberLeft = new Button("Trade");
-        tradeLumberLeft.setTranslateX(5);
-        tradeLumberLeft.setOnMouseClicked(event -> {
-            System.out.println("tradeLumberLeft");
-            players[0].stats.coin = players[0].stats.coin - 2;
-            players[3].stats.coin = players[3].stats.coin + 2;
-            try {
-                reDrawWonders();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-
-        Button tradeClayLeft = new Button("Trade");
-        tradeClayLeft.setTranslateX(5);
-        tradeClayLeft.setOnMouseClicked(event -> {
-            System.out.println("tradeClayLeft");
-            players[0].stats.coin = players[0].stats.coin - 2;
-            players[3].stats.coin = players[3].stats.coin + 2;
-
-            try {
-                reDrawWonders();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        Button tradeOreLeft = new Button("Trade");
-        tradeOreLeft.setTranslateX(5);
-        tradeOreLeft.setOnMouseClicked(event -> {
-            System.out.println("tradeOreLeft");
-            players[0].stats.coin = players[0].stats.coin - 2;
-            players[3].stats.coin = players[3].stats.coin + 2;
-
-            try {
-                reDrawWonders();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        Button tradeStoneLeft = new Button("Trade");
-        tradeStoneLeft.setTranslateX(5);
-        tradeStoneLeft.setOnMouseClicked(event -> {
-            System.out.println("tradeStoneLeft");
-            players[0].stats.coin = players[0].stats.coin - 2;
-            players[3].stats.coin = players[3].stats.coin + 2;
-
-            try {
-                reDrawWonders();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-
-        Button tradeGlassLeft = new Button("Trade");
-        tradeGlassLeft.setTranslateX(5);
-        tradeGlassLeft.setOnMouseClicked(event -> {
-            System.out.println("tradeGlassLeft");
-            players[0].stats.coin = players[0].stats.coin - 2;
-            players[3].stats.coin = players[3].stats.coin + 2;
-
-            try {
-                reDrawWonders();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        Button tradePaperLeft = new Button("Trade");
-        tradePaperLeft.setTranslateX(5);
-        tradePaperLeft.setOnMouseClicked(event -> {
-            System.out.println("tradePaperLeft");
-            players[0].stats.coin = players[0].stats.coin - 2;
-            players[3].stats.coin = players[3].stats.coin + 2;
-
-            try {
-                reDrawWonders();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        Button tradeTextileLeft = new Button("Trade");
-        tradeTextileLeft.setTranslateX(5);
-        tradeTextileLeft.setOnMouseClicked(event -> {
-            System.out.println("tradeTextileLeft");
-            players[0].stats.coin = players[0].stats.coin - 2;
-            players[3].stats.coin = players[3].stats.coin + 2;
-
-            try {
-                reDrawWonders();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        HBox tradeLumberHBLeft,tradeClayHBLeft,tradeStoneHBLeft,tradeOreHBLeft,tradeGlassHBLeft,tradePaperHBLeft,tradeTextileHBLeft;
-
-        is = Files.newInputStream(Paths.get("images/coins.png"));
-        img = new Image(is);
-        is.close();
-        imgCoin = new ImageView(img);
-        imgCoin.setFitHeight(35);
-        imgCoin.setFitWidth(35);
-        imgCoin.setTranslateX(20);
-        ForText = new Text("For 2 ");
-        ForText.setFill(Color.WHITESMOKE);
-        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
-        ForText.setTranslateX(15);
-        tradeLumberHBLeft = new HBox(tradeLumberLeft,imgLumber,ForText,imgCoin);
-        tradeLumberHBLeft.setTranslateY(270);
-        tradeLumberHBLeft.setTranslateX(60);
-        tradeLumberHBLeft.setPrefSize(60,60);
-
-
-        is = Files.newInputStream(Paths.get("images/coins.png"));
-        img = new Image(is);
-        is.close();
-        imgCoin = new ImageView(img);
-        imgCoin.setFitHeight(35);
-        imgCoin.setFitWidth(35);
-        imgCoin.setTranslateX(20);
-        ForText = new Text("For 2 ");
-        ForText.setFill(Color.WHITESMOKE);
-        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
-        ForText.setTranslateX(15);
-        tradeClayHBLeft = new HBox(tradeClayLeft,imgClay,ForText,imgCoin);
-        tradeClayHBLeft.setTranslateY(300);
-        tradeClayHBLeft.setTranslateX(60);
-        tradeClayHBLeft.setPrefSize(60,60);
-
-        is = Files.newInputStream(Paths.get("images/coins.png"));
-        img = new Image(is);
-        is.close();
-        imgCoin = new ImageView(img);
-        imgCoin.setFitHeight(35);
-        imgCoin.setFitWidth(35);
-        imgCoin.setTranslateX(20);
-        ForText = new Text("For 2 ");
-        ForText.setFill(Color.WHITESMOKE);
-        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
-        ForText.setTranslateX(15);
-        tradeOreHBLeft = new HBox(tradeOreLeft,imgOre,ForText,imgCoin);
-        tradeOreHBLeft.setTranslateY(330);
-        tradeOreHBLeft.setTranslateX(60);
-        tradeOreHBLeft.setPrefSize(60,60);
-
-        is = Files.newInputStream(Paths.get("images/coins.png"));
-        img = new Image(is);
-        is.close();
-        imgCoin = new ImageView(img);
-        imgCoin.setFitHeight(35);
-        imgCoin.setFitWidth(35);
-        imgCoin.setTranslateX(20);
-        ForText = new Text("For 2 ");
-        ForText.setFill(Color.WHITESMOKE);
-        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
-        ForText.setTranslateX(15);
-        tradeStoneHBLeft = new HBox(tradeStoneLeft,imgStone,ForText,imgCoin);
-        tradeStoneHBLeft.setTranslateY(360);
-        tradeStoneHBLeft.setTranslateX(60);
-        tradeStoneHBLeft.setPrefSize(60,60);
-
-        is = Files.newInputStream(Paths.get("images/coins.png"));
-        img = new Image(is);
-        is.close();
-        imgCoin = new ImageView(img);
-        imgCoin.setFitHeight(35);
-        imgCoin.setFitWidth(35);
-        imgCoin.setTranslateX(20);
-        ForText = new Text("For 2 ");
-        ForText.setFill(Color.WHITESMOKE);
-        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
-        ForText.setTranslateX(15);
-        tradeGlassHBLeft = new HBox(tradeGlassLeft,imgGlass,ForText,imgCoin);
-        tradeGlassHBLeft.setTranslateY(390);
-        tradeGlassHBLeft.setTranslateX(60);
-        tradeGlassHBLeft.setPrefSize(60,60);
-
-        is = Files.newInputStream(Paths.get("images/coins.png"));
-        img = new Image(is);
-        is.close();
-        imgCoin = new ImageView(img);
-        imgCoin.setFitHeight(35);
-        imgCoin.setFitWidth(35);
-        imgCoin.setTranslateX(20);
-        ForText = new Text("For 2 ");
-        ForText.setFill(Color.WHITESMOKE);
-        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
-        ForText.setTranslateX(15);
-        tradePaperHBLeft = new HBox(tradePaperLeft,imgPaper,ForText,imgCoin);
-        tradePaperHBLeft.setTranslateY(420);
-        tradePaperHBLeft.setTranslateX(60);
-        tradePaperHBLeft.setPrefSize(60,60);
-
-        is = Files.newInputStream(Paths.get("images/coins.png"));
-        img = new Image(is);
-        is.close();
-        imgCoin = new ImageView(img);
-        imgCoin.setFitHeight(35);
-        imgCoin.setFitWidth(35);
-        imgCoin.setTranslateX(20);
-        ForText = new Text("For 2 ");
-        ForText.setFill(Color.WHITESMOKE);
-        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
-        ForText.setTranslateX(15);
-        tradeTextileHBLeft = new HBox(tradeTextileLeft,imgTextile,ForText,imgCoin);
-        tradeTextileHBLeft.setTranslateY(450);
-        tradeTextileHBLeft.setTranslateX(60);
-        tradeTextileHBLeft.setPrefSize(60,60);
-
-
-
-        sp.getChildren().addAll(tradeLumberHBLeft,tradeClayHBLeft,tradeOreHBLeft,tradeStoneHBLeft,tradeGlassHBLeft,tradePaperHBLeft,tradeTextileHBLeft);
-        // TESTING FOR TRADE
-
-        is = Files.newInputStream(Paths.get("images/coins.png"));
-        img = new Image(is);
-        is.close();
-        imgCoin = new ImageView(img);
-        imgCoin.setFitHeight(35);
-        imgCoin.setFitWidth(35);
-        imgCoin.setTranslateX(20);
-
-        is = Files.newInputStream(Paths.get("images/Lumber.png"));
-        img = new Image(is);
-        is.close();
-        imgLumber = new ImageView(img);
-        imgLumber.setFitHeight(35);
-        imgLumber.setFitWidth(35);
-        imgLumber.setTranslateX(10);
-
-        is = Files.newInputStream(Paths.get("images/ore.png"));
-        img = new Image(is);
-        is.close();
-        imgOre = new ImageView(img);
-        imgOre.setFitHeight(35);
-        imgOre.setFitWidth(35);
-        imgOre.setTranslateX(10);
-
-        is = Files.newInputStream(Paths.get("images/Clay.png"));
-        img = new Image(is);
-        is.close();
-        imgClay = new ImageView(img);
-        imgClay.setFitHeight(35);
-        imgClay.setFitWidth(35);
-        imgClay.setTranslateX(10);
-
-        is = Files.newInputStream(Paths.get("images/Paper.png"));
-        img = new Image(is);
-        is.close();
-        imgPaper = new ImageView(img);
-        imgPaper.setFitHeight(35);
-        imgPaper.setFitWidth(35);
-        imgPaper.setTranslateX(10);
-
-        is = Files.newInputStream(Paths.get("images/Glass.png"));
-        img = new Image(is);
-        is.close();
-        imgGlass = new ImageView(img);
-        imgGlass.setFitHeight(35);
-        imgGlass.setFitWidth(35);
-        imgGlass.setTranslateX(10);
-
-        is = Files.newInputStream(Paths.get("images/Textile.png"));
-        img = new Image(is);
-        is.close();
-        imgTextile = new ImageView(img);
-        imgTextile.setFitHeight(35);
-        imgTextile.setFitWidth(35);
-        imgTextile.setTranslateX(10);
-
-        is = Files.newInputStream(Paths.get("images/Stone.png"));
-        img = new Image(is);
-        is.close();
-        imgStone  = new ImageView(img);
-        imgStone.setFitHeight(35);
-        imgStone.setFitWidth(35);
-        imgStone.setTranslateX(10);
-
-        Button tradeLumberRight = new Button("Trade");
-        tradeLumberRight.setTranslateX(5);
-        tradeLumberRight.setOnMouseClicked(event -> {
-            players[0].stats.coin = players[0].stats.coin - 2;
-            players[1].stats.coin = players[1].stats.coin + 2;
-
-            try {
-                reDrawWonders();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            System.out.println("tradeLumberRight");
-        });
-
-        Button tradeClayRight = new Button("Trade");
-        tradeClayRight.setTranslateX(5);
-        tradeClayRight.setOnMouseClicked(event -> {
-            players[0].stats.coin = players[0].stats.coin - 2;
-            players[1].stats.coin = players[1].stats.coin + 2;
-
-            try {
-                reDrawWonders();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            System.out.println("tradeClayRight");
-        });
-        Button tradeOreRight = new Button("Trade");
-        tradeOreRight.setTranslateX(5);
-        tradeOreRight.setOnMouseClicked(event -> {
-            players[0].stats.coin = players[0].stats.coin - 2;
-            players[1].stats.coin = players[1].stats.coin + 2;
-
-            try {
-                reDrawWonders();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            System.out.println("tradeOreRight");
-        });
-        Button tradeStoneRight = new Button("Trade");
-        tradeStoneRight.setTranslateX(5);
-        tradeStoneRight.setOnMouseClicked(event -> {
-            players[0].stats.coin = players[0].stats.coin - 2;
-            players[1].stats.coin = players[1].stats.coin + 2;
-
-            try {
-                reDrawWonders();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            System.out.println("tradeStoneRight");
-        });
-
-        Button tradeGlassRight = new Button("Trade");
-        tradeGlassRight.setTranslateX(5);
-        tradeGlassRight.setOnMouseClicked(event -> {
-            players[0].stats.coin = players[0].stats.coin - 2;
-            players[1].stats.coin = players[1].stats.coin + 2;
-
-            try {
-                reDrawWonders();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            System.out.println("tradeGlassRight");
-        });
-        Button tradePaperRight = new Button("Trade");
-        tradePaperRight.setTranslateX(5);
-        tradePaperRight.setOnMouseClicked(event -> {
-            players[0].stats.coin = players[0].stats.coin - 2;
-            players[1].stats.coin = players[1].stats.coin + 2;
-
-            try {
-                reDrawWonders();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            System.out.println("tradePaperRight");
-        });
-        Button tradeTextileRight = new Button("Trade");
-        tradeTextileRight.setTranslateX(5);
-        tradeTextileRight.setOnMouseClicked(event -> {
-            players[0].stats.coin = players[0].stats.coin - 2;
-            players[1].stats.coin = players[1].stats.coin + 2;
-
-            try {
-                reDrawWonders();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            System.out.println("tradeTextileRight");
-        });
-        HBox tradeLumberHBRight,tradeClayHBRight,tradeStoneHBRight,tradeOreHBRight,tradeGlassHBRight,tradePaperHBRight,tradeTextileHBRight;
-
-        is = Files.newInputStream(Paths.get("images/coins.png"));
-        img = new Image(is);
-        is.close();
-        imgCoin = new ImageView(img);
-        imgCoin.setFitHeight(35);
-        imgCoin.setFitWidth(35);
-        imgCoin.setTranslateX(20);
-        ForText = new Text("For 2 ");
-        ForText.setFill(Color.WHITESMOKE);
-        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
-        ForText.setTranslateX(15);
-        tradeLumberHBRight = new HBox(tradeLumberRight,imgLumber,ForText,imgCoin);
-        tradeLumberHBRight.setTranslateY(270);
-        tradeLumberHBRight.setTranslateX(1650);
-        tradeLumberHBRight.setPrefSize(60,60);
-
-
-        is = Files.newInputStream(Paths.get("images/coins.png"));
-        img = new Image(is);
-        is.close();
-        imgCoin = new ImageView(img);
-        imgCoin.setFitHeight(35);
-        imgCoin.setFitWidth(35);
-        imgCoin.setTranslateX(20);
-        ForText = new Text("For 2 ");
-        ForText.setFill(Color.WHITESMOKE);
-        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
-        ForText.setTranslateX(15);
-        tradeClayHBRight = new HBox(tradeClayRight,imgClay,ForText,imgCoin);
-        tradeClayHBRight.setTranslateY(300);
-        tradeClayHBRight.setTranslateX(1650);
-        tradeClayHBRight.setPrefSize(60,60);
-
-        is = Files.newInputStream(Paths.get("images/coins.png"));
-        img = new Image(is);
-        is.close();
-        imgCoin = new ImageView(img);
-        imgCoin.setFitHeight(35);
-        imgCoin.setFitWidth(35);
-        imgCoin.setTranslateX(20);
-        ForText = new Text("For 2 ");
-        ForText.setFill(Color.WHITESMOKE);
-        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
-        ForText.setTranslateX(15);
-        tradeOreHBRight = new HBox(tradeOreRight,imgOre,ForText,imgCoin);
-        tradeOreHBRight.setTranslateY(360);
-        tradeOreHBRight.setTranslateX(1650);
-        tradeOreHBRight.setPrefSize(60,60);
-
-        is = Files.newInputStream(Paths.get("images/coins.png"));
-        img = new Image(is);
-        is.close();
-        imgCoin = new ImageView(img);
-        imgCoin.setFitHeight(35);
-        imgCoin.setFitWidth(35);
-        imgCoin.setTranslateX(20);
-        ForText = new Text("For 2 ");
-        ForText.setFill(Color.WHITESMOKE);
-        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
-        ForText.setTranslateX(15);
-        tradeStoneHBRight = new HBox(tradeStoneRight,imgStone,ForText,imgCoin);
-        tradeStoneHBRight.setTranslateY(330);
-        tradeStoneHBRight.setTranslateX(1650);
-        tradeStoneHBRight.setPrefSize(40,40);
-
-        is = Files.newInputStream(Paths.get("images/coins.png"));
-        img = new Image(is);
-        is.close();
-        imgCoin = new ImageView(img);
-        imgCoin.setFitHeight(35);
-        imgCoin.setFitWidth(35);
-        imgCoin.setTranslateX(20);
-        ForText = new Text("For 2 ");
-        ForText.setFill(Color.BLACK);
-        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
-        ForText.setTranslateX(15);
-        tradeGlassHBRight = new HBox(tradeGlassRight,imgGlass,ForText,imgCoin);
-        tradeGlassHBRight.setTranslateY(390);
-        tradeGlassHBRight.setTranslateX(1650);
-        tradeGlassHBRight.setPrefSize(60,60);
-
-        is = Files.newInputStream(Paths.get("images/coins.png"));
-        img = new Image(is);
-        is.close();
-        imgCoin = new ImageView(img);
-        imgCoin.setFitHeight(35);
-        imgCoin.setFitWidth(35);
-        imgCoin.setTranslateX(20);
-        ForText = new Text("For 2 ");
-        ForText.setFill(Color.BLACK);
-        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
-        ForText.setTranslateX(15);
-        tradePaperHBRight = new HBox(tradePaperRight,imgPaper,ForText,imgCoin);
-        tradePaperHBRight.setTranslateY(420);
-        tradePaperHBRight.setTranslateX(1650);
-        tradePaperHBRight.setPrefSize(60,60);
-
-        is = Files.newInputStream(Paths.get("images/coins.png"));
-        img = new Image(is);
-        is.close();
-        imgCoin = new ImageView(img);
-        imgCoin.setFitHeight(35);
-        imgCoin.setFitWidth(35);
-        imgCoin.setTranslateX(20);
-        ForText = new Text("For 2 ");
-        ForText.setFill(Color.BLACK);
-        ForText.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
-        ForText.setTranslateX(15);
-        tradeTextileHBRight = new HBox(tradeTextileRight,imgTextile,ForText,imgCoin);
-        tradeTextileHBRight.setTranslateY(450);
-        tradeTextileHBRight.setTranslateX(1650);
-        tradeTextileHBRight.setPrefSize(60,60);
-
-        sp.getChildren().addAll(tradeLumberHBRight,tradeClayHBRight,tradeStoneHBRight,tradeOreHBRight,tradeGlassHBRight,tradePaperHBRight,tradeTextileHBRight);
-
 
 
         OptionsPage.PauseButton pb = new OptionsPage.PauseButton();
@@ -1844,55 +1222,54 @@ public class GamePage extends Scene {
 
 
     }
-    /*
-    *player 1 receives the resource
-    * player 2 gains the gold
-    * side is to check if player 2 is on the right or left of player 1
+    /**
+     *player 1 receives the resource
+     * player 2 gains the gold
+     * side is to check if player 2 is on the right or left of player 1
      */
-    public void makeTrade(Player p1, Player p2, String resource, String side )
-    {
-
-    }
-
-    public void checkForTrade(String resource) {
-        int worth=2;
-
-        if ( resource.equals("Ore"))
-        {
-            if(players[0].specialCards[2]==true)
-            {
-            }
-        }
-        if ( resource.equals("Stone"))
-        {
-            if(players[0].specialCards[2]==true)
-            {
-                worth = 1;
-            }
-        }
-        if ( resource.equals("Lumber"))
-        {
-            if(players[0].specialCards[2]==true)
-            {
-                worth = 1;
-            }
-        }
-        if ( resource.equals("Clay"))
-        {
-            if(players[0].specialCards[2]==true)
-            {
-                worth = 1;
-            }
+    public void makeTrade(int p1, int p2, String choice) throws Exception {
+        boolean isRight = ((p1 + 1) % 4 == p2);
+        int worth = 2;
+        Property tmp = new Property();
+        // determine the worth of the trade
+        if ((choice.equals("Ore") || choice.equals("Lumber") || choice.equals("Stone") || choice.equals("Clay")) && ((players[p1].specialCards[1] && isRight) || (players[p1].specialCards[2] && !isRight) || players[p1].specialCards[19]))
+            worth = 1;
+        if((choice.equals("Textile") || choice.equals("Glass") || choice.equals("Paper")) && players[p1].specialCards[3])
+            worth = 1;
+        if( players[p1].stats.coin < worth) {
+            if( p1 == 0)
+                giveError("Not enough coin");
+            return;
         }
 
-
-        Text cost;
-        cost = new Text( "for" + worth+"gold");
-        cost.setTranslateX(-600);
-        cost.setTranslateY(-300);
-        sp.getChildren().addAll(cost);
-
-
+        // check the resources
+        if( isRight) {
+            tmp.resource = new Resource( players[p1].rightTradedResources.quantity.length + 1);
+            for( int i = 0 ; i < players[p1].rightTradedResources.quantity.length; i++) {
+                tmp.resource.name[i] = players[p1].rightTradedResources.name[i];
+                tmp.resource.quantity[i] = players[p1].rightTradedResources.quantity[i];
+            }
+            tmp.resource.name[players[p1].rightTradedResources.quantity.length] = choice;
+            tmp.resource.quantity[players[p1].rightTradedResources.quantity.length] = 1;
+        }
+        else {
+            tmp.resource = new Resource( players[p1].leftTradedResources.quantity.length + 1);
+            for( int i = 0 ; i < players[p1].leftTradedResources.quantity.length; i++) {
+                tmp.resource.name[i] = players[p1].leftTradedResources.name[i];
+                tmp.resource.quantity[i] = players[p1].leftTradedResources.quantity[i];
+            }
+            tmp.resource.name[players[p1].leftTradedResources.quantity.length] = choice;
+            tmp.resource.quantity[players[p1].leftTradedResources.quantity.length] = 1;
+        }
+        if( checkResources( p2, false, tmp)) {
+            if(isRight) players[p1].rightTradedResources = new Resource( tmp.resource);
+            else players[p1].leftTradedResources = new Resource( tmp.resource);
+            players[p1].stats.coin -= worth;
+            players[p2].stats.coin += worth;
+            reDrawWonders();
+        }
+        else
+            giveError("Your neighbor doesn't have that resource");
     }
     private void makeBattles(int age){
         if(age == 1) {
@@ -2076,10 +1453,51 @@ public class GamePage extends Scene {
                 endGame();
                 return;
             }
+            for( int i = 0; i < 28; i++) {
+                if( !cards[currentAge - 2][i].isUsed) {
+                    cardsAtStake[noOfCardsAtStake] = cards[currentAge - 2][i];
+                    noOfCardsAtStake++;
+                }
+            }
         }
         for(int i = ((lastTurn - 1) % 4) * 7; i <= ((lastTurn - 1) % 4) * 7 + 6; i++) sp.getChildren().remove(cards[lastAge - 1][i]);
         for(int i = ((currentTurn - 1) % 4) * 7; i <= ((currentTurn - 1) % 4) * 7 + 6; i++) sp.getChildren().add(cards[currentAge - 1][i]);
+        for(int i = 0; i < 4; i++) { players[i].leftTradedResources = new Resource(0); players[i].rightTradedResources = new Resource( 0);}
         reDrawWonders();
+
+    }
+    public void slidingText(String text){
+        final String content = text;
+        final Text textArea = new Text(10, 20, "");
+        textArea.setWrappingWidth(350);
+        textArea.maxHeight(500);
+        textArea.setFill(Color.WHITESMOKE);
+        textArea.setFont(Font.font("Verdana", FontWeight.THIN, 30));
+        textArea.setTextAlignment(TextAlignment.CENTER);
+        final Animation animation = new Transition() {
+            {
+                setCycleDuration(Duration.millis(8000));
+            }
+
+            protected void interpolate(double frac) {
+                final int length = content.length();
+                final int n = Math.round(length * (float) frac);
+                textArea.setText(content.substring(0, n));
+            }
+
+        };
+
+        animation.play();
+
+
+        Circle bg = new Circle(350);
+
+        bg.setOpacity(0.6);
+        bg.setFill(Color.BLACK);
+        bg.setEffect( new GaussianBlur(3.5));
+        bg.setTranslateZ(100);
+        textArea.setTranslateZ(100);
+        sp.getChildren().addAll(bg, textArea);
     }
     public void endGame() {
 
@@ -3868,6 +3286,30 @@ public class GamePage extends Scene {
                     }
                     resourcesHB.getChildren().addAll(vb);
                 }
+            }
+            for(int i = 0; i < players[pNum].rightTradedResources.quantity.length; i++) {
+                VBox vb = new VBox();
+                vb.setBackground(bg);
+                is = Files.newInputStream(Paths.get("images/" + players[pNum].rightTradedResources.name[i] + ".png"));
+                img = new Image(is);
+                is.close();
+                imgView = new ImageView(img);
+                imgView.setFitHeight(25);
+                imgView.setFitWidth(25);
+                vb.getChildren().addAll(imgView);
+                resourcesHB.getChildren().addAll(vb);
+            }
+            for(int i = 0; i < players[pNum].leftTradedResources.quantity.length; i++) {
+                VBox vb = new VBox();
+                vb.setBackground(bg);
+                is = Files.newInputStream(Paths.get("images/" + players[pNum].leftTradedResources.name[i] + ".png"));
+                img = new Image(is);
+                is.close();
+                imgView = new ImageView(img);
+                imgView.setFitHeight(25);
+                imgView.setFitWidth(25);
+                vb.getChildren().addAll(imgView);
+                resourcesHB.getChildren().addAll(vb);
             }
             resourcesHB.setTranslateY(100);
             resourcesHB.setTranslateX(5);
