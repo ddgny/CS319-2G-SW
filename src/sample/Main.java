@@ -1,6 +1,5 @@
 package sample;
-import java.io.File;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import javafx.application.Application;
@@ -36,7 +35,7 @@ public class Main extends Application {
     private GameMenu gameMenu;
     private static Stage window;
     private static StackPane root, options, htp,credits, setName;
-    private static Scene mainMenu;
+    public static Scene mainMenu;
     public static Rectangle2D primaryScreenBounds;
     public static MediaPlayer mediaPlayer;
     @Override
@@ -118,6 +117,7 @@ public class Main extends Application {
             menu1.setTranslateY(20);
 
 
+
             // start game button
             btnStart = new MenuButton("Start a New Game");
             btnLoadGame = new MenuButton("Load Game");
@@ -145,7 +145,16 @@ public class Main extends Application {
 
             // load game button
             btnLoadGame.setOnMouseClicked(event -> {
-
+                try (BufferedReader br = new BufferedReader(new FileReader("save.txt"))) {
+                    String name = br.readLine();
+                    int intMode = Integer.parseInt(br.readLine());
+                    Scene scene = new GamePage( new StackPane(), mainMenu, window, name, "A", intMode);
+                    window.setScene( scene);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             });
 
             // Options button

@@ -12,11 +12,10 @@ import javafx.scene.media.MediaPlayer;
 
 import java.awt.event.ActionEvent;
 import java.beans.EventHandler;
-import java.io.File;
+import java.io.*;
+
 import javafx.scene.Group;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import javafx.animation.PauseTransition;
@@ -49,16 +48,17 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.*;
 
+import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class GamePage extends Scene {
     public static WonderBoard[] wb;
     public static Player[] players;
-    private ImageView[] cardTicks;
     private Card[][] cards;
     private Card[] cardsAtStake;
     private Stage window;
     private StackPane sp;
+    //private StackPane sp,endgame;
     private String side;
     Text goldValue;
     Text goldValueRight;
@@ -92,7 +92,7 @@ public class GamePage extends Scene {
             resource = new Resource(0);
         }
     }
-    private class Player {
+    public class Player {
         String name;
         int battlePoint, greenCards, redCards, yellowCards, greyCards, purpleCards, brownCards, blueCards, milestoneDone;
         String[] buildings;
@@ -111,8 +111,8 @@ public class GamePage extends Scene {
             resources = new Resource[22];
             rightTradedResources = new Resource(0);
             leftTradedResources = new Resource(0);
-            specialCards = new boolean[22];
-            for(int i = 0; i < 22; i++) specialCards[i] = false;
+            specialCards = new boolean[23];
+            for(int i = 0; i < 23; i++) specialCards[i] = false;
         }
         void addResource( Resource add) {
             resources[resourceCount] = add;
@@ -153,15 +153,16 @@ public class GamePage extends Scene {
     }
 
 
-    public GamePage(StackPane sp, Scene mainmenu, Stage window, String name, ToggleGroup side, int sMode) throws Exception {
+    public GamePage(StackPane sp, Scene mainmenu, Stage window, String name, String side, int sMode) throws Exception {
         super(sp, Main.primaryScreenBounds.getWidth(), Main.primaryScreenBounds.getHeight());
         mode = sMode;
         noOfCardsAtStake = 0;
-        cardsAtStake = new Card[40];
+
+        cardsAtStake = new Card[80];
         currentAge = currentTurn = 1;
         this.window = window;
         this.sp = sp;
-        this.side = side.getSelectedToggle().getUserData().toString();
+        this.side = side;
         wb = new WonderBoard[4];
         players = new Player[4];
         cards = new Card[3][28];
@@ -173,6 +174,17 @@ public class GamePage extends Scene {
         imgView.setFitWidth(Main.primaryScreenBounds.getWidth());
         sp.getChildren().add(imgView);
 
+        // save game
+        if(mode > 1) {
+            try (BufferedWriter bw = new BufferedWriter(new PrintWriter("save.txt"))) {
+                bw.write(name);
+                bw.newLine();
+                bw.write(mode + "");
+                giveError("Game Saved");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         //TRADE COMBO BOX
 
@@ -1196,6 +1208,7 @@ public class GamePage extends Scene {
         sp.getChildren().add(pb);
 
         players[0] = new Player(name);
+//        players[0].stats.victoryPoint = 30;
         players[1] = new Player("bot1");
         players[2] = new Player("bot2");
         players[3] = new Player("bot3");
@@ -1215,33 +1228,34 @@ public class GamePage extends Scene {
                 cards[i][j*7+6].setTranslateX(-550); cards[i][j*7+6].setTranslateY(290);
             }
         }
-        InputStream is2 = Files.newInputStream(Paths.get("images/tick.png"));
-        Image imgTick = new Image(is2);
-        is2.close();
-        cardTicks = new ImageView[7];
-        for(int i = 0; i < 7; i++){
-            cardTicks[i] = new ImageView(imgTick);
-            cardTicks[i].setFitWidth(40);
-            cardTicks[i].setFitHeight(40);
-            cardTicks[i].setVisible(false);
-        }
-        cardTicks[0].setTranslateX(-180); cardTicks[0].setTranslateY(10);
-        cardTicks[1].setTranslateX(20); cardTicks[1].setTranslateY(10);
-        cardTicks[2].setTranslateX(-380); cardTicks[2].setTranslateY(10);
-        cardTicks[3].setTranslateX(-580); cardTicks[3].setTranslateY(10);
-        cardTicks[4].setTranslateX(-80); cardTicks[4].setTranslateY(210);
-        cardTicks[5].setTranslateX(-280); cardTicks[5].setTranslateY(210);
-        cardTicks[6].setTranslateX(-480); cardTicks[6].setTranslateY(210);
-
-
-
 
         distributeWonders( sp, side, name);
 
         sp.getChildren().addAll(wb);
-        sp.getChildren().addAll(cardTicks);
-
-
+        if(mode == 1){
+            players[1].name = "General Seleucus";
+            players[2].name = "General Cassander";
+            players[3].name = "General Ptolemy";
+            reDrawWonders();
+            slidingText("Welcome to 7 wonders\n\nYou are one of the most powerful general of the kingdom of Macedon. Alexander the Great give tasks to his generals to rebuild one of the seven wonders.\nThe general who makes the best wonder will win.\n\nObejectives:\n- Collect the most victory point\n- Complete your wonder");
+        }
+        else if( mode == 2) {
+            players[1].name = "Seleucid Empire";
+            players[3].name = "Ptolemaic Dynasty";
+            players[2].name = "The kingdom of Cassander";
+            reDrawWonders();
+            slidingText("Alexander the Great died at a young age so the kingdom of Macedon is divided to his generals according to his will. However people of yor region don't want you to rule. So you need to improve your region and earn their trust.\n\nObjectives:\n- Collect the most victory point\n- Collect at least 20 victory points from blue cards or your wonder");
+        }
+        else if( mode == 3) {
+            players[1].name = "Roman Republic";
+            players[2].name = "Roman Republic";
+            players[3].name = "Roman Republic";
+            players[1].stats.shield = 5;
+            players[2].stats.shield = 5;
+            players[3].stats.shield = 5;
+            reDrawWonders();
+            slidingText("Roman Republic started to invade your lands. You need to protect your people and defeat the large army of Romans.\n\n Objecives:\n- Collect the most victory points");
+        }
 
     }
     /**
@@ -1467,12 +1481,14 @@ public class GamePage extends Scene {
         int lastTurn = currentTurn;
         currentTurn++;
 
+        // end age
         if( currentTurn == 7) {
             currentTurn = 1;
             makeBattles(currentAge);
             currentAge++;
             if( currentAge == 4) {
-                endGame();
+               // endGame();
+                endGameText();
                 return;
             }
             for( int i = 0; i < 28; i++) {
@@ -1481,38 +1497,67 @@ public class GamePage extends Scene {
                     noOfCardsAtStake++;
                 }
             }
+            for( int i = 0; i < 4; i++) {
+                if ( players[i].specialCards[22])
+                    players[i].specialCards[18] = true;
+            }
         }
         for(int i = ((lastTurn - 1) % 4) * 7; i <= ((lastTurn - 1) % 4) * 7 + 6; i++) sp.getChildren().remove(cards[lastAge - 1][i]);
         for(int i = ((currentTurn - 1) % 4) * 7; i <= ((currentTurn - 1) % 4) * 7 + 6; i++) sp.getChildren().add(cards[currentAge - 1][i]);
-
-
         for(int i = 0; i < 4; i++) { players[i].leftTradedResources = new Resource(0); players[i].rightTradedResources = new Resource( 0);}
         reDrawWonders();
-        sp.getChildren().removeAll(cardTicks);
-        reDrawTick();
-        sp.getChildren().addAll(cardTicks);
 
-    }
-    public void reDrawTick(){
-        for(int i = 0; i < 7; i++){
-            cardTicks[i].setVisible(false);
-        }
-        for(int i = ((currentTurn - 1) % 4) * 7; i <= ((currentTurn - 1) % 4) * 7 + 6; i++){
-            for (int j = 0; j < players[0].buildingsCount; j++) {
-                if (players[0].buildings[j].contains(cards[currentAge - 1][i].cost.requiredBuilding) && !cards[currentAge - 1][i].cost.requiredBuilding.equals("")) {
-                    cardTicks[i%7].setVisible(true);
-                    //System.out.println("FREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE" + i%7);
+        // popup screen at the end of the ages
+        if( currentTurn == 1) {
+            int endAge=currentAge-1;
+            if (players[0].stats.shield == players[1].stats.shield) {
+                if (players[0].stats.shield == players[3].stats.shield)
+                    slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n"+"The battles was drawn!!");
+                else {
+                    if (players[0].stats.shield > players[3].stats.shield)
+                        slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[3].name + "\n But drawn the battle against " + players[1].name);
+                    else
+                        slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " lost the battle against " + players[3].name + "\n But drawn the battle against " + players[1].name);
                 }
+
+            }
+
+            if (players[0].stats.shield > players[1].stats.shield) {
+                if (players[0].stats.shield > players[3].stats.shield)
+                    slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won all the battles!!");
+                else if (players[0].stats.shield < players[3].stats.shield)
+                    slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[1].name + "\n But lost the battle against " + players[3].name);
+                else
+                    slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[1].name + "\n But drawn the battle against " + players[3].name);
+
+            }
+            if (players[0].stats.shield < players[1].stats.shield) {
+                if (players[0].stats.shield < players[3].stats.shield)
+                    slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " lost all the battles!!");
+                else if (players[0].stats.shield > players[3].stats.shield)
+                    slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[3].name + "\n But lost the battle against " + players[1].name);
+                else
+                    slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " lost the battle against " + players[1].name + "\n But drawn the battle against " + players[3].name);
             }
         }
+//            if( currentTurn == 2) {
+//                if(players[0].stats.shield == players[1].stats.shield){
+//                    if(players[0].stats.shield == players[3].stats.shield)
+//                        slidingText("In Age 2 \n The battles was drawn!!");
+//                    else{
+//                        if(players[0].stats.shield > players[3].stats.shield)
+//                            slidingText("In Age 2 \n "+ players[0].name +" won the battle against " +players[3].name+ "\n But drawn the battle against "+ players[1].name);
+//                        else
+//                            slidingText("In Age 2 \n "+ players[0].name +" lost the battle against " +players[3].name+ "\n But drawn the battle against "+ players[1].name);
+//                    }
+//
+//                }
 
     }
-
-
-    public void slidingText(String text){
+    public void slidingText(String text) throws Exception{
         final String content = text;
         final Text textArea = new Text(10, 20, "");
-        textArea.setWrappingWidth(350);
+        textArea.setWrappingWidth(550);
         textArea.maxHeight(500);
         textArea.setFill(Color.WHITESMOKE);
         textArea.setFont(Font.font("Verdana", FontWeight.THIN, 30));
@@ -1532,121 +1577,574 @@ public class GamePage extends Scene {
 
         animation.play();
 
-
-        Circle bg = new Circle(350);
-
-        bg.setOpacity(0.6);
-        bg.setFill(Color.BLACK);
+        Rectangle bg = new Rectangle(1250,680);
+        Rectangle bg2 = new Rectangle(1350,680);
+        bg2.setFill(Color.BLACK);
+        bg2.setEffect( new GaussianBlur(3.5));
+        bg2.setTranslateZ(100);
+        bg2.setOpacity(0.9);
+        InputStream ageWar = Files.newInputStream(Paths.get("images/AgeWar.png"));
+        Image img1 = new Image(ageWar);
+        bg.setOpacity(0.5);
+        bg.setFill(new ImagePattern(img1));
+        //bg.setFill(Color.BLACK);
         bg.setEffect( new GaussianBlur(3.5));
         bg.setTranslateZ(100);
         textArea.setTranslateZ(100);
-        sp.getChildren().addAll(bg, textArea);
-    }
-    public void endGame() {
+        InputStream continueImg = Files.newInputStream(Paths.get("images/icons8.png"));
+        Image img2 = new Image(continueImg);
+//        Button btnCont =new Button("Continue");
+//        btnCont.setTranslateX(0);
+//        btnCont.setTranslateY(0);
+        Rectangle contRec =new Rectangle(200,200);
+        contRec.setFill(new ImagePattern(img2));
+        contRec.setTranslateX(550);
+        contRec.setTranslateY(200);
+        contRec.setOnMouseClicked(event -> {
+            try {
+                sp.getChildren().removeAll(bg2,bg,textArea,contRec);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        });
+
+        sp.getChildren().addAll(bg2,bg, textArea,contRec);
 
     }
-    public void victoryPointCalculator(){
-        int[] total = new int[4];
-        for(int i = 0 ; i < 4; i++)
-            total[i] = 0;
 
-        int[] endCoin = new int[4];
-        for(int i = 0 ; i < 4; i++)
-            endCoin[i] = 0;
+    public void endGameText()throws Exception{
+        int[] total = {0,0,0,0};
 
-        int[] endScience = new int[4];
-        for(int i = 0 ; i < 4; i++)
-            endScience[i] = 0;
 
-        int[] endSpecialPurple = new int[4] ;
-        for(int i = 0; i < 4; i++)
-            endSpecialPurple[i] = 0;
+        int[] endCoin ={0,0,0,0};
 
-        int[] endSpecialYellow = new int[4];
-        for(int i = 0 ; i < 4; i++)
-            endSpecialYellow[i] = 0;
 
-        //point from coin
-        for( int i = 0; i < 4; i++ )
+        int[] endScience = {0,0,0,0};
+
+
+        int[] endSpecialPurple = {0,0,0,0};
+
+
+        int[] endSpecialYellow = {0,0,0,0};
+
+        int[ ] endSpecial = {0,0,0,0};
+        Rectangle bg3 = new Rectangle(1380,680);
+        bg3.setFill(Color.BLACK);
+        bg3.setEffect( new GaussianBlur(3.5));
+        bg3.setTranslateZ(100);
+        bg3.setOpacity(0.9);
+//        Rectangle contRec =new Rectangle(200,200);
+//        InputStream contImg = Files.newInputStream(Paths.get("images/icons8.png"));
+//        Image img3 = new Image(contImg);
+//        contRec.setFill(new ImagePattern(img3));
+//        contRec.setTranslateX(550);
+//        contRec.setTranslateY(200);
+        Rectangle bg4 = new Rectangle(1350,680);
+        InputStream gameOver = Files.newInputStream(Paths.get("images/game-over4.jpg"));
+        Image img4 = new Image(gameOver);
+        bg4.setOpacity(0.9);
+        bg4.setFill(new ImagePattern(img4));
+
+        for (int i = 0; i < 4; i++)
             endCoin[i] = players[i].stats.coin / 3;
 
-        for( int i = 0; i < 4; i++ ) {
-            endScience[i] += players[i].stats.mechanic * players[i].stats.mechanic + players[i].stats.literature * players[i].stats.literature
-                    + players[i].stats.geometry * players[i].stats.geometry;
-            for(int j = 0; j < 5; j++){
-                if(players[i].stats.mechanic > j && players[i].stats.literature > j && players[i].stats.geometry > j) endScience[i] += 7;
+        //point from coin
+        for (int i = 0; i < 4; i++)
+            endCoin[i] = players[i].stats.coin / 3;
+        //point from science
+
+
+        for (int i = 0; i < 4; i++) {
+            if(players[i].specialCards[16]){
+                int mec = 0; int lit = 0; int geo = 0;
+                int mecSci = sciencePointCalculator(players[i].stats.mechanic + 1 , players[i].stats.literature, players[i].stats.geometry);
+                int litSci = sciencePointCalculator(players[i].stats.mechanic, players[i].stats.literature + 1, players[i].stats.geometry);
+                int geoSci = sciencePointCalculator(players[i].stats.mechanic , players[i].stats.literature, players[i].stats.geometry + 1);
+
+                endScience[i] =  max( mecSci , max( litSci , geoSci));
             }
+            else
+                endScience[i] = sciencePointCalculator(players[i].stats.mechanic, players[i].stats.literature, players[i].stats.geometry);
         }
 
         //workers guild special
-        for(int i = 0 ; i < 4 ; i ++) {
+        for (int i = 0; i < 4; i++) {
             if (players[i].specialCards[10]) {
-                endSpecialPurple[i] += players[(i + 1 % 4)].brownCards + players[(i + 3) % 4].brownCards;
+                endSpecialPurple[i] += players[(i + 1) % 4].brownCards + players[(i + 3) % 4].brownCards;
             }
         }
         //craftsmen guild special
-        for(int i = 0 ; i < 4 ; i ++) {
+        for (int i = 0; i < 4; i++) {
             if (players[i].specialCards[11]) {
-                endSpecialPurple[i] += (players[(i + 1 % 4)].greyCards)*2 + (players[(i + 3) % 4].greyCards)*2;
+                endSpecialPurple[i] += (players[(i + 1) % 4].greyCards) * 2 + (players[(i + 3) % 4].greyCards) * 2;
             }
         }
         //traders guild special
-        for(int i = 0 ; i < 4 ; i ++) {
+        for (int i = 0; i < 4; i++) {
             if (players[i].specialCards[12]) {
-                endSpecialPurple[i] += players[(i + 1 % 4)].yellowCards + players[(i + 3) % 4].yellowCards;
+                endSpecialPurple[i] += players[(i + 1) % 4].yellowCards + players[(i + 3) % 4].yellowCards;
             }
         }
         //philosophers guil special
-        for(int i = 0 ; i < 4 ; i ++) {
+        for (int i = 0; i < 4; i++) {
             if (players[i].specialCards[13]) {
-                endSpecialPurple[i] += players[(i + 1 % 4)].greenCards + players[(i + 3) % 4].greenCards;
+                endSpecialPurple[i] += players[(i + 1) % 4].greenCards + players[(i + 3) % 4].greenCards;
             }
         }
         //spies guild special
-        for(int i = 0 ; i < 4 ; i ++) {
+        for (int i = 0; i < 4; i++) {
             if (players[i].specialCards[14]) {
-                endSpecialPurple[i] += players[(i + 1 % 4)].redCards + players[(i + 3) % 4].redCards;
+                endSpecialPurple[i] += players[(i + 1) % 4].redCards + players[(i + 3) % 4].redCards;
             }
         }
         //magistrates guild special
-        for(int i = 0 ; i < 4 ; i ++) {
+        for (int i = 0; i < 4; i++) {
             if (players[i].specialCards[15]) {
-                endSpecialPurple[i] += players[(i + 1 % 4)].blueCards + players[(i + 3) % 4].blueCards;
+                endSpecialPurple[i] += players[(i + 1) % 4].blueCards + players[(i + 3) % 4].blueCards;
             }
         }
         //haven special
-        for(int i = 0 ; i < 4 ; i ++) {
+        for (int i = 0; i < 4; i++) {
             if (players[i].specialCards[6]) {
                 endSpecialYellow[i] += players[i].brownCards;
             }
         }
         //lighthouse special
-        for(int i = 0 ; i < 4 ; i ++) {
+        for (int i = 0; i < 4; i++) {
             if (players[i].specialCards[7]) {
                 endSpecialYellow[i] += players[i].yellowCards;
             }
         }
         //chamber of commerce special
-        for(int i = 0 ; i < 4 ; i ++) {
+        for (int i = 0; i < 4; i++) {
             if (players[i].specialCards[8]) {
-                endSpecialYellow[i] += (players[i].greyCards)*2;
+                endSpecialYellow[i] += (players[i].greyCards) * 2;
             }
         }
         //arena special
-        for(int i = 0 ; i < 4 ; i ++) {
+        for (int i = 0; i < 4; i++) {
             if (players[i].specialCards[9]) {
                 endSpecialYellow[i] += players[i].milestoneDone;
             }
         }
+        for (int i = 0; i < 4; i++)
+            endSpecial[i] += endSpecialPurple[i] + endSpecialYellow[i];
         //total point
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
+            total[i] = endCoin[i] + endScience[i] + endSpecialPurple[i] + endSpecialYellow[i] + players[i].stats.victoryPoint
+                    + players[i].battlePoint;
+
+
+        Text player0  = new Text(players[0].name);
+        player0.setFill(Color.WHITESMOKE);
+        player0.setFont(Font.font("Kalam",20));
+        Text player1  = new Text(players[1].name);
+        player1.setFill(Color.WHITESMOKE);
+        player1.setFont(Font.font("Kalam",20));
+        Text player2  = new Text(players[2].name);
+        player2.setFill(Color.WHITESMOKE);
+        player2.setFont(Font.font("Kalam",20));
+        Text player3  = new Text(players[3].name);
+        player3.setFill(Color.WHITESMOKE);
+        player3.setFont(Font.font("Kalam",20));
+        TextField player0name = new TextField(players[0].name);
+
+        Text player0coin = new Text(players[0].stats.coin/3+"");
+        player0coin.setTranslateX(150);
+        player0coin.setFill(Color.YELLOW);
+        player0coin.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+        Text player1coin = new Text(players[1].stats.coin/3+"");
+        player1coin.setTranslateX(170);
+        player1coin.setFill(Color.YELLOW);
+        player1coin.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+        Text player2coin = new Text(players[2].stats.coin/3+"");
+        player2coin.setTranslateX(170);
+        player2coin.setFill(Color.YELLOW);
+        player2coin.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+        Text player3coin = new Text(players[3].stats.coin/3+"");
+        player3coin.setTranslateX(170);
+        player3coin.setFill(Color.YELLOW);
+        player3coin.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+
+
+        Text player0battlePoints = new Text(players[0].battlePoint+"");
+        player0battlePoints.setTranslateX(300);
+        player0battlePoints.setFill(Color.RED);
+        player0battlePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+        Text player1battlePoints = new Text(players[1].battlePoint+"");
+        player1battlePoints.setTranslateX(320);
+        player1battlePoints.setFill(Color.RED);
+        player1battlePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+        Text player2battlePoints = new Text(players[2].battlePoint+"");
+        player2battlePoints.setTranslateX(320);
+        player2battlePoints.setFill(Color.RED);
+        player2battlePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+        Text player3battlePoints = new Text(players[3].battlePoint+"");
+        player3battlePoints.setTranslateX(320);
+        player3battlePoints.setFill(Color.RED);
+        player3battlePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+
+        Text player0sciencePoints = new Text(endScience[0]+"");
+        player0sciencePoints.setTranslateX(450);
+        player0sciencePoints.setFill(Color.GREEN);
+        player0sciencePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+        Text player1sciencePoints = new Text(endScience[1]+"");
+        player1sciencePoints.setTranslateX(470);
+        player1sciencePoints.setFill(Color.GREEN);
+        player1sciencePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+        Text player2sciencePoints = new Text(endScience[2]+"");
+        player2sciencePoints.setTranslateX(470);
+        player2sciencePoints.setFill(Color.GREEN);
+        player2sciencePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+        Text player3sciencePoints = new Text(endScience[3]+"");
+        player3sciencePoints.setTranslateX(470);
+        player3sciencePoints.setFill(Color.GREEN);
+        player3sciencePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+
+
+
+
+
+
+
+        Text player0specialcards = new Text(endSpecial[0]+"");
+        player0specialcards.setTranslateX(650);
+        player0specialcards.setFill(Color.PURPLE);
+        player0specialcards.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+        Text player1specialcards = new Text(endSpecial[1]+"");
+        player1specialcards.setTranslateX(670);
+        player1specialcards.setFill(Color.PURPLE);
+        player1specialcards.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+        Text player2specialcards = new Text(endSpecial[2]+"");
+        player2specialcards.setTranslateX(670);
+        player2specialcards.setFill(Color.PURPLE);
+        player2specialcards.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+        Text player3specialcards = new Text(endSpecial[3]+"");
+        player3specialcards.setTranslateX(680);
+        player3specialcards.setFill(Color.PURPLE);
+        player3specialcards.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+
+
+
+        Text player0bluePoints = new Text(players[0].stats.victoryPoint+"");
+        player0bluePoints.setTranslateX(860);
+        player0bluePoints.setFill(Color.BLUE);
+        player0bluePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+        Text player1bluePoints = new Text(players[1].stats.victoryPoint+"");
+        player1bluePoints.setTranslateX(870);
+        player1bluePoints.setFill(Color.BLUE);
+        player1bluePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+        Text player2bluePoints = new Text(players[2].stats.victoryPoint+"");
+        player2bluePoints.setTranslateX(870);
+        player2bluePoints.setFill(Color.BLUE);
+        player2bluePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+        Text player3bluePoints = new Text(players[3].stats.victoryPoint+"");
+        player3bluePoints.setTranslateX(880);
+        player3bluePoints.setFill(Color.BLUE);
+        player3bluePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+
+
+
+        Text player0totalPoints = new Text(total[0]+"");
+        player0totalPoints.setTranslateX(1010);
+        player0totalPoints.setFill(Color.WHITESMOKE);
+        player0totalPoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+        Text player1totalPoints = new Text(total[1]+"");
+        player1totalPoints.setTranslateX(1020);
+        player1totalPoints.setFill(Color.WHITESMOKE);
+        player1totalPoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+        Text player2totalPoints = new Text(total[2]+"");
+        player2totalPoints.setTranslateX(1020);
+        player2totalPoints.setFill(Color.WHITESMOKE);
+        player2totalPoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+        Text player3totalPoints = new Text(total[3]+"");
+        player3totalPoints.setTranslateX(1030);
+        player3totalPoints.setFill(Color.WHITESMOKE);
+        player3totalPoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
+
+        Text nameText = new Text("Player Names");
+        nameText.setFill(Color.WHITESMOKE);
+        nameText.setFont(Font.font("Kalam",20));
+
+        Text coinText =  new Text("Coin Points");
+        coinText.setFill(Color.YELLOW);
+        coinText.setFont(Font.font("Kalam",20));
+
+        Text battlePointsText = new Text("Battle Points");
+        battlePointsText.setFill(Color.RED);
+        battlePointsText.setFont(Font.font("Kalam",20));
+
+        Text sciencePointsText = new Text("Science Points");
+        sciencePointsText.setFill(Color.GREEN);
+        sciencePointsText.setFont(Font.font("Kalam",20));
+
+        Text specialcardPointsText = new Text("Special Card Points");
+        specialcardPointsText.setFill(Color.PURPLE);
+        specialcardPointsText.setFont(Font.font("Kalam",20));
+
+        Text bluePoints = new Text("Blue Card Points");
+        bluePoints.setFill(Color.BLUE);
+        bluePoints.setFont(Font.font("Kalam",20));
+
+        Text totalPointsText = new Text("Total Points");
+        totalPointsText.setFill(Color.WHITESMOKE);
+        totalPointsText.setFont(Font.font("Kalam",20));
+
+        HBox statsBox = new HBox(nameText,coinText,battlePointsText,sciencePointsText,specialcardPointsText,bluePoints,totalPointsText);
+        statsBox.setTranslateX(120);
+        statsBox.setTranslateY(330);
+        statsBox.setSpacing(65);
+
+        HBox player0box = new HBox(player0,player0coin,player0battlePoints,player0sciencePoints,player0specialcards,player0bluePoints,player0totalPoints);
+        player0box.setSpacing(10);
+        player0box.setTranslateY(380);
+        player0box.setTranslateX(120);
+
+        HBox player1box = new HBox(player1,player1coin,player1battlePoints,player1sciencePoints,player1specialcards,player1bluePoints,player1totalPoints);
+        player1box.setTranslateY(430);
+        player1box.setSpacing(10);
+        player1box.setTranslateX(120);
+
+
+        HBox player2box = new HBox(player2,player2coin,player2battlePoints,player2sciencePoints,player2specialcards,player2bluePoints,player2totalPoints);
+        player2box.setTranslateY(480);
+        player2box.setSpacing(10);
+        player2box.setTranslateX(120);
+
+        HBox player3box = new HBox(player3,player3coin,player3battlePoints,player3sciencePoints,player3specialcards,player3bluePoints,player3totalPoints);
+        player3box.setTranslateY(530);
+        player3box.setSpacing(10);
+        player3box.setTranslateX(120);
+
+        HBox menu6 = new HBox(140);
+        menu6.setTranslateX(450);
+        menu6.setTranslateY(250);
+
+
+        Main.MenuButton btnExit2 = new Main.MenuButton("Return to menu");
+        Main.MenuButton btnContinue = new Main.MenuButton("Continue");
+        Main.MenuButton btnPlayAgain = new Main.MenuButton("PlayAgain");
+
+        btnExit2.setOnMouseClicked( event2 -> {
+            btnExit2.setVisible(false);
+            btnContinue.setVisible(false);
+            menu6.getChildren().removeAll(btnExit2, btnContinue);
+//            sp.getChildren().remove(menu6);
+            sp.getChildren().removeAll(bg3,bg4,statsBox,player0box,player1box,player2box,player3box,menu6);
+            window.setScene(Main.mainMenu);
+        });
+        btnContinue.setOnMouseClicked( event2 -> {
+            try {
+                Scene scene = new GamePage( new StackPane(), Main.mainMenu, window, players[0].name, side, mode + 1);
+                window.setScene(scene);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        btnPlayAgain.setOnMouseClicked( mouseEvent -> {
+            try {
+                Scene scene = new GamePage( new StackPane(), Main.mainMenu, window, players[0].name, side, mode);
+                window.setScene(scene);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        boolean isContinue = false;
+        if( mode == 1 && players[0].milestoneDone == 3 && total[0] > total[1] && total[0] > total[2] && total[0] > total[3]) isContinue = true;
+        else if( mode == 2 && players[0].stats.victoryPoint > 19 && total[0] > total[1] && total[0] > total[2] && total[0] > total[3]) isContinue = true;
+        else if( mode == 3  && total[0] > total[1] && total[0] > total[2] && total[0] > total[3]) isContinue = true;
+        if(isContinue)
+            menu6.getChildren().addAll(btnExit2, btnContinue);
+        else
+            menu6.getChildren().addAll(btnExit2, btnPlayAgain);
+
+
+//        contRec.setOnMouseClicked(event -> {
+//            try {
+//                sp.getChildren().removeAll(bg4,statsBox,player0box,player1box,player2box,player3box,contRec);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//
+//
+//        });
+
+        sp.getChildren().addAll(bg3,bg4,statsBox,player0box,player1box,player2box,player3box,menu6);
+
+    }
+
+
+//    public void endGame() {
+//
+//        Button viewStats = new Button("View endgame Stats");
+//        viewStats.setPrefHeight(50);
+//        viewStats.setPrefWidth(200);
+//        viewStats.setTranslateY(-100);
+//        viewStats.setTranslateX(0);
+//        sp.getChildren().add(viewStats);
+//        viewStats.setOnMouseClicked(event -> {
+//            Scene scene = null;
+//            try {
+//                endgame = new StackPane();
+//                scene = new EndGamePage(endgame, players, window);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            window.setScene( scene);
+//        });
+//
+//    }
+    public void victoryPointCalculator() {
+        int[] total = new int[4];
+        for (int i = 0; i < 4; i++)
+            total[i] = 0;
+
+        int[] endCoin = new int[4];
+        for (int i = 0; i < 4; i++)
+            endCoin[i] = 0;
+
+        int[] endScience = new int[4];
+        for (int i = 0; i < 4; i++)
+            endScience[i] = 0;
+
+        int[] endSpecialPurple = new int[4];
+        for (int i = 0; i < 4; i++)
+            endSpecialPurple[i] = 0;
+
+        int[] endSpecialYellow = new int[4];
+        for (int i = 0; i < 4; i++)
+            endSpecialYellow[i] = 0;
+
+        int[] endSpecial = new int[4];
+        for (int i = 0; i < 4; i++)
+            endSpecial[i] = 0;
+
+        //point from coin
+        for (int i = 0; i < 4; i++)
+            endCoin[i] = players[i].stats.coin / 3;
+        //point from science
+
+
+        for (int i = 0; i < 4; i++) {
+            if(players[i].specialCards[16]){
+                
+                int mecSci = sciencePointCalculator(players[i].stats.mechanic + 1 , players[i].stats.literature, players[i].stats.geometry);
+                int litSci = sciencePointCalculator(players[i].stats.mechanic, players[i].stats.literature + 1, players[i].stats.geometry);
+                int geoSci = sciencePointCalculator(players[i].stats.mechanic , players[i].stats.literature, players[i].stats.geometry + 1);
+
+                endScience[i] =  max( mecSci , max( litSci , geoSci));
+            }
+            else
+                endScience[i] = sciencePointCalculator(players[i].stats.mechanic, players[i].stats.literature, players[i].stats.geometry);
+        }
+
+        //workers guild special
+        for (int i = 0; i < 4; i++) {
+            if (players[i].specialCards[10]) {
+                endSpecialPurple[i] += players[(i + 1) % 4].brownCards + players[(i + 3) % 4].brownCards;
+            }
+        }
+        //craftsmen guild special
+        for (int i = 0; i < 4; i++) {
+            if (players[i].specialCards[11]) {
+                endSpecialPurple[i] += (players[(i + 1) % 4].greyCards) * 2 + (players[(i + 3) % 4].greyCards) * 2;
+            }
+        }
+        //traders guild special
+        for (int i = 0; i < 4; i++) {
+            if (players[i].specialCards[12]) {
+                endSpecialPurple[i] += players[(i + 1) % 4].yellowCards + players[(i + 3) % 4].yellowCards;
+            }
+        }
+        //philosophers guil special
+        for (int i = 0; i < 4; i++) {
+            if (players[i].specialCards[13]) {
+                endSpecialPurple[i] += players[(i + 1) % 4].greenCards + players[(i + 3) % 4].greenCards;
+            }
+        }
+        //spies guild special
+        for (int i = 0; i < 4; i++) {
+            if (players[i].specialCards[14]) {
+                endSpecialPurple[i] += players[(i + 1) % 4].redCards + players[(i + 3) % 4].redCards;
+            }
+        }
+        //magistrates guild special
+        for (int i = 0; i < 4; i++) {
+            if (players[i].specialCards[15]) {
+                endSpecialPurple[i] += players[(i + 1) % 4].blueCards + players[(i + 3) % 4].blueCards;
+            }
+        }
+        //haven special
+        for (int i = 0; i < 4; i++) {
+            if (players[i].specialCards[6]) {
+                endSpecialYellow[i] += players[i].brownCards;
+            }
+        }
+        //lighthouse special
+        for (int i = 0; i < 4; i++) {
+            if (players[i].specialCards[7]) {
+                endSpecialYellow[i] += players[i].yellowCards;
+            }
+        }
+        //chamber of commerce special
+        for (int i = 0; i < 4; i++) {
+            if (players[i].specialCards[8]) {
+                endSpecialYellow[i] += (players[i].greyCards) * 2;
+            }
+        }
+        //arena special
+        for (int i = 0; i < 4; i++) {
+            if (players[i].specialCards[9]) {
+                endSpecialYellow[i] += players[i].milestoneDone;
+            }
+        }
+        for (int i = 0; i < 4; i++)
+            endSpecial[i] += endSpecialPurple[i] + endSpecialYellow[i];
+        //total point
+        for (int i = 0; i < 4; i++)
             total[i] = endCoin[i] + endScience[i] + endSpecialPurple[i] + endSpecialYellow[i] + players[0].stats.victoryPoint
                     + players[i].battlePoint;
     }
+    public int sciencePointCalculator(int a, int b, int c){
+        int m = 0;
+        
+        m += a * a + b * b + c* c;
+        
+        int l = min( a, min(b, c));
+        m += 7 * l;
+        return m;
+
+
+    }
     public boolean recursiveCheck( Resource[] playersResource, boolean[] pr, Resource costsResource, int cr) {
-        //System.out.println("pr.length: " + pr.length);
-        //System.out.println("cost length: " + costsResource.quantity.length);
-        //System.out.println("player length: " + playersResource.length);
+        System.out.println("pr.length: " + pr.length);
+        System.out.println("cost length: " + costsResource.quantity.length);
+        System.out.println("player length: " + playersResource.length);
         if( cr >= costsResource.quantity.length)
             return true;
 //        System.out.println("cost: " + costsResource.name[cr]);
@@ -1655,7 +2153,7 @@ public class GamePage extends Scene {
             if(!pr[i]) {
                 for (int j = 0; j < playersResource[i].quantity.length; j++) {
                     if(playersResource[i].name[j].equals(costsResource.name[cr])) {
-                        //System.out.println(playersResource[i].name[j] + " -> " + costsResource.name[cr]);
+                        System.out.println(playersResource[i].name[j] + " -> " + costsResource.name[cr]);
                         int tmpCr = cr;
                         boolean[] tmpPr = pr;
                         Resource[] tmpPlayerResource = new Resource[playersResource.length];
@@ -1692,16 +2190,26 @@ public class GamePage extends Scene {
         if( players[playerNum].stats.coin < cost.coin)
             return false;
         Resource[] tmpPlayerResource;
-        tmpPlayerResource = new Resource[players[playerNum].resources.length];
+        tmpPlayerResource = new Resource[60];
         Resource tmpCostResource = new Resource( cost.resource);
         System.out.println("length" + players[playerNum].resources.length);
-        for( int k = 0; k < players[playerNum].resourceCount; k++)
+        int k;
+        for( k = 0; k < players[playerNum].resourceCount; k++)
             tmpPlayerResource[k] = new Resource( players[playerNum].resources[k]);
-
-        return recursiveCheck( tmpPlayerResource, new boolean[players[playerNum].resourceCount], tmpCostResource, 0);
+        for(int i = 0; i < players[playerNum].leftTradedResources.name.length; i++,k++) {
+            tmpPlayerResource[k] = new Resource( 1);
+            tmpPlayerResource[k].name[0] = players[playerNum].leftTradedResources.name[i];
+            tmpPlayerResource[k].quantity[0] = players[playerNum].leftTradedResources.quantity[i];
+        }
+        for(int i = 0; i < players[playerNum].rightTradedResources.name.length; i++,k++) {
+            tmpPlayerResource[k] = new Resource( 1);
+            tmpPlayerResource[k].name[0] = players[playerNum].rightTradedResources.name[i];
+            tmpPlayerResource[k].quantity[0] = players[playerNum].rightTradedResources.quantity[i];
+        }
+        return recursiveCheck( tmpPlayerResource, new boolean[players[playerNum].resourceCount + players[playerNum].rightTradedResources.quantity.length + players[playerNum].leftTradedResources.quantity.length], tmpCostResource, 0);
     }
     public void gainBenefit( int playerNum, boolean isWonderbuild, Property benefit, String buildingName, String buildingColor) throws Exception {
-        // specialCard = # : 16= Babylon A, 17 = Babylon B, 18 = olympia A, 19 = olympia B1,    20 = olympiaB3, 21 = Halikarnassos
+        // specialCard = # : 16= Babylon A, 17 = Babylon B, 18 = olympia A, 19 = olympia B1,    20 = olympiaB3, 21 = Halikarnassos, 22 = check of olympiaA
         if(isWonderbuild) {
             benefit = wb[playerNum].milestones[players[playerNum].milestoneDone].benefit;
             players[playerNum].milestoneDone++;
@@ -1864,6 +2372,7 @@ public class GamePage extends Scene {
         else if (benefit.specialCard == 8)  players[playerNum].stats.coin += players[playerNum].greyCards * 2;
         else if (benefit.specialCard == 9)  players[playerNum].stats.coin += players[playerNum].milestoneDone * 3;
         players[playerNum].specialCards[benefit.specialCard] = true;
+        if(benefit.specialCard == 18)  players[playerNum].specialCards[22] = true;
     }
     private void definingCards() throws Exception {
         Property a = new Property();
@@ -2246,6 +2755,12 @@ public class GamePage extends Scene {
         b.geometry=1;
         cards[1][18] = new Card("dispensary","green",a,b);
 //dispensary2
+        a = new Property();
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Ore"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Glass"; a.resource.quantity[1] = 1;
+        b = new Property();
+        b.geometry=1;
         cards[1][19] = new Card("dispensary","green",a,b);
 
 
@@ -2295,7 +2810,7 @@ public class GamePage extends Scene {
         a.resource.name[1] = "Paper"; a.resource.quantity[1] = 1;
         b = new Property();
         b.literature =1;
-        cards[1][24] = new Card("dispensary","green",a,b);
+        cards[1][24] = new Card("school","green",a,b);
 
 
 //loom
@@ -2570,7 +3085,7 @@ public class GamePage extends Scene {
         a.resource.name[0] = "Ore"; a.resource.quantity[0] = 2;
         a.resource.name[1] = "Stone"; a.resource.quantity[1] = 1;
         a.resource.name[2] = "Clay"; a.resource.quantity[2] = 1;
-        a.resource.name[3] = "Lumber"; a.resource.quantity[3] = 2;
+        a.resource.name[3] = "Lumber"; a.resource.quantity[3] = 1;
         b = new Property();
         b.specialCard=10;
         cards[2][22] = new Card("workersguild","purple",a,b);
@@ -2624,7 +3139,7 @@ public class GamePage extends Scene {
         cards[2][27] = new Card("magistratesguild","purple",a,b);
 
     }
-    private void distributeWonders( StackPane sp, ToggleGroup side, String name) throws Exception {
+    private void distributeWonders( StackPane sp, String side, String name) throws Exception {
         Random rand = new Random();
         int[] randoms = new int[4];
         randoms[0] = rand.nextInt(7); randoms[0]++;
@@ -2645,10 +3160,10 @@ public class GamePage extends Scene {
             if(randoms[i] == 7) {tmp.name[0] = "Stone"; tmp.quantity[0] = 1; }
             players[i].addResource( tmp);
         }
-        wb[0] = new WonderBoard( sp,randoms[0], side.getSelectedToggle().getUserData().toString(), name, 0);
-        wb[1] = new WonderBoard( sp,randoms[1], side.getSelectedToggle().getUserData().toString(), "bot1", 1);
-        wb[2] = new WonderBoard( sp,randoms[2], side.getSelectedToggle().getUserData().toString(), "bot2", 2);
-        wb[3] = new WonderBoard( sp,randoms[3], side.getSelectedToggle().getUserData().toString(), "bot3", 3);
+        wb[0] = new WonderBoard( sp,randoms[0], side, name, 0);
+        wb[1] = new WonderBoard( sp,randoms[1], side, "bot1", 1);
+        wb[2] = new WonderBoard( sp,randoms[2], side, "bot2", 2);
+        wb[3] = new WonderBoard( sp,randoms[3], side, "bot3", 3);
         // wonder animasyonları
         TranslateTransition translateTransition = new TranslateTransition();
         translateTransition.setDuration(Duration.millis(1000));
@@ -3500,7 +4015,7 @@ public class GamePage extends Scene {
     private enum CardAction { SELL, BURY, BUILD; }
     public class Card extends Pane {
         String name, color;
-        javafx.scene.control.Button sellButton,buryButton,buildButton;
+        Button sellButton,buryButton,buildButton,olympiaButton;
         Rectangle board;
         GamePage.Property cost, benefit;
         boolean isUsed;
@@ -3532,7 +4047,7 @@ public class GamePage extends Scene {
             if (this.isUsed)
                 return;
             board.setOpacity(0.65);
-            sellButton = new javafx.scene.control.Button("SELL");
+            sellButton = new Button("SELL");
             sellButton.setTranslateX(55);
             sellButton.setTranslateY(30);
             getChildren().add(sellButton);
@@ -3544,7 +4059,7 @@ public class GamePage extends Scene {
                 }
             });
 
-            buryButton = new javafx.scene.control.Button("UPGRADE WONDER");
+            buryButton = new Button("UPGRADE WONDER");
             buryButton.setTranslateX(10);
             buryButton.setTranslateY(70);
             getChildren().add(buryButton);
@@ -3568,6 +4083,31 @@ public class GamePage extends Scene {
                 }
             });
 
+            if( players[0].specialCards[18]) {
+                olympiaButton = new Button("BUILD FREE");
+                olympiaButton.setTranslateX(20);
+                olympiaButton.setTranslateY(150);
+                getChildren().add(olympiaButton);
+                olympiaButton.setOnMouseClicked(event -> {
+                    try {
+                        gainBenefit( 0, false, this.benefit, this.name, this.color);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        deleteCard();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        endTurn();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    players[0].specialCards[18] = false;
+                });
+            }
+
         /*
         sell = new Text("Sell");
         sell.setFill(Color.WHITESMOKE);
@@ -3587,6 +4127,7 @@ public class GamePage extends Scene {
             getChildren().remove(sellButton);
             getChildren().remove(buryButton);
             getChildren().remove(buildButton);
+            getChildren().remove(olympiaButton);
         }
         public void deleteCard() throws IOException {
             board.setOpacity(1);
@@ -3618,6 +4159,7 @@ public class GamePage extends Scene {
 
             switch (action) {
                 case SELL:
+                    System.out.println(playerNum + "sell" + name);
                     Property tmp = new GamePage.Property();
                     tmp.coin = 3;
                     gainBenefit( playerNum, false, tmp, "", "");
@@ -3626,6 +4168,7 @@ public class GamePage extends Scene {
                     break;
 
                 case BURY:
+                    System.out.println(playerNum + "bury" + name);
                     if (players[playerNum].milestoneDone == wb[playerNum].milestones.length) {
                         if (!isBot(playerNum))
                             giveError("All wonders have already built");
@@ -3642,6 +4185,7 @@ public class GamePage extends Scene {
                     break;
 
                 case BUILD:
+                    System.out.println(playerNum + "build" + name);
                     if (!checkResources(playerNum, false, cost)) {
                         if (!isBot(playerNum))
                             giveError("Not enough resources");

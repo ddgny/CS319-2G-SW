@@ -46,55 +46,101 @@ public class setNamePage extends Scene {
         nameArea.setFill(Color.BLACK);
         nameArea.setEffect( new GaussianBlur(3.5));
         // name
-        TextField tf = new TextField("Player");
-        tf.setMaxWidth(150);
-        tf.setTranslateY(-30);
-        Text nameText = new Text("Player Name: ");
-        nameText.setFill(Color.WHITESMOKE);
-        nameText.setFont(Font.font("Verdana", FontWeight.BOLD,15));
-        nameText.setTranslateY(-70);
-        Text sideText = new Text("Which side you want to play? ");
-        sideText.setFill(Color.WHITESMOKE);
-        sideText.setFont(Font.font("Verdana", FontWeight.BOLD,15));
-        sideText.setTranslateY(10);
-        // side
-        RadioButton aSide = new RadioButton("A");
-        aSide.setUserData("A");
-        RadioButton bSide = new RadioButton("B");
-        bSide.setUserData("B");
-        aSide.setTextFill(Color.WHITESMOKE);
-        bSide.setTextFill(Color.WHITESMOKE);
-        ToggleGroup sidetg = new ToggleGroup();
-        aSide.setToggleGroup(sidetg);
-        bSide.setToggleGroup(sidetg);
-        aSide.setSelected(true);
-        HBox hbox = new HBox(aSide, bSide);
-        bSide.setTranslateX(40);
-        hbox.setTranslateY(447);
-        hbox.setTranslateX(710);
-        // ally mode
-        CheckBox ally = new CheckBox("Ally Mode");
-        ally.setTranslateY(90);
-        ally.setTextFill(Color.WHITESMOKE);
-        // Start Button
-        Main.MenuButton sb = new Main.MenuButton("Start");
-        sb.setMaxSize(250,30);
-        sb.setTranslateY(170);
-        sb.setOnMouseClicked(event -> {
-            Scene scene = null;
-            StackPane gameScreen = new StackPane();
-            int intMode;
-            if( mode == "Story") intMode = 1;
-            else if( ally.isSelected()) intMode = -1;
-            else intMode = 0;
-            try {
-                scene = new GamePage(gameScreen, bp, window, tf.getText(), sidetg, intMode);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            window.setScene( scene);
-        });
+        if( mode == "Quick") {
+            TextField tf = new TextField("Player");
+            tf.setMaxWidth(150);
+            tf.setTranslateY(-30);
+            Text nameText = new Text("Player Name: ");
+            nameText.setFill(Color.WHITESMOKE);
+            nameText.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+            nameText.setTranslateY(-70);
 
-        sp.getChildren().addAll( bb, nameArea, nameText, tf, sideText, hbox, ally, sb);
+            Text sideText = new Text("Which side you want to play? ");
+            sideText.setFill(Color.WHITESMOKE);
+            sideText.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+            sideText.setTranslateY(10);
+            // side
+            RadioButton aSide = new RadioButton("A");
+            aSide.setUserData("A");
+            RadioButton bSide = new RadioButton("B");
+            bSide.setUserData("B");
+            aSide.setTextFill(Color.WHITESMOKE);
+            bSide.setTextFill(Color.WHITESMOKE);
+            ToggleGroup sidetg = new ToggleGroup();
+            aSide.setToggleGroup(sidetg);
+            bSide.setToggleGroup(sidetg);
+            aSide.setSelected(true);
+            HBox hbox = new HBox(aSide, bSide);
+            bSide.setTranslateX(40);
+            hbox.setTranslateY(447);
+            hbox.setTranslateX(710);
+            // ally mode
+            CheckBox ally = new CheckBox("Ally Mode");
+            ally.setTranslateY(90);
+            ally.setTextFill(Color.WHITESMOKE);
+            // Start Button
+            Main.MenuButton sb = new Main.MenuButton("Start");
+            sb.setMaxSize(250, 30);
+            sb.setTranslateY(170);
+
+            sb.setOnMouseClicked(event -> {
+                String side = sidetg.getSelectedToggle().getUserData().toString();
+                Scene scene = null;
+                StackPane gameScreen = new StackPane();
+                int intMode;
+                if (mode == "Story") intMode = 1;
+                else if (ally.isSelected()) intMode = -1;
+                else intMode = 0;
+                try {
+                    scene = new GamePage(gameScreen, bp, window, tf.getText(), side, intMode);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                window.setScene(scene);
+            });
+
+            sp.getChildren().addAll(bb, nameArea, nameText, tf, sideText, hbox, ally, sb);
+        }
+        else{
+            TextField tf = new TextField("Player");
+            tf.setMaxWidth(150);
+            tf.setTranslateY(20);
+            Text nameText = new Text("Player Name: ");
+            nameText.setFill(Color.WHITESMOKE);
+            nameText.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+            nameText.setTranslateY(-20);
+
+            RadioButton aSide = new RadioButton("A");
+            aSide.setUserData("A");
+            RadioButton bSide = new RadioButton("B");
+            bSide.setUserData("B");
+            aSide.setTextFill(Color.WHITESMOKE);
+            bSide.setTextFill(Color.WHITESMOKE);
+            ToggleGroup sidetg = new ToggleGroup();
+            aSide.setToggleGroup(sidetg);
+            bSide.setToggleGroup(sidetg);
+            aSide.setSelected(true);
+            Main.MenuButton sb = new Main.MenuButton("Start");
+            sb.setMaxSize(250, 30);
+            sb.setTranslateY(170);
+
+            sb.setOnMouseClicked(event -> {
+                String side = sidetg.getSelectedToggle().getUserData().toString();
+                Scene scene = null;
+                StackPane gameScreen = new StackPane();
+                int intMode;
+                if (mode == "Story") intMode = 1;
+
+                else intMode = 0;
+                try {
+                    scene = new GamePage(gameScreen, bp, window, tf.getText(), side, intMode);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                window.setScene(scene);
+            });
+
+            sp.getChildren().addAll(bb, nameArea, nameText, tf, sb);
+        }
     }
 }
