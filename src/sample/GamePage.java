@@ -1584,7 +1584,7 @@ public class GamePage extends Scene {
         }
         for(int i = ((currentTurn - 1) % 4) * 7; i <= ((currentTurn - 1) % 4) * 7 + 6; i++){
             for (int j = 0; j < players[0].buildingsCount; j++) {
-                if (players[0].buildings[j].contains(cards[currentAge - 1][i].cost.requiredBuilding) && !cards[currentAge - 1][i].cost.requiredBuilding.equals("")) {
+                if (players[0].buildings[j].contains(cards[currentAge - 1][i].cost.requiredBuilding) && !cards[currentAge - 1][i].cost.requiredBuilding.equals("") && !cards[currentAge -1][i].isUsed) {
                     cardTicks[i%7].setVisible(true);
                     System.out.println("FREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE" + i%7);
                 }
