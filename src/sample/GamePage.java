@@ -2700,6 +2700,12 @@ public class GamePage extends Scene {
         b.geometry=1;
         cards[1][18] = new Card("dispensary","green",a,b);
 //dispensary2
+        a = new Property();
+        a.resource = new Resource(2);
+        a.resource.name[0] = "Ore"; a.resource.quantity[0] = 2;
+        a.resource.name[1] = "Glass"; a.resource.quantity[1] = 1;
+        b = new Property();
+        b.geometry=1;
         cards[1][19] = new Card("dispensary","green",a,b);
 
 
@@ -2749,7 +2755,7 @@ public class GamePage extends Scene {
         a.resource.name[1] = "Paper"; a.resource.quantity[1] = 1;
         b = new Property();
         b.literature =1;
-        cards[1][24] = new Card("dispensary","green",a,b);
+        cards[1][24] = new Card("school","green",a,b);
 
 
 //loom
@@ -3024,7 +3030,7 @@ public class GamePage extends Scene {
         a.resource.name[0] = "Ore"; a.resource.quantity[0] = 2;
         a.resource.name[1] = "Stone"; a.resource.quantity[1] = 1;
         a.resource.name[2] = "Clay"; a.resource.quantity[2] = 1;
-        a.resource.name[3] = "Lumber"; a.resource.quantity[3] = 2;
+        a.resource.name[3] = "Lumber"; a.resource.quantity[3] = 1;
         b = new Property();
         b.specialCard=10;
         cards[2][22] = new Card("workersguild","purple",a,b);
@@ -4098,6 +4104,7 @@ public class GamePage extends Scene {
 
             switch (action) {
                 case SELL:
+                    System.out.println(playerNum + "sell" + name);
                     Property tmp = new GamePage.Property();
                     tmp.coin = 3;
                     gainBenefit( playerNum, false, tmp, "", "");
@@ -4106,6 +4113,7 @@ public class GamePage extends Scene {
                     break;
 
                 case BURY:
+                    System.out.println(playerNum + "bury" + name);
                     if (players[playerNum].milestoneDone == wb[playerNum].milestones.length) {
                         if (!isBot(playerNum))
                             giveError("All wonders have already built");
@@ -4122,6 +4130,7 @@ public class GamePage extends Scene {
                     break;
 
                 case BUILD:
+                    System.out.println(playerNum + "build" + name);
                     if (!checkResources(playerNum, false, cost)) {
                         if (!isBot(playerNum))
                             giveError("Not enough resources");
