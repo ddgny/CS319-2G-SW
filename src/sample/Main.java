@@ -1,6 +1,5 @@
 package sample;
-import java.io.File;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import javafx.application.Application;
@@ -146,7 +145,16 @@ public class Main extends Application {
 
             // load game button
             btnLoadGame.setOnMouseClicked(event -> {
-
+                try (BufferedReader br = new BufferedReader(new FileReader("save.txt"))) {
+                    String name = br.readLine();
+                    int intMode = Integer.parseInt(br.readLine());
+                    Scene scene = new GamePage( new StackPane(), mainMenu, window, name, "A", intMode);
+                    window.setScene( scene);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             });
 
             // Options button

@@ -84,6 +84,7 @@ public class setNamePage extends Scene {
             sb.setTranslateY(170);
 
             sb.setOnMouseClicked(event -> {
+                String side = sidetg.getSelectedToggle().getUserData().toString();
                 Scene scene = null;
                 StackPane gameScreen = new StackPane();
                 int intMode;
@@ -91,7 +92,7 @@ public class setNamePage extends Scene {
                 else if (ally.isSelected()) intMode = -1;
                 else intMode = 0;
                 try {
-                    scene = new GamePage(gameScreen, bp, window, tf.getText(), sidetg, intMode);
+                    scene = new GamePage(gameScreen, bp, window, tf.getText(), side, intMode);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -124,6 +125,7 @@ public class setNamePage extends Scene {
             sb.setTranslateY(170);
 
             sb.setOnMouseClicked(event -> {
+                String side = sidetg.getSelectedToggle().getUserData().toString();
                 Scene scene = null;
                 StackPane gameScreen = new StackPane();
                 int intMode;
@@ -131,7 +133,7 @@ public class setNamePage extends Scene {
 
                 else intMode = 0;
                 try {
-                    scene = new GamePage(gameScreen, bp, window, tf.getText(), sidetg, intMode);
+                    scene = new GamePage(gameScreen, bp, window, tf.getText(), side, intMode);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

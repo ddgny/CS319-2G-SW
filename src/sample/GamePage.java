@@ -12,11 +12,10 @@ import javafx.scene.media.MediaPlayer;
 
 import java.awt.event.ActionEvent;
 import java.beans.EventHandler;
-import java.io.File;
+import java.io.*;
+
 import javafx.scene.Group;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import javafx.animation.PauseTransition;
@@ -154,16 +153,16 @@ public class GamePage extends Scene {
     }
 
 
-    public GamePage(StackPane sp, Scene mainmenu, Stage window, String name, ToggleGroup side, int sMode) throws Exception {
+    public GamePage(StackPane sp, Scene mainmenu, Stage window, String name, String side, int sMode) throws Exception {
         super(sp, Main.primaryScreenBounds.getWidth(), Main.primaryScreenBounds.getHeight());
         mode = sMode;
         noOfCardsAtStake = 0;
 
-        cardsAtStake = new Card[40];
+        cardsAtStake = new Card[80];
         currentAge = currentTurn = 1;
         this.window = window;
         this.sp = sp;
-        this.side = side.getSelectedToggle().getUserData().toString();
+        this.side = side;
         wb = new WonderBoard[4];
         players = new Player[4];
         cards = new Card[3][28];
@@ -175,6 +174,17 @@ public class GamePage extends Scene {
         imgView.setFitWidth(Main.primaryScreenBounds.getWidth());
         sp.getChildren().add(imgView);
 
+        // save game
+        if(mode > 1) {
+            try (BufferedWriter bw = new BufferedWriter(new PrintWriter("save.txt"))) {
+                bw.write(name);
+                bw.newLine();
+                bw.write(mode + "");
+                giveError("Game Saved");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         //TRADE COMBO BOX
 
@@ -1474,6 +1484,8 @@ public class GamePage extends Scene {
         for(int i = ((currentTurn - 1) % 4) * 7; i <= ((currentTurn - 1) % 4) * 7 + 6; i++) sp.getChildren().add(cards[currentAge - 1][i]);
         for(int i = 0; i < 4; i++) { players[i].leftTradedResources = new Resource(0); players[i].rightTradedResources = new Resource( 0);}
         reDrawWonders();
+
+        // popup screen at the end of the ages
         if( currentTurn == 1) {
             int endAge=currentAge-1;
             if (players[0].stats.shield == players[1].stats.shield) {
@@ -3084,7 +3096,7 @@ public class GamePage extends Scene {
         cards[2][27] = new Card("magistratesguild","purple",a,b);
 
     }
-    private void distributeWonders( StackPane sp, ToggleGroup side, String name) throws Exception {
+    private void distributeWonders( StackPane sp, String side, String name) throws Exception {
         Random rand = new Random();
         int[] randoms = new int[4];
         randoms[0] = rand.nextInt(7); randoms[0]++;
@@ -3105,10 +3117,10 @@ public class GamePage extends Scene {
             if(randoms[i] == 7) {tmp.name[0] = "Stone"; tmp.quantity[0] = 1; }
             players[i].addResource( tmp);
         }
-        wb[0] = new WonderBoard( sp,randoms[0], side.getSelectedToggle().getUserData().toString(), name, 0);
-        wb[1] = new WonderBoard( sp,randoms[1], side.getSelectedToggle().getUserData().toString(), "bot1", 1);
-        wb[2] = new WonderBoard( sp,randoms[2], side.getSelectedToggle().getUserData().toString(), "bot2", 2);
-        wb[3] = new WonderBoard( sp,randoms[3], side.getSelectedToggle().getUserData().toString(), "bot3", 3);
+        wb[0] = new WonderBoard( sp,randoms[0], side, name, 0);
+        wb[1] = new WonderBoard( sp,randoms[1], side, "bot1", 1);
+        wb[2] = new WonderBoard( sp,randoms[2], side, "bot2", 2);
+        wb[3] = new WonderBoard( sp,randoms[3], side, "bot3", 3);
         // wonder animasyonları
         TranslateTransition translateTransition = new TranslateTransition();
         translateTransition.setDuration(Duration.millis(1000));
@@ -4030,7 +4042,7 @@ public class GamePage extends Scene {
 
             if( players[0].specialCards[18]) {
                 olympiaButton = new Button("BUILD FREE");
-                olympiaButton.setTranslateX(50);
+                olympiaButton.setTranslateX(20);
                 olympiaButton.setTranslateY(150);
                 getChildren().add(olympiaButton);
                 olympiaButton.setOnMouseClicked(event -> {
