@@ -54,6 +54,7 @@ import static java.lang.Math.min;
 public class GamePage extends Scene {
     public static WonderBoard[] wb;
     public static Player[] players;
+    private ImageView[] cardTicks;
     private Card[][] cards;
     private Card[] cardsAtStake;
     private Stage window;
@@ -1228,10 +1229,29 @@ public class GamePage extends Scene {
                 cards[i][j*7+6].setTranslateX(-550); cards[i][j*7+6].setTranslateY(290);
             }
         }
+        InputStream is2 = Files.newInputStream(Paths.get("images/tick.png"));
+        Image imgTick = new Image(is2);
+        is2.close();
+        cardTicks = new ImageView[7];
+        for(int i = 0; i < 7; i++){
+            cardTicks[i] = new ImageView(imgTick);
+            cardTicks[i].setFitWidth(40);
+            cardTicks[i].setFitHeight(40);
+            cardTicks[i].setVisible(false);
+        }
+        cardTicks[0].setTranslateX(-180); cardTicks[0].setTranslateY(10);
+        cardTicks[1].setTranslateX(20); cardTicks[1].setTranslateY(10);
+        cardTicks[2].setTranslateX(-380); cardTicks[2].setTranslateY(10);
+        cardTicks[3].setTranslateX(-580); cardTicks[3].setTranslateY(10);
+        cardTicks[4].setTranslateX(-80); cardTicks[4].setTranslateY(210);
+        cardTicks[5].setTranslateX(-280); cardTicks[5].setTranslateY(210);
+        cardTicks[6].setTranslateX(-480); cardTicks[6].setTranslateY(210);
 
         distributeWonders( sp, side, name);
 
         sp.getChildren().addAll(wb);
+        sp.getChildren().addAll(cardTicks);
+
         if(mode == 1){
             players[1].name = "General Seleucus";
             players[2].name = "General Cassander";
@@ -1506,6 +1526,9 @@ public class GamePage extends Scene {
         for(int i = ((currentTurn - 1) % 4) * 7; i <= ((currentTurn - 1) % 4) * 7 + 6; i++) sp.getChildren().add(cards[currentAge - 1][i]);
         for(int i = 0; i < 4; i++) { players[i].leftTradedResources = new Resource(0); players[i].rightTradedResources = new Resource( 0);}
         reDrawWonders();
+        sp.getChildren().removeAll(cardTicks);
+        reDrawTick();
+        sp.getChildren().addAll(cardTicks);
 
         // popup screen at the end of the ages
         if( currentTurn == 1) {
@@ -1554,6 +1577,22 @@ public class GamePage extends Scene {
 //                }
 
     }
+
+    public void reDrawTick(){
+        for(int i = 0; i < 7; i++){
+            cardTicks[i].setVisible(false);
+        }
+        for(int i = ((currentTurn - 1) % 4) * 7; i <= ((currentTurn - 1) % 4) * 7 + 6; i++){
+            for (int j = 0; j < players[0].buildingsCount; j++) {
+                if (players[0].buildings[j].contains(cards[currentAge - 1][i].cost.requiredBuilding) && !cards[currentAge - 1][i].cost.requiredBuilding.equals("")) {
+                    cardTicks[i%7].setVisible(true);
+                    System.out.println("FREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE" + i%7);
+                }
+            }
+        }
+
+    }
+
     public void slidingText(String text) throws Exception{
         final String content = text;
         final Text textArea = new Text(10, 20, "");
