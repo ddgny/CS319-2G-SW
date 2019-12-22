@@ -1208,6 +1208,7 @@ public class GamePage extends Scene {
         sp.getChildren().add(pb);
 
         players[0] = new Player(name);
+//        players[0].stats.victoryPoint = 30;
         players[1] = new Player("bot1");
         players[2] = new Player("bot2");
         players[3] = new Player("bot3");
@@ -1231,8 +1232,29 @@ public class GamePage extends Scene {
         distributeWonders( sp, side, name);
 
         sp.getChildren().addAll(wb);
-        if(mode!=0){
-            slidingText("Story Mode!!"+mode);
+        if(mode == 1){
+            players[1].name = "General Seleucus";
+            players[2].name = "General Cassander";
+            players[3].name = "General Ptolemy";
+            reDrawWonders();
+            slidingText("Welcome to 7 wonders\n\nYou are one of the most powerful general of the kingdom of Macedon. Alexander the Great give tasks to his generals to rebuild one of the seven wonders.\nThe general who makes the best wonder will win.\n\nObejectives:\n- Collect the most victory point\n- Complete your wonder");
+        }
+        else if( mode == 2) {
+            players[1].name = "Seleucid Empire";
+            players[3].name = "Ptolemaic Dynasty";
+            players[2].name = "The kingdom of Cassander";
+            reDrawWonders();
+            slidingText("Alexander the Great died at a young age so the kingdom of Macedon is divided to his generals according to his will. However people of yor region don't want you to rule. So you need to improve your region and earn their trust.\n\nObjectives:\n- Collect the most victory point\n- Collect at least 20 victory points from blue cards or your wonder");
+        }
+        else if( mode == 3) {
+            players[1].name = "Roman Republic";
+            players[2].name = "Roman Republic";
+            players[3].name = "Roman Republic";
+            players[1].stats.shield = 5;
+            players[2].stats.shield = 5;
+            players[3].stats.shield = 5;
+            reDrawWonders();
+            slidingText("Roman Republic started to invade your lands. You need to protect your people and defeat the large army of Romans.\n\n Objecives:\n- Collect the most victory points");
         }
 
     }
@@ -1710,7 +1732,7 @@ public class GamePage extends Scene {
             endSpecial[i] += endSpecialPurple[i] + endSpecialYellow[i];
         //total point
         for (int i = 0; i < 4; i++)
-            total[i] = endCoin[i] + endScience[i] + endSpecialPurple[i] + endSpecialYellow[i] + players[0].stats.victoryPoint
+            total[i] = endCoin[i] + endScience[i] + endSpecialPurple[i] + endSpecialYellow[i] + players[i].stats.victoryPoint
                     + players[i].battlePoint;
 
 
@@ -1923,22 +1945,43 @@ public class GamePage extends Scene {
         menu6.setTranslateY(250);
 
 
-        Main.MenuButton btnExit2 = new Main.MenuButton("Exit Game");
-        Main.MenuButton btnMain = new Main.MenuButton("Play Again");
+        Main.MenuButton btnExit2 = new Main.MenuButton("Return to menu");
+        Main.MenuButton btnContinue = new Main.MenuButton("Continue");
+        Main.MenuButton btnPlayAgain = new Main.MenuButton("PlayAgain");
 
         btnExit2.setOnMouseClicked( event2 -> {
-            System.exit(0);
-        });
-        btnMain.setOnMouseClicked( event2 -> {
-
             btnExit2.setVisible(false);
-            btnMain.setVisible(false);
-            menu6.getChildren().removeAll(btnExit2, btnMain);
+            btnContinue.setVisible(false);
+            menu6.getChildren().removeAll(btnExit2, btnContinue);
 //            sp.getChildren().remove(menu6);
             sp.getChildren().removeAll(bg3,bg4,statsBox,player0box,player1box,player2box,player3box,menu6);
             window.setScene(Main.mainMenu);
         });
-        menu6.getChildren().addAll(btnExit2, btnMain);
+        btnContinue.setOnMouseClicked( event2 -> {
+            try {
+                Scene scene = new GamePage( new StackPane(), Main.mainMenu, window, players[0].name, side, mode + 1);
+                window.setScene(scene);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        btnPlayAgain.setOnMouseClicked( mouseEvent -> {
+            try {
+                Scene scene = new GamePage( new StackPane(), Main.mainMenu, window, players[0].name, side, mode);
+                window.setScene(scene);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        boolean isContinue = false;
+        if( mode == 1 && players[0].milestoneDone == 3 && total[0] > total[1] && total[0] > total[2] && total[0] > total[3]) isContinue = true;
+        else if( mode == 2 && players[0].stats.victoryPoint > 19 && total[0] > total[1] && total[0] > total[2] && total[0] > total[3]) isContinue = true;
+        else if( mode == 3  && total[0] > total[1] && total[0] > total[2] && total[0] > total[3]) isContinue = true;
+        if(isContinue)
+            menu6.getChildren().addAll(btnExit2, btnContinue);
+        else
+            menu6.getChildren().addAll(btnExit2, btnPlayAgain);
 
 
 //        contRec.setOnMouseClicked(event -> {
