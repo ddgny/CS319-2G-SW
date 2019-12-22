@@ -25,7 +25,7 @@ import java.nio.file.Paths;
 public class setNamePage extends Scene {
     public setNamePage(StackPane sp, Scene bp, Stage window, String mode) throws Exception {
         super( sp, Main.primaryScreenBounds.getWidth(), Main.primaryScreenBounds.getHeight());
-        InputStream is = Files.newInputStream(Paths.get("images/setname.jpg"));
+        InputStream is = Files.newInputStream(Paths.get("images/setnameQuick.gif"));
         Image img = new Image(is);
         is.close();
         ImageView imgView = new ImageView(img);
@@ -102,6 +102,14 @@ public class setNamePage extends Scene {
             sp.getChildren().addAll(bb, nameArea, nameText, tf, sideText, hbox, ally, sb);
         }
         else{
+            sp.getChildren().removeAll(imgView);
+            InputStream is1 = Files.newInputStream(Paths.get("images/setnameStory.gif"));
+            Image img8 = new Image(is1);
+            is.close();
+            ImageView imgView1 = new ImageView(img8);
+            imgView1.setFitHeight(Main.primaryScreenBounds.getHeight());
+            imgView1.setFitWidth(Main.primaryScreenBounds.getWidth());
+            sp.getChildren().add(imgView1);
             TextField tf = new TextField("Player");
             tf.setMaxWidth(150);
             tf.setTranslateY(20);

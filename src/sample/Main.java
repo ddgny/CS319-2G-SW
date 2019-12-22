@@ -46,7 +46,7 @@ public class Main extends Application {
         window = primaryStage;
         primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         // Background image
-        InputStream is = Files.newInputStream(Paths.get("images/mainmenu.jpg"));
+        InputStream is = Files.newInputStream(Paths.get("images/background-img.gif"));
         Image img = new Image(is);
         is.close();
         ImageView imgView = new ImageView(img);
