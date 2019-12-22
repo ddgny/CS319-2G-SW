@@ -36,7 +36,7 @@ public class Main extends Application {
     private GameMenu gameMenu;
     private static Stage window;
     private static StackPane root, options, htp,credits, setName;
-    private static Scene mainMenu;
+    public static Scene mainMenu;
     public static Rectangle2D primaryScreenBounds;
     public static MediaPlayer mediaPlayer;
     @Override
