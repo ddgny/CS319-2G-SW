@@ -54,6 +54,7 @@ import static java.lang.Math.min;
 public class GamePage extends Scene {
     public static WonderBoard[] wb;
     public static Player[] players;
+    private ImageView[] cardTicks;
     private Card[][] cards;
     private Card[] cardsAtStake;
     private Stage window;
@@ -1214,10 +1215,31 @@ public class GamePage extends Scene {
                 cards[i][j*7+6].setTranslateX(-550); cards[i][j*7+6].setTranslateY(290);
             }
         }
+        InputStream is2 = Files.newInputStream(Paths.get("images/tick.png"));
+        Image imgTick = new Image(is2);
+        is2.close();
+        cardTicks = new ImageView[7];
+        for(int i = 0; i < 7; i++){
+            cardTicks[i] = new ImageView(imgTick);
+            cardTicks[i].setFitWidth(40);
+            cardTicks[i].setFitHeight(40);
+            cardTicks[i].setVisible(false);
+        }
+        cardTicks[0].setTranslateX(-180); cardTicks[0].setTranslateY(10);
+        cardTicks[1].setTranslateX(20); cardTicks[1].setTranslateY(10);
+        cardTicks[2].setTranslateX(-380); cardTicks[2].setTranslateY(10);
+        cardTicks[3].setTranslateX(-580); cardTicks[3].setTranslateY(10);
+        cardTicks[4].setTranslateX(-80); cardTicks[4].setTranslateY(210);
+        cardTicks[5].setTranslateX(-280); cardTicks[5].setTranslateY(210);
+        cardTicks[6].setTranslateX(-480); cardTicks[6].setTranslateY(210);
+
+
+
 
         distributeWonders( sp, side, name);
 
         sp.getChildren().addAll(wb);
+        sp.getChildren().addAll(cardTicks);
 
 
 
@@ -1462,10 +1484,31 @@ public class GamePage extends Scene {
         }
         for(int i = ((lastTurn - 1) % 4) * 7; i <= ((lastTurn - 1) % 4) * 7 + 6; i++) sp.getChildren().remove(cards[lastAge - 1][i]);
         for(int i = ((currentTurn - 1) % 4) * 7; i <= ((currentTurn - 1) % 4) * 7 + 6; i++) sp.getChildren().add(cards[currentAge - 1][i]);
+
+
         for(int i = 0; i < 4; i++) { players[i].leftTradedResources = new Resource(0); players[i].rightTradedResources = new Resource( 0);}
         reDrawWonders();
+        sp.getChildren().removeAll(cardTicks);
+        reDrawTick();
+        sp.getChildren().addAll(cardTicks);
 
     }
+    public void reDrawTick(){
+        for(int i = 0; i < 7; i++){
+            cardTicks[i].setVisible(false);
+        }
+        for(int i = ((currentTurn - 1) % 4) * 7; i <= ((currentTurn - 1) % 4) * 7 + 6; i++){
+            for (int j = 0; j < players[0].buildingsCount; j++) {
+                if (players[0].buildings[j].contains(cards[currentAge - 1][i].cost.requiredBuilding) && !cards[currentAge - 1][i].cost.requiredBuilding.equals("")) {
+                    cardTicks[i%7].setVisible(true);
+                    //System.out.println("FREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE" + i%7);
+                }
+            }
+        }
+
+    }
+
+
     public void slidingText(String text){
         final String content = text;
         final Text textArea = new Text(10, 20, "");
@@ -1601,9 +1644,9 @@ public class GamePage extends Scene {
                     + players[i].battlePoint;
     }
     public boolean recursiveCheck( Resource[] playersResource, boolean[] pr, Resource costsResource, int cr) {
-        System.out.println("pr.length: " + pr.length);
-        System.out.println("cost length: " + costsResource.quantity.length);
-        System.out.println("player length: " + playersResource.length);
+        //System.out.println("pr.length: " + pr.length);
+        //System.out.println("cost length: " + costsResource.quantity.length);
+        //System.out.println("player length: " + playersResource.length);
         if( cr >= costsResource.quantity.length)
             return true;
 //        System.out.println("cost: " + costsResource.name[cr]);
@@ -1612,7 +1655,7 @@ public class GamePage extends Scene {
             if(!pr[i]) {
                 for (int j = 0; j < playersResource[i].quantity.length; j++) {
                     if(playersResource[i].name[j].equals(costsResource.name[cr])) {
-                        System.out.println(playersResource[i].name[j] + " -> " + costsResource.name[cr]);
+                        //System.out.println(playersResource[i].name[j] + " -> " + costsResource.name[cr]);
                         int tmpCr = cr;
                         boolean[] tmpPr = pr;
                         Resource[] tmpPlayerResource = new Resource[playersResource.length];
