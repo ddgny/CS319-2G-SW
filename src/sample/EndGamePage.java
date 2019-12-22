@@ -186,81 +186,81 @@ public class EndGamePage extends Scene {
 
         Text player0  = new Text(players[0].name);
         player0.setFill(Color.BLACK);
-        player0.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player0.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
         Text player1  = new Text(players[1].name);
         player1.setFill(Color.BLACK);
-        player1.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player1.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
         Text player2  = new Text(players[2].name);
         player2.setFill(Color.BLACK);
-        player2.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player2.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
         Text player3  = new Text(players[3].name);
         player3.setFill(Color.BLACK);
-        player3.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player3.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
         TextField player0name = new TextField(players[0].name);
 
 
         Text player0coin = new Text(players[0].stats.coin/3+"");
-        player0coin.setTranslateX(150);
+        player0coin.setTranslateX(0);
         player0coin.setFill(Color.YELLOW);
-        player0coin.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player0coin.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
         Text player1coin = new Text(players[1].stats.coin/3+"");
-        player1coin.setTranslateX(170);
+        player1coin.setTranslateX(0);
         player1coin.setFill(Color.YELLOW);
-        player1coin.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player1coin.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
         Text player2coin = new Text(players[2].stats.coin/3+"");
-        player2coin.setTranslateX(170);
+        player2coin.setTranslateX(0);
         player2coin.setFill(Color.YELLOW);
-        player2coin.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player2coin.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
         Text player3coin = new Text(players[3].stats.coin/3+"");
-        player3coin.setTranslateX(170);
+        player3coin.setTranslateX(0);
         player3coin.setFill(Color.YELLOW);
-        player3coin.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player3coin.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
 
 
         Text player0battlePoints = new Text(players[0].battlePoint+"");
-        player0battlePoints.setTranslateX(300);
+        player0battlePoints.setTranslateX(0);
         player0battlePoints.setFill(Color.RED);
-        player0battlePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player0battlePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
         Text player1battlePoints = new Text(players[1].battlePoint+"");
-        player1battlePoints.setTranslateX(320);
+        player1battlePoints.setTranslateX(0);
         player1battlePoints.setFill(Color.RED);
-        player1battlePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player1battlePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
         Text player2battlePoints = new Text(players[2].battlePoint+"");
-        player2battlePoints.setTranslateX(320);
+        player2battlePoints.setTranslateX(0);
         player2battlePoints.setFill(Color.RED);
-        player2battlePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player2battlePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
         Text player3battlePoints = new Text(players[3].battlePoint+"");
-        player3battlePoints.setTranslateX(320);
+        player3battlePoints.setTranslateX(0);
         player3battlePoints.setFill(Color.RED);
-        player3battlePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player3battlePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
 
         Text player0sciencePoints = new Text(endScience[0]+"");
-        player0sciencePoints.setTranslateX(450);
+        player0sciencePoints.setTranslateX(0);
         player0sciencePoints.setFill(Color.GREEN);
-        player0sciencePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player0sciencePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
         Text player1sciencePoints = new Text(endScience[1]+"");
-        player1sciencePoints.setTranslateX(470);
+        player1sciencePoints.setTranslateX(0);
         player1sciencePoints.setFill(Color.GREEN);
-        player1sciencePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player1sciencePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
         Text player2sciencePoints = new Text(endScience[2]+"");
-        player2sciencePoints.setTranslateX(470);
+        player2sciencePoints.setTranslateX(0);
         player2sciencePoints.setFill(Color.GREEN);
-        player2sciencePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player2sciencePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
         Text player3sciencePoints = new Text(endScience[3]+"");
-        player3sciencePoints.setTranslateX(470);
+        player3sciencePoints.setTranslateX(0);
         player3sciencePoints.setFill(Color.GREEN);
-        player3sciencePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player3sciencePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
 
 
@@ -270,70 +270,70 @@ public class EndGamePage extends Scene {
 
 
         Text player0specialcards = new Text(endSpecial[0]+"");
-        player0specialcards.setTranslateX(650);
+        player0specialcards.setTranslateX(0);
         player0specialcards.setFill(Color.PURPLE);
-        player0specialcards.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player0specialcards.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
         Text player1specialcards = new Text(endSpecial[1]+"");
-        player1specialcards.setTranslateX(670);
+        player1specialcards.setTranslateX(0);
         player1specialcards.setFill(Color.PURPLE);
-        player1specialcards.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player1specialcards.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
         Text player2specialcards = new Text(endSpecial[2]+"");
-        player2specialcards.setTranslateX(670);
+        player2specialcards.setTranslateX(0);
         player2specialcards.setFill(Color.PURPLE);
-        player2specialcards.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player2specialcards.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
         Text player3specialcards = new Text(endSpecial[3]+"");
-        player3specialcards.setTranslateX(680);
+        player3specialcards.setTranslateX(0);
         player3specialcards.setFill(Color.PURPLE);
-        player3specialcards.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player3specialcards.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
 
 
 
         Text player0bluePoints = new Text(players[0].stats.victoryPoint+"");
-        player0bluePoints.setTranslateX(860);
+        player0bluePoints.setTranslateX(0);
         player0bluePoints.setFill(Color.BLUE);
-        player0bluePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player0bluePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
         Text player1bluePoints = new Text(players[1].stats.victoryPoint+"");
-        player1bluePoints.setTranslateX(870);
+        player1bluePoints.setTranslateX(0);
         player1bluePoints.setFill(Color.BLUE);
-        player1bluePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player1bluePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
         Text player2bluePoints = new Text(players[2].stats.victoryPoint+"");
-        player2bluePoints.setTranslateX(870);
+        player2bluePoints.setTranslateX(0);
         player2bluePoints.setFill(Color.BLUE);
-        player2bluePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player2bluePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
         Text player3bluePoints = new Text(players[3].stats.victoryPoint+"");
-        player3bluePoints.setTranslateX(880);
+        player3bluePoints.setTranslateX(0);
         player3bluePoints.setFill(Color.BLUE);
-        player3bluePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player3bluePoints.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
 
 
 
         Text player0totalPoints = new Text(total[0]+"");
-        player0totalPoints.setTranslateX(1010);
+        player0totalPoints.setTranslateX(00);
         player0totalPoints.setFill(Color.WHITESMOKE);
-        player0totalPoints.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player0totalPoints.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
         Text player1totalPoints = new Text(total[1]+"");
-        player1totalPoints.setTranslateX(1020);
+        player1totalPoints.setTranslateX(00);
         player1totalPoints.setFill(Color.WHITESMOKE);
-        player1totalPoints.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player1totalPoints.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
         Text player2totalPoints = new Text(total[2]+"");
-        player2totalPoints.setTranslateX(1020);
+        player2totalPoints.setTranslateX(00);
         player2totalPoints.setFill(Color.WHITESMOKE);
-        player2totalPoints.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player2totalPoints.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
         Text player3totalPoints = new Text(total[3]+"");
-        player3totalPoints.setTranslateX(1030);
+        player3totalPoints.setTranslateX(00);
         player3totalPoints.setFill(Color.WHITESMOKE);
-        player3totalPoints.setFont(Font.font("Kalam", FontPosture.ITALIC,30));
+        player3totalPoints.setFont(Font.font("Kalam", FontPosture.ITALIC,20));
 
 
 
@@ -342,68 +342,91 @@ public class EndGamePage extends Scene {
 
         Text nameText = new Text("Player Names");
         nameText.setFill(Color.BLACK);
-        nameText.setFont(Font.font("Kalam", FontPosture.REGULAR,30));
+        nameText.setFont(Font.font("Kalam", FontPosture.REGULAR,20));
 
 
         Text coinText =  new Text("Coin Points");
         coinText.setFill(Color.YELLOW);
-        coinText.setFont(Font.font("Kalam", FontPosture.REGULAR,30));
+        coinText.setFont(Font.font("Kalam", FontPosture.REGULAR,20));
 
 
         Text battlePointsText = new Text("Battle Points");
         battlePointsText.setFill(Color.RED);
-        battlePointsText.setFont(Font.font("Kalam", FontPosture.REGULAR,30));
+        battlePointsText.setFont(Font.font("Kalam", FontPosture.REGULAR,20));
 
 
         Text sciencePointsText = new Text("Science Points");
         sciencePointsText.setFill(Color.GREEN);
-        sciencePointsText.setFont(Font.font("Kalam", FontPosture.REGULAR,30));
+        sciencePointsText.setFont(Font.font("Kalam", FontPosture.REGULAR,20));
 
 
         Text specialcardPointsText = new Text("Special Card Points");
         specialcardPointsText.setFill(Color.PURPLE);
-        specialcardPointsText.setFont(Font.font("Kalam", FontPosture.REGULAR,30));
+        specialcardPointsText.setFont(Font.font("Kalam", FontPosture.REGULAR,20));
 
 
         Text bluePoints = new Text("Blue Card Points");
         bluePoints.setFill(Color.BLUE);
-        bluePoints.setFont(Font.font("Kalam", FontPosture.REGULAR,30));
+        bluePoints.setFont(Font.font("Kalam", FontPosture.REGULAR,20));
 
 
 
         Text totalPointsText = new Text("Total Points");
         totalPointsText.setFill(Color.WHITESMOKE);
-        totalPointsText.setFont(Font.font("Kalam", FontPosture.REGULAR,30));
+        totalPointsText.setFont(Font.font("Kalam", FontPosture.REGULAR,20));
 
 
 
 
 
+        VBox namesbox = new VBox(nameText,player0,player1,player2,player3);
+        namesbox.setSpacing(30);
+        VBox coinsbox = new VBox(coinText,player0coin,player1coin,player2coin,player3coin);
+        coinsbox.setSpacing(30);
+        VBox battlepointbox = new VBox(battlePointsText,player0battlePoints,player1battlePoints,player2battlePoints,player3battlePoints);
+        battlepointbox.setSpacing(30);
+        VBox sciencepointbox = new VBox(sciencePointsText,player0sciencePoints,player1sciencePoints,player2sciencePoints,player3sciencePoints);
+        sciencepointbox.setSpacing(30);
+        VBox specialpointbox = new VBox(specialcardPointsText,player0specialcards,player1specialcards,player2specialcards,player3specialcards);
+        specialpointbox.setSpacing(30);
+        VBox bluepointbox = new VBox(bluePoints,player0bluePoints,player1bluePoints,player2bluePoints,player3bluePoints);
+        bluepointbox.setSpacing(30);
+        VBox totalpointbox = new VBox(totalPointsText,player0totalPoints,player1totalPoints,player2totalPoints,player3totalPoints);
+        totalpointbox.setSpacing(30);
+
+        HBox boxbox = new HBox(namesbox,coinsbox,battlepointbox,sciencepointbox,specialpointbox,bluepointbox,totalpointbox);
+        boxbox.setSpacing(100);
 
 
+/*
         HBox statsBox = new HBox(nameText,coinText,battlePointsText,sciencePointsText,specialcardPointsText,bluePoints,totalPointsText);
-        statsBox.setSpacing(80);
+        statsBox.setSpacing(30);
 
         HBox player0box = new HBox(player0,player0coin,player0battlePoints,player0sciencePoints,player0specialcards,player0bluePoints,player0totalPoints);
-        player0box.setSpacing(80);
+        player0box.setSpacing(20);
         player0box.setTranslateY(100);
 
         HBox player1box = new HBox(player1,player1coin,player1battlePoints,player1sciencePoints,player1specialcards,player1bluePoints,player1totalPoints);
         player1box.setTranslateY(200);
-        player1box.setSpacing(80);
+        player1box.setSpacing(30);
 
 
         HBox player2box = new HBox(player2,player2coin,player2battlePoints,player2sciencePoints,player2specialcards,player2bluePoints,player2totalPoints);
         player2box.setTranslateY(300);
-        player2box.setSpacing(80);
+        player2box.setSpacing(30);
 
         HBox player3box = new HBox(player3,player3coin,player3battlePoints,player3sciencePoints,player3specialcards,player3bluePoints,player3totalPoints);
         player3box.setTranslateY(400);
-        player3box.setSpacing(80);
-        sp.getChildren().addAll(statsBox,player0box,player1box,player2box,player3box);
+        player3box.setSpacing(20);
 
 
 
+ */
+        //sp.getChildren().addAll(statsBox,player0box,player1box,player2box,player3box);
+
+
+       // sp.getChildren().addAll(namesbox,coinsbox,battlepointbox,sciencepointbox,specialpointbox,bluepointbox,totalpointbox);
+        sp.getChildren().addAll(boxbox);
 
     }
 
