@@ -22,7 +22,18 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * setNamePage class
+ */
 public class setNamePage extends Scene {
+    /**
+     * Constructor for setNamePage class
+     * @param sp
+     * @param bp
+     * @param window
+     * @param mode game mode
+     * @throws Exception
+     */
     public setNamePage(StackPane sp, Scene bp, Stage window, String mode) throws Exception {
         super( sp, Main.primaryScreenBounds.getWidth(), Main.primaryScreenBounds.getHeight());
         InputStream is = Files.newInputStream(Paths.get("images/setnameQuick.jpg"));
