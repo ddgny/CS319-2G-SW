@@ -1123,7 +1123,7 @@ public class GamePage extends Scene {
         comboBoxTradeButtonRight.setDisable(true);
         sp.getChildren().addAll(comboBoxTradeButtonRight,comboHboxRight);
 
-
+        // Putting Pause Button into GamePage
         OptionsPage.PauseButton pb = new OptionsPage.PauseButton();
         pb.setOnMouseClicked( event -> {
             Rectangle r = new Rectangle(0,0,1700,1700);
@@ -1133,9 +1133,11 @@ public class GamePage extends Scene {
             menu2.setTranslateX(0);
             menu2.setTranslateY(300);
 
+            // Pause Menu opens up when Pause Button is clicked
             Main.MenuButton btnResume = new Main.MenuButton("Resume Game");
-            Main.MenuButton btnExit2 = new Main.MenuButton("Exit Game");
             Main.MenuButton btnMain = new Main.MenuButton("Main Menu");
+            Main.MenuButton btnExit2 = new Main.MenuButton("Exit Game");
+            // Resume Button
             btnResume.setOnMouseClicked( event2 -> {
                 btnResume.setVisible(false);
                 btnExit2.setVisible(false);
@@ -1144,9 +1146,11 @@ public class GamePage extends Scene {
                 sp.getChildren().remove(menu2);
                 sp.getChildren().remove(r);
             });
+            // Exit Button
             btnExit2.setOnMouseClicked( event2 -> {
                 System.exit(0);
             });
+            // Main Menu Button
             btnMain.setOnMouseClicked( event2 -> {
                 btnResume.setVisible(false);
                 btnExit2.setVisible(false);
@@ -1156,21 +1160,22 @@ public class GamePage extends Scene {
                 sp.getChildren().remove(r);
                 window.setScene( mainmenu);
             });
-            menu2.getChildren().addAll(btnResume, btnExit2, btnMain);
+            menu2.getChildren().addAll(btnResume, btnMain, btnExit2);
             sp.getChildren().add(menu2);
 
         });
+        // Mute and Unmute Buttons in GamePage
         Pane mute2 = new Pane();
         Pane unmute2 = new Pane();
-        mute2.setMaxSize(100,100);
-        unmute2.setMaxSize(100,100);
+        mute2.setMaxSize(85,85);
+        unmute2.setMaxSize(85,85);
         try {
             InputStream is2 = Files.newInputStream(Paths.get("images/mute.png"));
             Image img2 = new Image(is2);
             is2.close();
             ImageView imgViewMute = new ImageView(img2);
-            imgViewMute.setFitHeight(100);
-            imgViewMute.setFitWidth(100);
+            imgViewMute.setFitHeight(85);
+            imgViewMute.setFitWidth(85);
             mute2.getChildren().add(imgViewMute);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1180,8 +1185,8 @@ public class GamePage extends Scene {
             Image img3 = new Image(is3);
             is3.close();
             ImageView imgViewUnmute = new ImageView(img3);
-            imgViewUnmute.setFitHeight(100);
-            imgViewUnmute.setFitWidth(100);
+            imgViewUnmute.setFitHeight(85);
+            imgViewUnmute.setFitWidth(85);
             unmute2.getChildren().add(imgViewUnmute);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1201,11 +1206,11 @@ public class GamePage extends Scene {
         else
             unmute2.setVisible(false);
         sp.getChildren().addAll(mute2, unmute2);
-        mute2.setTranslateX(650);
+        mute2.setTranslateX(620);
         mute2.setTranslateY(-380);
-        unmute2.setTranslateX(650);
+        unmute2.setTranslateX(620);
         unmute2.setTranslateY(-380);
-        pb.setTranslateX(750);
+        pb.setTranslateX(720);
         pb.setTranslateY(-380);
         sp.getChildren().add(pb);
 
@@ -1230,9 +1235,11 @@ public class GamePage extends Scene {
                 cards[i][j*7+6].setTranslateX(-550); cards[i][j*7+6].setTranslateY(290);
             }
         }
+        // Green tick symbol to track if a specific card can be built for free
         InputStream is2 = Files.newInputStream(Paths.get("images/tick.png"));
         Image imgTick = new Image(is2);
         is2.close();
+        // Putting all ticks into an array
         cardTicks = new ImageView[7];
         for(int i = 0; i < 7; i++){
             cardTicks[i] = new ImageView(imgTick);
@@ -1240,6 +1247,7 @@ public class GamePage extends Scene {
             cardTicks[i].setFitHeight(40);
             cardTicks[i].setVisible(false);
         }
+        // Setting coordinates relevant to card coordinates
         cardTicks[0].setTranslateX(-180); cardTicks[0].setTranslateY(10);
         cardTicks[1].setTranslateX(20); cardTicks[1].setTranslateY(10);
         cardTicks[2].setTranslateX(-380); cardTicks[2].setTranslateY(10);
@@ -1335,6 +1343,7 @@ public class GamePage extends Scene {
         else
             giveError("Your neighbor doesn't have that resource");
     }
+    // Method for making battles, it gets input age and it is called once per age.
     private void makeBattles(int age){
         if(age == 1) {
             if (players[0].stats.shield > players[1].stats.shield) {
@@ -1601,6 +1610,7 @@ public class GamePage extends Scene {
         }
         slidingText( textToSend);
     }
+    // Putting green tick in the upper right corner of free cards.
     public void reDrawTick(){
         for(int i = 0; i < 7; i++){
             cardTicks[i].setVisible(false);
@@ -1609,7 +1619,7 @@ public class GamePage extends Scene {
             for (int j = 0; j < players[0].buildingsCount; j++) {
                 if (players[0].buildings[j].contains(cards[currentAge - 1][i].cost.requiredBuilding) && !cards[currentAge - 1][i].cost.requiredBuilding.equals("") && !cards[currentAge -1][i].isUsed) {
                     cardTicks[i%7].setVisible(true);
-                    System.out.println("FREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE" + i%7);
+                    //System.out.println("FREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE" + i%7);
                 }
             }
         }
@@ -3961,6 +3971,7 @@ public class GamePage extends Scene {
             specialHB.setTranslateY(160);
             specialHB.setTranslateX(5);
             getChildren().addAll(resourcesHB, specialHB);
+            // Putting green ticks for milestones that are completed
             InputStream is5 = Files.newInputStream(Paths.get("images/tick.png"));
             Image img5 = new Image(is5);
             is5.close();
