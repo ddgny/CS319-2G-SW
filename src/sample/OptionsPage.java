@@ -14,7 +14,17 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * OptionsPage class
+ */
 public class OptionsPage extends Scene {
+    /**
+     * Constructor for OptionsPage class
+     * @param sp
+     * @param bp
+     * @param window
+     * @throws Exception
+     */
     public OptionsPage( StackPane sp, Scene bp, Stage window)  throws Exception{
         super( sp, Main.primaryScreenBounds.getWidth(), Main.primaryScreenBounds.getHeight());
         InputStream is = Files.newInputStream(Paths.get("images/options.jpg"));
