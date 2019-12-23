@@ -51,6 +51,9 @@ import java.util.*;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
+/**
+ * Game page class implements game actions
+ */
 public class GamePage extends Scene {
     public static WonderBoard[] wb;
     public static Player[] players;
@@ -67,6 +70,10 @@ public class GamePage extends Scene {
     private int currentAge, currentTurn, noOfCardsAtStake;
     // mode = ally -> -1 , normal -> 0 , story -> 1,2,3,4,5...
     private int mode;
+    
+    /**
+    * Resource class implements resource objects
+    */
     private class Resource {
         String[] name;
         int[] quantity;
