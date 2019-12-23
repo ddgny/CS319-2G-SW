@@ -1437,6 +1437,19 @@ public class GamePage extends Scene {
                 players[2].battlePoint -= 1;
                 players[3].battlePoint += 5;
             }
+            if( mode == -1) {
+                if (players[0].stats.shield + players[2].stats.shield < players[1].stats.shield + players[3].stats.shield) {
+                    players[1].battlePoint += 5;
+                    players[3].battlePoint += 5;
+                    players[2].battlePoint -= 1;
+                    players[0].battlePoint -= 1;
+                } else if (players[0].stats.shield + players[2].stats.shield > players[1].stats.shield + players[3].stats.shield) {
+                    players[2].battlePoint += 5;
+                    players[0].battlePoint += 5;
+                    players[1].battlePoint -= 1;
+                    players[3].battlePoint -= 1;
+                }
+            }
         }
 
     }
@@ -1536,47 +1549,57 @@ public class GamePage extends Scene {
         sp.getChildren().removeAll(cardTicks);
         reDrawTick();
         sp.getChildren().addAll(cardTicks);
-        battleResultsPopup();
+        if( currentTurn == 1) battleResultsPopup();
 
     }
     public void battleResultsPopup() throws Exception {
 
         // popup screen at the end of the ages
-        if( currentTurn == 1) {
-            Media sound = new Media(new File("sounds/battle.mp3").toURI().toString());
-            mediaPlayer = new MediaPlayer(sound);
-            mediaPlayer.play();
-            int endAge=currentAge-1;
-            if (players[0].stats.shield == players[1].stats.shield) {
-                if (players[0].stats.shield == players[3].stats.shield)
-                    slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n"+"The battles was drawn!!");
-                else {
-                    if (players[0].stats.shield > players[3].stats.shield)
-                        slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[3].name + "\n But drawn the battle against " + players[1].name);
-                    else
-                        slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " lost the battle against " + players[3].name + "\n But drawn the battle against " + players[1].name);
-                }
-
-            }
-
-            if (players[0].stats.shield > players[1].stats.shield) {
+        Media sound = new Media(new File("sounds/battle.mp3").toURI().toString());
+        mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.play();
+        int endAge=currentAge-1;
+        String textToSend = "";
+        if (players[0].stats.shield == players[1].stats.shield) {
+            if (players[0].stats.shield == players[3].stats.shield)
+                textToSend = "Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n"+"The battles was drawn!!" ;
+            else {
                 if (players[0].stats.shield > players[3].stats.shield)
-                    slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won all the battles!!");
-                else if (players[0].stats.shield < players[3].stats.shield)
-                    slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[1].name + "\n But lost the battle against " + players[3].name);
+                    textToSend = "Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[3].name + "\n But drawn the battle against " + players[1].name;
                 else
-                    slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[1].name + "\n But drawn the battle against " + players[3].name);
+                    textToSend = "Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " lost the battle against " + players[3].name + "\n But drawn the battle against " + players[1].name;
+            }
 
-            }
-            if (players[0].stats.shield < players[1].stats.shield) {
-                if (players[0].stats.shield < players[3].stats.shield)
-                    slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " lost all the battles!!");
-                else if (players[0].stats.shield > players[3].stats.shield)
-                    slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[3].name + "\n But lost the battle against " + players[1].name);
-                else
-                    slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " lost the battle against " + players[1].name + "\n But drawn the battle against " + players[3].name);
-            }
         }
+
+        if (players[0].stats.shield > players[1].stats.shield) {
+            if (players[0].stats.shield > players[3].stats.shield)
+                textToSend = "Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won all the battles!!";
+            else if (players[0].stats.shield < players[3].stats.shield)
+                textToSend = "Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[1].name + "\n But lost the battle against " + players[3].name;
+            else
+                textToSend = "Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[1].name + "\n But drawn the battle against " + players[3].name;
+
+        }
+        if (players[0].stats.shield < players[1].stats.shield) {
+            if (players[0].stats.shield < players[3].stats.shield)
+                textToSend = "Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " lost all the battles!!";
+            else if (players[0].stats.shield > players[3].stats.shield)
+                textToSend = "Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won the battle against " + players[3].name + "\n But lost the battle against " + players[1].name;
+            else
+                textToSend = "Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " lost the battle against " + players[1].name + "\n But drawn the battle against " + players[3].name;
+        }
+        if( mode == -1) {
+            textToSend += "\n\nAlliances have been made and we ";
+            if(players[0].stats.shield + players[2].stats.shield < players[1].stats.shield + players[3].stats.shield)
+                textToSend += "lost";
+            else if(players[0].stats.shield + players[2].stats.shield == players[1].stats.shield + players[3].stats.shield)
+                textToSend += "drawn";
+            else
+                textToSend += "won";
+            textToSend += " the battle.";
+        }
+        slidingText( textToSend);
     }
     public void reDrawTick(){
         for(int i = 0; i < 7; i++){
@@ -2090,137 +2113,6 @@ public class GamePage extends Scene {
     }
 
 
-//    public void endGame() {
-//
-//        Button viewStats = new Button("View endgame Stats");
-//        viewStats.setPrefHeight(50);
-//        viewStats.setPrefWidth(200);
-//        viewStats.setTranslateY(-100);
-//        viewStats.setTranslateX(0);
-//        sp.getChildren().add(viewStats);
-//        viewStats.setOnMouseClicked(event -> {
-//            Scene scene = null;
-//            try {
-//                endgame = new StackPane();
-//                scene = new EndGamePage(endgame, players, window);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            window.setScene( scene);
-//        });
-//
-//    }
-    public void victoryPointCalculator() {
-        int[] total = new int[4];
-        for (int i = 0; i < 4; i++)
-            total[i] = 0;
-
-        int[] endCoin = new int[4];
-        for (int i = 0; i < 4; i++)
-            endCoin[i] = 0;
-
-        int[] endScience = new int[4];
-        for (int i = 0; i < 4; i++)
-            endScience[i] = 0;
-
-        int[] endSpecialPurple = new int[4];
-        for (int i = 0; i < 4; i++)
-            endSpecialPurple[i] = 0;
-
-        int[] endSpecialYellow = new int[4];
-        for (int i = 0; i < 4; i++)
-            endSpecialYellow[i] = 0;
-
-        int[] endSpecial = new int[4];
-        for (int i = 0; i < 4; i++)
-            endSpecial[i] = 0;
-
-        //point from coin
-        for (int i = 0; i < 4; i++)
-            endCoin[i] = players[i].stats.coin / 3;
-        //point from science
-
-
-        for (int i = 0; i < 4; i++) {
-            if(players[i].specialCards[16]){
-                
-                int mecSci = sciencePointCalculator(players[i].stats.mechanic + 1 , players[i].stats.literature, players[i].stats.geometry);
-                int litSci = sciencePointCalculator(players[i].stats.mechanic, players[i].stats.literature + 1, players[i].stats.geometry);
-                int geoSci = sciencePointCalculator(players[i].stats.mechanic , players[i].stats.literature, players[i].stats.geometry + 1);
-
-                endScience[i] =  max( mecSci , max( litSci , geoSci));
-            }
-            else
-                endScience[i] = sciencePointCalculator(players[i].stats.mechanic, players[i].stats.literature, players[i].stats.geometry);
-        }
-
-        //workers guild special
-        for (int i = 0; i < 4; i++) {
-            if (players[i].specialCards[10]) {
-                endSpecialPurple[i] += players[(i + 1) % 4].brownCards + players[(i + 3) % 4].brownCards;
-            }
-        }
-        //craftsmen guild special
-        for (int i = 0; i < 4; i++) {
-            if (players[i].specialCards[11]) {
-                endSpecialPurple[i] += (players[(i + 1) % 4].greyCards) * 2 + (players[(i + 3) % 4].greyCards) * 2;
-            }
-        }
-        //traders guild special
-        for (int i = 0; i < 4; i++) {
-            if (players[i].specialCards[12]) {
-                endSpecialPurple[i] += players[(i + 1) % 4].yellowCards + players[(i + 3) % 4].yellowCards;
-            }
-        }
-        //philosophers guil special
-        for (int i = 0; i < 4; i++) {
-            if (players[i].specialCards[13]) {
-                endSpecialPurple[i] += players[(i + 1) % 4].greenCards + players[(i + 3) % 4].greenCards;
-            }
-        }
-        //spies guild special
-        for (int i = 0; i < 4; i++) {
-            if (players[i].specialCards[14]) {
-                endSpecialPurple[i] += players[(i + 1) % 4].redCards + players[(i + 3) % 4].redCards;
-            }
-        }
-        //magistrates guild special
-        for (int i = 0; i < 4; i++) {
-            if (players[i].specialCards[15]) {
-                endSpecialPurple[i] += players[(i + 1) % 4].blueCards + players[(i + 3) % 4].blueCards;
-            }
-        }
-        //haven special
-        for (int i = 0; i < 4; i++) {
-            if (players[i].specialCards[6]) {
-                endSpecialYellow[i] += players[i].brownCards;
-            }
-        }
-        //lighthouse special
-        for (int i = 0; i < 4; i++) {
-            if (players[i].specialCards[7]) {
-                endSpecialYellow[i] += players[i].yellowCards;
-            }
-        }
-        //chamber of commerce special
-        for (int i = 0; i < 4; i++) {
-            if (players[i].specialCards[8]) {
-                endSpecialYellow[i] += (players[i].greyCards) * 2;
-            }
-        }
-        //arena special
-        for (int i = 0; i < 4; i++) {
-            if (players[i].specialCards[9]) {
-                endSpecialYellow[i] += players[i].milestoneDone;
-            }
-        }
-        for (int i = 0; i < 4; i++)
-            endSpecial[i] += endSpecialPurple[i] + endSpecialYellow[i];
-        //total point
-        for (int i = 0; i < 4; i++)
-            total[i] = endCoin[i] + endScience[i] + endSpecialPurple[i] + endSpecialYellow[i] + players[0].stats.victoryPoint
-                    + players[i].battlePoint;
-    }
     public int sciencePointCalculator(int a, int b, int c){
         int m = 0;
         
@@ -4247,7 +4139,7 @@ public class GamePage extends Scene {
         public boolean playCard(int playerNum, CardAction action) throws IOException, Exception {
             if (isUsed) // check if it is used or not
                 return false;
-
+            if(currentAge > 3) return  false;
             switch (action) {
                 case SELL:
                     System.out.println(playerNum + "sell" + name);

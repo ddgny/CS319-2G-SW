@@ -44,7 +44,10 @@ public class CreditsPage extends Scene {
         bb.setTranslateX(-350);
         bb.setTranslateY(-230);
         sp.getChildren().add(bb);
-
+        Text congrats = new Text("Congratulations!! You have finished the story mode");
+        congrats.setFill(Color.GREEN);
+        congrats.setFont(Font.font("Verdana", FontWeight.BOLD,35));
+        congrats.setTranslateY(-300);
         final String content = "7 Wonders\n\n" + "Ahmet Berk Eren\n"+"Safa Alperen Oruç\n"+"Göktuğ Öztürkcan\n"+"Ömer Faruk Oflaz\n"+"Deniz Doğanay";
         final Text textArea = new Text(10, 20, "");
         textArea.setWrappingWidth(350);
@@ -74,5 +77,6 @@ public class CreditsPage extends Scene {
         bg.setFill(Color.BLACK);
         bg.setEffect( new GaussianBlur(3.5));
         sp.getChildren().addAll(bg, textArea);
+        if(isStoryFinished) sp.getChildren().add(congrats);
     }
 }
