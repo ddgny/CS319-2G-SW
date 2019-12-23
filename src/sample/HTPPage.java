@@ -28,7 +28,17 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * HTPpage class for how to play 
+ */
 public class HTPPage extends Scene {
+    /**
+     * Constructor for HTPPage class
+     * @param sp
+     * @param bp
+     * @param window
+     * @throws Exception
+     */
     public HTPPage(StackPane sp, Scene bp, Stage window) throws Exception{
         super(sp, Main.primaryScreenBounds.getWidth(), Main.primaryScreenBounds.getHeight());
         InputStream is = Files.newInputStream(Paths.get("images/mainmenu.jpg"));
