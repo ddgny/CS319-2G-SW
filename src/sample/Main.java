@@ -31,6 +31,9 @@ import javafx.scene.Node.*;
 
 import java.awt.*;
 
+/**
+ * Main classto run application 
+ */
 public class Main extends Application {
     private GameMenu gameMenu;
     private static Stage window;
@@ -38,6 +41,10 @@ public class Main extends Application {
     public static Scene mainMenu;
     public static Rectangle2D primaryScreenBounds;
     public static MediaPlayer mediaPlayer;
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void start(Stage primaryStage) throws Exception{
         //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
@@ -61,8 +68,16 @@ public class Main extends Application {
         primaryStage.setScene(mainMenu);
         window.show();
     }
+    
+    /**
+     * GameMenu class to create game menu page
+     */
     private static class GameMenu extends Parent {
         MenuButton btnStart, btnLoadGame, btnOptions, btnHTP, btnCredits, btnExit;
+        
+        /**
+         * method to select game mode 
+         */
         private void modeSelectionMenu() {
             VBox menu2 = new VBox(20);
             menu2.setTranslateX(200);
@@ -111,6 +126,9 @@ public class Main extends Application {
             menu2.getChildren().addAll(btnStory, btnQuickmatch, btnCancel);
             getChildren().addAll(menu2);
         }
+        /**
+         * Constructor for GameMenu class  
+         */
         public GameMenu() {
             VBox menu1 = new VBox(20);
             menu1.setTranslateX(200);
@@ -200,8 +218,21 @@ public class Main extends Application {
             getChildren().add(menu1);
         }
     }
+    
+    /**
+     * MenuButton class to create menu buttons
+     */
     public static class MenuButton extends StackPane{
+        
+        /**
+         * text object
+         */
         private Text text;
+        
+        /**
+         * Constructor for MenuButton class
+         * @param name name
+         */
         public MenuButton(String name) {
             // creating the text of button
             text = new Text(name);
@@ -236,7 +267,11 @@ public class Main extends Application {
 
         }
     }
-
+    
+    /**
+     * Main method
+     * @param args
+     */
     public static void main(String[] args) {
         Media sound = new Media(new File("sounds/gamemusic.mp3").toURI().toString());
         mediaPlayer = new MediaPlayer(sound);
