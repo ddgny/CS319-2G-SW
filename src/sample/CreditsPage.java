@@ -48,6 +48,7 @@ public class CreditsPage extends Scene {
         congrats.setFill(Color.GREEN);
         congrats.setFont(Font.font("Verdana", FontWeight.BOLD,35));
         congrats.setTranslateY(-300);
+        //sliding credits page
         final String content = "7 Wonders\n\n" + "Ahmet Berk Eren\n"+"Safa Alperen Oruç\n"+"Göktuğ Öztürkcan\n"+"Ömer Faruk Oflaz\n"+"Deniz Doğanay";
         final Text textArea = new Text(10, 20, "");
         textArea.setWrappingWidth(350);

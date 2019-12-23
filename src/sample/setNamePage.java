@@ -25,7 +25,7 @@ import java.nio.file.Paths;
 public class setNamePage extends Scene {
     public setNamePage(StackPane sp, Scene bp, Stage window, String mode) throws Exception {
         super( sp, Main.primaryScreenBounds.getWidth(), Main.primaryScreenBounds.getHeight());
-        InputStream is = Files.newInputStream(Paths.get("images/setnameQuick.gif"));
+        InputStream is = Files.newInputStream(Paths.get("images/setnameQuick.jpg"));
         Image img = new Image(is);
         is.close();
         ImageView imgView = new ImageView(img);
@@ -103,7 +103,7 @@ public class setNamePage extends Scene {
         }
         else{
             sp.getChildren().removeAll(imgView);
-            InputStream is1 = Files.newInputStream(Paths.get("images/setnameStory.gif"));
+            InputStream is1 = Files.newInputStream(Paths.get("images/setnameStory.jpg"));
             Image img8 = new Image(is1);
             is.close();
             ImageView imgView1 = new ImageView(img8);

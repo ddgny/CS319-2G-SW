@@ -40,7 +40,7 @@ public class HTPPage extends Scene {
         sp.getChildren().add(imgView);
 
 
-
+        //adding 12 button
         Button btn1 = new Button("1");
         Button btn2 = new Button("2");
         Button btn3 = new Button("3");
@@ -70,7 +70,7 @@ public class HTPPage extends Scene {
         InputStream htpImage = Files.newInputStream(Paths.get("images/htp1.jpg"));
         Image img1 = new Image(htpImage);
         htpRec.setFill(new ImagePattern(img1));
-
+        //filling buttons
         btn1.setOnMouseClicked(event -> {
             try {
                 htpRec.setFill(new ImagePattern(new Image(Files.newInputStream(Paths.get("images/htp1.jpg")))));
@@ -165,7 +165,7 @@ public class HTPPage extends Scene {
 
         });
 
-
+        //adding buttons to a VBox
         VBox Vtext =new VBox();
         VBox htpVBox= new VBox();
 //        Text textArea = new Text();
@@ -195,6 +195,7 @@ public class HTPPage extends Scene {
         htpVBox.setPrefHeight(0);
         htpVBox.setTranslateY(-36);
         // htpVBox.setFillHeight(false);
+        //creating rectangle frame
         Rectangle bg = new Rectangle(500,500);
         bg.setOpacity(0.6);
         bg.setFill(Color.BLACK);
