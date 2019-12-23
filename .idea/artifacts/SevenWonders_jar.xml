@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SevenWonders:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/SevenWonders_jar</output-path>
+    <root id="archive" name="SevenWonders.jar">
+      <element id="module-output" name="SevenWonders" />
+    </root>
+  </artifact>
+</component>
