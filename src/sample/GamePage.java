@@ -51,6 +51,9 @@ import java.util.*;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
+/**
+ * Game page class implements game actions
+ */
 public class GamePage extends Scene {
     public static WonderBoard[] wb;
     public static Player[] players;
@@ -67,6 +70,10 @@ public class GamePage extends Scene {
     private int currentAge, currentTurn, noOfCardsAtStake;
     // mode = ally -> -1 , normal -> 0 , story -> 1,2,3,4,5...
     private int mode;
+    
+    /**
+    * Resource class implements resource objects
+    */
     private class Resource {
         String[] name;
         int[] quantity;
@@ -74,6 +81,11 @@ public class GamePage extends Scene {
             name = new String[optional];
             quantity = new int[optional];
         }
+        /**
+        *This method is used for the constructor
+        *Creates a new Resource with the given dummy
+        *@param dummy is new Resource
+        */
         public Resource( Resource dummy) {
             this.name = new String[dummy.name.length];
             this.quantity = new int[dummy.quantity.length];
@@ -1167,15 +1179,15 @@ public class GamePage extends Scene {
         // Mute and Unmute Buttons in GamePage
         Pane mute2 = new Pane();
         Pane unmute2 = new Pane();
-        mute2.setMaxSize(85,85);
-        unmute2.setMaxSize(85,85);
+        mute2.setMaxSize(50,50);
+        unmute2.setMaxSize(50,50);
         try {
             InputStream is2 = Files.newInputStream(Paths.get("images/mute.png"));
             Image img2 = new Image(is2);
             is2.close();
             ImageView imgViewMute = new ImageView(img2);
-            imgViewMute.setFitHeight(85);
-            imgViewMute.setFitWidth(85);
+            imgViewMute.setFitHeight(50);
+            imgViewMute.setFitWidth(50);
             mute2.getChildren().add(imgViewMute);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1185,8 +1197,8 @@ public class GamePage extends Scene {
             Image img3 = new Image(is3);
             is3.close();
             ImageView imgViewUnmute = new ImageView(img3);
-            imgViewUnmute.setFitHeight(85);
-            imgViewUnmute.setFitWidth(85);
+            imgViewUnmute.setFitHeight(50);
+            imgViewUnmute.setFitWidth(50);
             unmute2.getChildren().add(imgViewUnmute);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1206,11 +1218,11 @@ public class GamePage extends Scene {
         else
             unmute2.setVisible(false);
         sp.getChildren().addAll(mute2, unmute2);
-        mute2.setTranslateX(620);
+        mute2.setTranslateX(600);
         mute2.setTranslateY(-380);
-        unmute2.setTranslateX(620);
+        unmute2.setTranslateX(600);
         unmute2.setTranslateY(-380);
-        pb.setTranslateX(720);
+        pb.setTranslateX(660);
         pb.setTranslateY(-380);
         sp.getChildren().add(pb);
 

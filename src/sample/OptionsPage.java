@@ -84,13 +84,13 @@ public class OptionsPage extends Scene {
     // Pause Button for GamePage
     public static class PauseButton extends VBox {
         public PauseButton() throws Exception{
-            setMaxSize( 85, 85);
+            setMaxSize( 50, 50);
             InputStream is = Files.newInputStream(Paths.get( "images/pause.png"));
             Image img = new Image(is);
             is.close();
             ImageView imgView = new ImageView(img);
-            imgView.setFitHeight(85);
-            imgView.setFitWidth(85);
+            imgView.setFitHeight(50);
+            imgView.setFitWidth(50);
             getChildren().add(imgView);
         }
     }
