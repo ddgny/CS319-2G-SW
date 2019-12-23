@@ -81,6 +81,11 @@ public class GamePage extends Scene {
             name = new String[optional];
             quantity = new int[optional];
         }
+        /**
+        *This method is used for the constructor
+        *Creates a new Resource with the given dummy
+        *@param dummy is new Resource
+        */
         public Resource( Resource dummy) {
             this.name = new String[dummy.name.length];
             this.quantity = new int[dummy.quantity.length];
