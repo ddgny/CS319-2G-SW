@@ -26,7 +26,19 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * CreditsPage class that creates credits page
+ */
 public class CreditsPage extends Scene {
+    
+    /**
+     * Constructor for CreditsPage class
+     * @param sp
+     * @param bp
+     * @param window
+     * @param isStoryFinished checks whether story is finished or not
+     * @throws Exception
+     */
     public CreditsPage(StackPane sp, Scene bp, Stage window, boolean isStoryFinished) throws Exception{
         super(sp, Main.primaryScreenBounds.getWidth(), Main.primaryScreenBounds.getHeight());
         InputStream is = Files.newInputStream(Paths.get("images/mainmenu.jpg"));
