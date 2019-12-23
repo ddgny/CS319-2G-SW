@@ -72,8 +72,8 @@ public class GamePage extends Scene {
     private int mode;
     
     /**
-    * Resource class implements resource objects
-    */
+     * Resource class implements resource objects
+     */
     private class Resource {
         String[] name;
         int[] quantity;
@@ -82,10 +82,10 @@ public class GamePage extends Scene {
             quantity = new int[optional];
         }
         /**
-        *This method is used for the constructor
-        *Creates a new Resource with the given dummy
-        *@param dummy is new Resource
-        */
+         *This method is used for the constructor
+         *Creates a new Resource with the given dummy
+         *@param dummy is new Resource
+         */
         public Resource( Resource dummy) {
             this.name = new String[dummy.name.length];
             this.quantity = new int[dummy.quantity.length];
@@ -95,17 +95,27 @@ public class GamePage extends Scene {
             }
         }
     }
+    /**
+     * Represents a Properties of gane
+     */
     public  class Property {
         int coin, shield, mechanic, literature, geometry, victoryPoint;
         String requiredBuilding;
         Resource resource;
         int specialCard;
+        
+        /**
+         * Represents constructor of the Property class
+         */
         public Property(){
             coin = shield = mechanic = literature = geometry = victoryPoint = specialCard = 0;
             requiredBuilding = "";
             resource = new Resource(0);
         }
     }
+    /**
+     * Represents a new Player participating in a game
+     */
     public class Player {
         String name;
         int battlePoint, greenCards, redCards, yellowCards, greyCards, purpleCards, brownCards, blueCards, milestoneDone;
@@ -115,7 +125,12 @@ public class GamePage extends Scene {
         int resourceCount, buildingsCount;
         boolean[] specialCards;
         Property stats;
-
+        
+        /**
+         * Represents constructor for the Player class 
+         * Takes String tmp to create new Player
+         * @param tmp name of the new Player
+         */
         public Player(String tmp) {
             stats = new Property();
             stats.coin = 3;
@@ -128,6 +143,10 @@ public class GamePage extends Scene {
             specialCards = new boolean[23];
             for(int i = 0; i < 23; i++) specialCards[i] = false;
         }
+        /**
+         * Adds Resource objects to resources array
+         * @param new Resource will be added
+         */
         void addResource( Resource add) {
             resources[resourceCount] = add;
             resourceCount++;
@@ -166,7 +185,15 @@ public class GamePage extends Scene {
 
     }
 
-
+    /**
+     * Constructor for class GamePage
+     * @param sp 
+     * @param mainmenu main menu screen
+     * @param window
+     * @param name player name
+     * @param side wanderboards side either A or B
+     * @param sMode indicates game mode
+     */
     public GamePage(StackPane sp, Scene mainmenu, Stage window, String name, String side, int sMode) throws Exception {
         super(sp, Main.primaryScreenBounds.getWidth(), Main.primaryScreenBounds.getHeight());
         mode = sMode;
@@ -2131,38 +2158,6 @@ public class GamePage extends Scene {
 
 
         sp.getChildren().addAll(bg3,bg4,boxbox,menu6);
-        // mode = ally -> -1 , normal -> 0 , story -> 1,2,3,4,5...
-        //choosing winner
-            if (mode >= 0)
-            {
-                Text winnertext = new Text("");
-                int max=-1;
-                for(int i=0;i<4;i++)
-                {
-                    if(total[i]>max)
-                    {
-                        winnertext = new Text("Winner is " + players[i].name);
-                        max = total[i];
-                    }
-                }
-                winnertext.setTranslateX(500);
-                winnertext.setTranslateY(250);
-                winnertext.setFont(Font.font("Kalam", FontWeight.BOLD, 22));
-                winnertext.setFill(Color.WHITESMOKE);
-                sp.getChildren().addAll(winnertext);
-            }
-            if (mode == -1)
-            {
-                Text winnertext = new Text("");
-                if(total[0]+total[2] >= total[1]+total[3] )
-                {
-                    winnertext = new Text("Winners are " + players[0].name+ " and "+ players[2].name);
-                }
-            }
-
-
-
-
 
     }
 
