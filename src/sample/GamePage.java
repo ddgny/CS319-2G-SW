@@ -2196,7 +2196,11 @@ public class GamePage extends Scene {
 
     }
     /**
-     * 
+     * method for recursive check resources
+     * @param playerResources holds player resources
+     * @param pr
+     * @param costsResource
+     * @param cr
      */
     public boolean recursiveCheck( Resource[] playersResource, boolean[] pr, Resource costsResource, int cr) {
         System.out.println("pr.length: " + pr.length);
@@ -2232,6 +2236,14 @@ public class GamePage extends Scene {
         }
         return false;
     }
+    
+    /**
+     * method that checks the resources
+     * @param playerNum player index
+     * @param isWonderbuild checks whether wonder is built or not
+     * @param cost
+     * @return this
+     */
     public boolean checkResources(int playerNum, boolean isWonderbuild, Property cost) {
         if(isWonderbuild)
             cost = wb[playerNum].milestones[players[playerNum].milestoneDone].cost;
@@ -2265,6 +2277,16 @@ public class GamePage extends Scene {
         }
         return recursiveCheck( tmpPlayerResource, new boolean[players[playerNum].resourceCount + players[playerNum].rightTradedResources.quantity.length + players[playerNum].leftTradedResources.quantity.length], tmpCostResource, 0);
     }
+    
+    /**
+     * method that gives benefit to player
+     * @param playerNum player index
+     * @param isWonderbuild checks whether wonder is built or not
+     * @param benefit gained benefit
+     * @param buildingName name of the building
+     * @param buildingColor color of the building
+     * @throws Exception
+     */
     public void gainBenefit( int playerNum, boolean isWonderbuild, Property benefit, String buildingName, String buildingColor) throws Exception {
         // specialCard = # : 16= Babylon A, 17 = Babylon B, 18 = olympia A, 19 = olympia B1,    20 = olympiaB3, 21 = Halikarnassos, 22 = check of olympiaA
         if(isWonderbuild) {
@@ -2431,6 +2453,11 @@ public class GamePage extends Scene {
         players[playerNum].specialCards[benefit.specialCard] = true;
         if(benefit.specialCard == 18)  players[playerNum].specialCards[22] = true;
     }
+    
+    /**
+     * Method for defining all cards in the game
+     * @throws Exception
+     */
     private void definingCards() throws Exception {
         Property a = new Property();
         Property b = new Property();
@@ -3196,6 +3223,13 @@ public class GamePage extends Scene {
         cards[2][27] = new Card("magistratesguild","purple",a,b);
 
     }
+    /**
+     * Method that distributes the wonders to players
+     * @param sp
+     * @param side wonderboard side A or B
+     * @param name player name
+     * @throws Exception
+     */
     private void distributeWonders( StackPane sp, String side, String name) throws Exception {
         Random rand = new Random();
         int[] randoms = new int[4];
@@ -3221,7 +3255,7 @@ public class GamePage extends Scene {
         wb[1] = new WonderBoard( sp,randoms[1], side, "bot1", 1);
         wb[2] = new WonderBoard( sp,randoms[2], side, "bot2", 2);
         wb[3] = new WonderBoard( sp,randoms[3], side, "bot3", 3);
-        // wonder animasyonları
+        // wonder animations
         TranslateTransition translateTransition = new TranslateTransition();
         translateTransition.setDuration(Duration.millis(1000));
         translateTransition.setNode(wb[0]);
@@ -3246,6 +3280,10 @@ public class GamePage extends Scene {
         translateTransition.setByY(-260);
         translateTransition.play();
     }
+    
+    /**
+     * Class that draws wanderboards
+     */
     private class WonderBoard extends Pane {
         Text coinText, shieldText, battleText, vicPointText, literatureText, mechanicText, geometryText, greenText, redText, yellowText, greyText, brownText, blueText;
         int pNum, wonderNum;
@@ -3253,6 +3291,16 @@ public class GamePage extends Scene {
         Milestone[] milestones;
         VBox coinVB, shieldVB, battleVB, vicPointVB, literatureVB, mechanicVB, geometryVB;
         HBox greenHB, redHB, yellowHB, greyHB, brownHB, blueHB, resourcesHB;
+        
+        /**
+         * Constructor for WonderBoard class
+         * @param sp 
+         * @param wNumber wonder number
+         * @param side wonerboard side A or B
+         * @param playerName player name
+         * @param pN player index
+         * @throws Exception
+         */
         public WonderBoard( StackPane sp, int wNumber, String side, String playerName, int pN) throws Exception {
             Property a, b;
             String wName;
@@ -4059,8 +4107,18 @@ public class GamePage extends Scene {
             getChildren().add(milestoneTick);
         }
     }
+    /**
+     * Milestone class that contains milestones
+     */
     public class Milestone extends Pane {
         Property cost, benefit;
+        
+        /**
+         * Constructor for Milestone class
+         * @param cost milestone cost
+         * @param benefit milestone benefit
+         * @throws Exception
+         */
         public Milestone( Property cost, Property benefit ) throws Exception {
             this.cost = cost;
             this.benefit = benefit;
@@ -4101,6 +4159,10 @@ public class GamePage extends Scene {
             });
             setMaxSize(140, 190);
         }
+        
+        /**
+         * method for mouse action 
+         */
         public void  mouseEnteredHere(){
             if (this.isUsed)
                 return;
@@ -4177,7 +4239,10 @@ public class GamePage extends Scene {
          */
 
         }
-
+          
+        /**
+         * method for mouse action exit 
+         */
         public void  mouseExitedHere(){
             if (this.isUsed)
                 return;
@@ -4187,6 +4252,10 @@ public class GamePage extends Scene {
             getChildren().remove(buildButton);
             getChildren().remove(olympiaButton);
         }
+        /**
+         * method that deletes card
+         * @throws IOException when card cannot be deleted(IOException)
+         */
         public void deleteCard() throws IOException {
             board.setOpacity(1);
             getChildren().remove(sellButton);
