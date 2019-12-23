@@ -2119,6 +2119,38 @@ public class GamePage extends Scene {
 
 
         sp.getChildren().addAll(bg3,bg4,boxbox,menu6);
+        // mode = ally -> -1 , normal -> 0 , story -> 1,2,3,4,5...
+        //choosing winner
+            if (mode >= 0)
+            {
+                Text winnertext = new Text("");
+                int max=-1;
+                for(int i=0;i<4;i++)
+                {
+                    if(total[i]>max)
+                    {
+                        winnertext = new Text("Winner is " + players[i].name);
+                        max = total[i];
+                    }
+                }
+                winnertext.setTranslateX(500);
+                winnertext.setTranslateY(250);
+                winnertext.setFont(Font.font("Kalam", FontWeight.BOLD, 22));
+                winnertext.setFill(Color.WHITESMOKE);
+                sp.getChildren().addAll(winnertext);
+            }
+            if (mode == -1)
+            {
+                Text winnertext = new Text("");
+                if(total[0]+total[2] >= total[1]+total[3] )
+                {
+                    winnertext = new Text("Winners are " + players[0].name+ " and "+ players[2].name);
+                }
+            }
+
+
+
+
 
     }
 
