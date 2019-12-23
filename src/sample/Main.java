@@ -185,7 +185,7 @@ public class Main extends Application {
                 Scene scene = null;
                 try {
                     credits = new StackPane();
-                    scene = new CreditsPage(credits, mainMenu, window);
+                    scene = new CreditsPage(credits, mainMenu, window, false);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

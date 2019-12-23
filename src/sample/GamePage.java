@@ -59,6 +59,7 @@ public class GamePage extends Scene {
     private Card[] cardsAtStake;
     private Stage window;
     private StackPane sp;
+    private static MediaPlayer mediaPlayer;
     //private StackPane sp,endgame;
     private String side;
     Text goldValue;
@@ -1252,6 +1253,7 @@ public class GamePage extends Scene {
         sp.getChildren().addAll(wb);
         sp.getChildren().addAll(cardTicks);
 
+        // story mode features
         if(mode == 1){
             players[1].name = "General Seleucus";
             players[2].name = "General Cassander";
@@ -1264,7 +1266,7 @@ public class GamePage extends Scene {
             players[3].name = "Ptolemaic Dynasty";
             players[2].name = "The kingdom of Cassander";
             reDrawWonders();
-            slidingText("Alexander the Great died at a young age so the kingdom of Macedon is divided to his generals according to his will. However people of yor region don't want you to rule. So you need to improve your region and earn their trust.\n\nObjectives:\n- Collect the most victory point\n- Collect at least 20 victory points from blue cards or your wonder");
+            slidingText("Alexander the Great died at a young age and the kingdom of Macedon is divided to his generals according to his will. However people of yor region don't want you to rule. So you need to improve your region and earn their trust.\n\nObjectives:\n- Collect the most victory point\n- Collect at least 20 victory points from blue cards or your wonder");
         }
         else if( mode == 3) {
             players[1].name = "Roman Republic";
@@ -1274,9 +1276,15 @@ public class GamePage extends Scene {
             players[2].stats.shield = 5;
             players[3].stats.shield = 5;
             reDrawWonders();
-            slidingText("Roman Republic started to invade your lands. You need to protect your people and defeat the large army of Romans.\n\n Objecives:\n- Collect the most victory points");
+            slidingText("Roman Republic started to invade your lands. You need to protect your people and defeat the large army of Romans.\n\n Objecives:\n- Collect the most victory points\n- Your battle point can not be negative at the end");
         }
-
+        else if( mode == 4) {
+            players[1].name = "Seleucid Empire";
+            players[2].name = "Roman Republic";
+            players[3].name = "Ptolemaic Dynasty";
+            reDrawWonders();
+            slidingText("After the invasion, your friend Aristotle wants you to improve the region's science buildings and make field to people to do research. You agreed the demands of Aristotle.\n\n- Collect the most victory points\n- Collect at least 25 victory points from green cards");
+        }
     }
     /**
      *player 1 receives the resource
@@ -1507,8 +1515,7 @@ public class GamePage extends Scene {
             makeBattles(currentAge);
             currentAge++;
             if( currentAge == 4) {
-               // endGame();
-                endGameText();
+                battleResultsPopup();
                 return;
             }
             for( int i = 0; i < 28; i++) {
@@ -1529,9 +1536,16 @@ public class GamePage extends Scene {
         sp.getChildren().removeAll(cardTicks);
         reDrawTick();
         sp.getChildren().addAll(cardTicks);
+        battleResultsPopup();
+
+    }
+    public void battleResultsPopup() throws Exception {
 
         // popup screen at the end of the ages
         if( currentTurn == 1) {
+            Media sound = new Media(new File("sounds/battle.mp3").toURI().toString());
+            mediaPlayer = new MediaPlayer(sound);
+            mediaPlayer.play();
             int endAge=currentAge-1;
             if (players[0].stats.shield == players[1].stats.shield) {
                 if (players[0].stats.shield == players[3].stats.shield)
@@ -1563,21 +1577,7 @@ public class GamePage extends Scene {
                     slidingText("Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " lost the battle against " + players[1].name + "\n But drawn the battle against " + players[3].name);
             }
         }
-//            if( currentTurn == 2) {
-//                if(players[0].stats.shield == players[1].stats.shield){
-//                    if(players[0].stats.shield == players[3].stats.shield)
-//                        slidingText("In Age 2 \n The battles was drawn!!");
-//                    else{
-//                        if(players[0].stats.shield > players[3].stats.shield)
-//                            slidingText("In Age 2 \n "+ players[0].name +" won the battle against " +players[3].name+ "\n But drawn the battle against "+ players[1].name);
-//                        else
-//                            slidingText("In Age 2 \n "+ players[0].name +" lost the battle against " +players[3].name+ "\n But drawn the battle against "+ players[1].name);
-//                    }
-//
-//                }
-
     }
-
     public void reDrawTick(){
         for(int i = 0; i < 7; i++){
             cardTicks[i].setVisible(false);
@@ -1645,7 +1645,13 @@ public class GamePage extends Scene {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+            if(currentAge > 3) {
+                try {
+                    endGameText();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         });
 
         sp.getChildren().addAll(bg2,bg, textArea,contRec);
@@ -1679,10 +1685,12 @@ public class GamePage extends Scene {
 //        contRec.setFill(new ImagePattern(img3));
 //        contRec.setTranslateX(550);
 //        contRec.setTranslateY(200);
+
         Rectangle bg4 = new Rectangle(1350,680);
         InputStream gameOver = Files.newInputStream(Paths.get("images/game-over4.jpg"));
         Image img4 = new Image(gameOver);
         bg4.setOpacity(0.9);
+
         bg4.setFill(new ImagePattern(img4));
 
         for (int i = 0; i < 4; i++)
@@ -1790,65 +1798,65 @@ public class GamePage extends Scene {
         TextField player0name = new TextField(players[0].name);
 
         Text player0coin = new Text(players[0].stats.coin/3+"");
-        player0coin.setTranslateX(150);
+        //player0coin.setTranslateX(150);
         player0coin.setFill(Color.YELLOW);
         player0coin.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
         Text player1coin = new Text(players[1].stats.coin/3+"");
-        player1coin.setTranslateX(170);
+        //player1coin.setTranslateX(170);
         player1coin.setFill(Color.YELLOW);
         player1coin.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
         Text player2coin = new Text(players[2].stats.coin/3+"");
-        player2coin.setTranslateX(170);
+        //player2coin.setTranslateX(170);
         player2coin.setFill(Color.YELLOW);
         player2coin.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
         Text player3coin = new Text(players[3].stats.coin/3+"");
-        player3coin.setTranslateX(170);
+        //player3coin.setTranslateX(170);
         player3coin.setFill(Color.YELLOW);
         player3coin.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
 
 
         Text player0battlePoints = new Text(players[0].battlePoint+"");
-        player0battlePoints.setTranslateX(300);
+       // player0battlePoints.setTranslateX(300);
         player0battlePoints.setFill(Color.RED);
         player0battlePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
         Text player1battlePoints = new Text(players[1].battlePoint+"");
-        player1battlePoints.setTranslateX(320);
+        //player1battlePoints.setTranslateX(320);
         player1battlePoints.setFill(Color.RED);
         player1battlePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
         Text player2battlePoints = new Text(players[2].battlePoint+"");
-        player2battlePoints.setTranslateX(320);
+        //player2battlePoints.setTranslateX(320);
         player2battlePoints.setFill(Color.RED);
         player2battlePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
         Text player3battlePoints = new Text(players[3].battlePoint+"");
-        player3battlePoints.setTranslateX(320);
+        //player3battlePoints.setTranslateX(320);
         player3battlePoints.setFill(Color.RED);
         player3battlePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
 
         Text player0sciencePoints = new Text(endScience[0]+"");
-        player0sciencePoints.setTranslateX(450);
+        //player0sciencePoints.setTranslateX(450);
         player0sciencePoints.setFill(Color.GREEN);
         player0sciencePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
         Text player1sciencePoints = new Text(endScience[1]+"");
-        player1sciencePoints.setTranslateX(470);
+        //player1sciencePoints.setTranslateX(470);
         player1sciencePoints.setFill(Color.GREEN);
         player1sciencePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
         Text player2sciencePoints = new Text(endScience[2]+"");
-        player2sciencePoints.setTranslateX(470);
+//        player2sciencePoints.setTranslateX(470);
         player2sciencePoints.setFill(Color.GREEN);
         player2sciencePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
         Text player3sciencePoints = new Text(endScience[3]+"");
-        player3sciencePoints.setTranslateX(470);
+//        player3sciencePoints.setTranslateX(470);
         player3sciencePoints.setFill(Color.GREEN);
         player3sciencePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
@@ -1860,22 +1868,22 @@ public class GamePage extends Scene {
 
 
         Text player0specialcards = new Text(endSpecial[0]+"");
-        player0specialcards.setTranslateX(650);
+//        player0specialcards.setTranslateX(650);
         player0specialcards.setFill(Color.PURPLE);
         player0specialcards.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
         Text player1specialcards = new Text(endSpecial[1]+"");
-        player1specialcards.setTranslateX(670);
+//        player1specialcards.setTranslateX(670);
         player1specialcards.setFill(Color.PURPLE);
         player1specialcards.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
         Text player2specialcards = new Text(endSpecial[2]+"");
-        player2specialcards.setTranslateX(670);
+//        player2specialcards.setTranslateX(670);
         player2specialcards.setFill(Color.PURPLE);
         player2specialcards.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
         Text player3specialcards = new Text(endSpecial[3]+"");
-        player3specialcards.setTranslateX(680);
+//        player3specialcards.setTranslateX(680);
         player3specialcards.setFill(Color.PURPLE);
         player3specialcards.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
@@ -1883,22 +1891,22 @@ public class GamePage extends Scene {
 
 
         Text player0bluePoints = new Text(players[0].stats.victoryPoint+"");
-        player0bluePoints.setTranslateX(860);
+//        player0bluePoints.setTranslateX(860);
         player0bluePoints.setFill(Color.BLUE);
         player0bluePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
         Text player1bluePoints = new Text(players[1].stats.victoryPoint+"");
-        player1bluePoints.setTranslateX(870);
+//        player1bluePoints.setTranslateX(870);
         player1bluePoints.setFill(Color.BLUE);
         player1bluePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
         Text player2bluePoints = new Text(players[2].stats.victoryPoint+"");
-        player2bluePoints.setTranslateX(870);
+//        player2bluePoints.setTranslateX(870);
         player2bluePoints.setFill(Color.BLUE);
         player2bluePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
         Text player3bluePoints = new Text(players[3].stats.victoryPoint+"");
-        player3bluePoints.setTranslateX(880);
+//        player3bluePoints.setTranslateX(880);
         player3bluePoints.setFill(Color.BLUE);
         player3bluePoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
@@ -1906,22 +1914,22 @@ public class GamePage extends Scene {
 
 
         Text player0totalPoints = new Text(total[0]+"");
-        player0totalPoints.setTranslateX(1010);
+//        player0totalPoints.setTranslateX(1010);
         player0totalPoints.setFill(Color.WHITESMOKE);
         player0totalPoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
         Text player1totalPoints = new Text(total[1]+"");
-        player1totalPoints.setTranslateX(1020);
+//        player1totalPoints.setTranslateX(1020);
         player1totalPoints.setFill(Color.WHITESMOKE);
         player1totalPoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
         Text player2totalPoints = new Text(total[2]+"");
-        player2totalPoints.setTranslateX(1020);
+//        player2totalPoints.setTranslateX(1020);
         player2totalPoints.setFill(Color.WHITESMOKE);
         player2totalPoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
         Text player3totalPoints = new Text(total[3]+"");
-        player3totalPoints.setTranslateX(1030);
+//        player3totalPoints.setTranslateX(1030);
         player3totalPoints.setFill(Color.WHITESMOKE);
         player3totalPoints.setFont(Font.font("Kalam",FontWeight.BOLD,23));
 
@@ -1997,8 +2005,23 @@ public class GamePage extends Scene {
             window.setScene(Main.mainMenu);
         });
         btnContinue.setOnMouseClicked( event2 -> {
+            Scene scene;
+            if (mode < 4) {
+                try {
+                    scene = new GamePage( new StackPane(), Main.mainMenu, window, players[0].name, side, mode + 1);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                try {
+                    scene = new CreditsPage( new StackPane(), Main.mainMenu, window, true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             try {
-                Scene scene = new GamePage( new StackPane(), Main.mainMenu, window, players[0].name, side, mode + 1);
+                scene = new GamePage( new StackPane(), Main.mainMenu, window, players[0].name, side, mode + 1);
                 window.setScene(scene);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -2016,7 +2039,7 @@ public class GamePage extends Scene {
         boolean isContinue = false;
         if( mode == 1 && players[0].milestoneDone == 3 && total[0] > total[1] && total[0] > total[2] && total[0] > total[3]) isContinue = true;
         else if( mode == 2 && players[0].stats.victoryPoint > 19 && total[0] > total[1] && total[0] > total[2] && total[0] > total[3]) isContinue = true;
-        else if( mode == 3  && total[0] > total[1] && total[0] > total[2] && total[0] > total[3]) isContinue = true;
+        else if( mode == 3  && total[0] > total[1] && total[0] > total[2] && total[0] > total[3] && players[0].battlePoint > -1) isContinue = true;
         if(isContinue)
             menu6.getChildren().addAll(btnExit2, btnContinue);
         else
@@ -2033,7 +2056,36 @@ public class GamePage extends Scene {
 //
 //        });
 
-        sp.getChildren().addAll(bg3,bg4,statsBox,player0box,player1box,player2box,player3box,menu6);
+        VBox namesbox = new VBox(nameText,player0,player1,player2,player3);
+        namesbox.setTranslateY(330);
+        namesbox.setSpacing(20);
+        VBox coinsbox = new VBox(coinText,player0coin,player1coin,player2coin,player3coin);
+        coinsbox.setTranslateY(330);
+        coinsbox.setSpacing(20);
+        VBox battlepointbox = new VBox(battlePointsText,player0battlePoints,player1battlePoints,player2battlePoints,player3battlePoints);
+        battlepointbox.setTranslateY(330);
+        battlepointbox.setSpacing(20);
+        VBox sciencepointbox = new VBox(sciencePointsText,player0sciencePoints,player1sciencePoints,player2sciencePoints,player3sciencePoints);
+        sciencepointbox.setSpacing(20);
+        sciencepointbox.setTranslateY(330);
+        VBox specialpointbox = new VBox(specialcardPointsText,player0specialcards,player1specialcards,player2specialcards,player3specialcards);
+        specialpointbox.setSpacing(20);
+        specialpointbox.setTranslateY(330);
+        VBox bluepointbox = new VBox(bluePoints,player0bluePoints,player1bluePoints,player2bluePoints,player3bluePoints);
+        bluepointbox.setSpacing(20);
+        bluepointbox.setTranslateY(330);
+        VBox totalpointbox = new VBox(totalPointsText,player0totalPoints,player1totalPoints,player2totalPoints,player3totalPoints);
+        totalpointbox.setSpacing(20);
+        totalpointbox.setTranslateY(330);
+
+        HBox boxbox = new HBox(namesbox,coinsbox,battlepointbox,sciencepointbox,specialpointbox,bluepointbox,totalpointbox);
+        boxbox.setSpacing(50);
+        boxbox.setTranslateX(120);
+
+
+
+
+        sp.getChildren().addAll(bg3,bg4,boxbox,menu6);
 
     }
 
