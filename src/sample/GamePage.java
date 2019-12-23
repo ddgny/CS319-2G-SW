@@ -193,6 +193,7 @@ public class GamePage extends Scene {
      * @param name player name
      * @param side wanderboards side either A or B
      * @param sMode indicates game mode
+     * @throws Exception 
      */
     public GamePage(StackPane sp, Scene mainmenu, Stage window, String name, String side, int sMode) throws Exception {
         super(sp, Main.primaryScreenBounds.getWidth(), Main.primaryScreenBounds.getHeight());
@@ -1546,7 +1547,10 @@ public class GamePage extends Scene {
             }
         }
     }
-
+    /**
+     * Method that end the turn
+     * @throws Exception
+     */
     public void endTurn() throws Exception {
 
         playBots();
@@ -1600,6 +1604,10 @@ public class GamePage extends Scene {
         if( currentTurn == 1) battleResultsPopup();
 
     }
+    /**
+     * This method implements pop-up screen for end of the ages to show war situations
+     * @throws Exception
+     */
     public void battleResultsPopup() throws Exception {
 
         // popup screen at the end of the ages
@@ -1619,7 +1627,7 @@ public class GamePage extends Scene {
             }
 
         }
-
+        //if player0 has more soldier than player1
         if (players[0].stats.shield > players[1].stats.shield) {
             if (players[0].stats.shield > players[3].stats.shield)
                 textToSend = "Age "+ endAge +" Ended!! \n "+players[0].name+" did two battles. \n" + players[0].name + " won all the battles!!";
@@ -1649,7 +1657,9 @@ public class GamePage extends Scene {
         }
         slidingText( textToSend);
     }
-    // Putting green tick in the upper right corner of free cards.
+    /**
+     * Putting green tick in the upper right corner of free cards.
+     */
     public void reDrawTick(){
         for(int i = 0; i < 7; i++){
             cardTicks[i].setVisible(false);
@@ -1664,7 +1674,10 @@ public class GamePage extends Scene {
         }
 
     }
-
+    /**
+     * Method for sliding text
+     * @throws Exception
+     */
     public void slidingText(String text) throws Exception{
         final String content = text;
         final Text textArea = new Text(10, 20, "");
@@ -1729,7 +1742,10 @@ public class GamePage extends Scene {
         sp.getChildren().addAll(bg2,bg, textArea,contRec);
 
     }
-
+    /**
+     * Method that shows stats of the players at the end of the game
+     * @throws Exception
+     */
     public void endGameText()throws Exception{
         int[] total = {0,0,0,0};
 
@@ -2161,7 +2177,13 @@ public class GamePage extends Scene {
 
     }
 
-
+    /**
+     * Method that calculates science points coming from green cards
+     * @param a variable for mechanic
+     * @param b variable for literature
+     * @param c variable for geometry
+     * @return m total science point
+     */
     public int sciencePointCalculator(int a, int b, int c){
         int m = 0;
         
@@ -2173,6 +2195,9 @@ public class GamePage extends Scene {
 
 
     }
+    /**
+     * 
+     */
     public boolean recursiveCheck( Resource[] playersResource, boolean[] pr, Resource costsResource, int cr) {
         System.out.println("pr.length: " + pr.length);
         System.out.println("cost length: " + costsResource.quantity.length);
